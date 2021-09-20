@@ -1,6 +1,9 @@
 # Bebidas_energeticas_y_ECV
 Repositorio creado y desarrollado por los alumnos del grupo A de la asignatura "Fuentes de Datos Biomédicas y Web Semántica" del grado en Ingeniería de la Salud, Universidad de Burgos. 
 
+### Integrantes del grupo
+Beatriz Amo Nestares, Víctor Barcina Muñoz, Samuel Lozano Juárez
+
 ### Título  del proyecto
 Estudio de la posible correlación entre el consumo de bebidas energéticas y el desarrollo de enfermedades cardiovasculares.
 
