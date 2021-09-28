@@ -1,19 +1,24 @@
 # Cambio climático y enfermedades cardiovasculares
 Repositorio creado y desarrollado por los alumnos del grupo A de la asignatura "Fuentes de Datos Biomédicas y Web Semántica" del grado en Ingeniería de la Salud, Universidad de Burgos. 
 
+![cardiovascular-disease-climate-change-722x406](https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg)
+
+ 
 Para obtener mayor información acerca del proyecto, consultar la [Wiki del repositorio](https://github.com/SamuelLozanoJuarez/Cambio_climatico_y_ECV/wiki).
 
-### Integrantes del grupo
+## Integrantes del grupo
 Beatriz Amo Nestares, Víctor Barcina Muñoz, Samuel Lozano Juárez
 
-### Título  del proyecto
+## Título  del proyecto
 Estudio de la posible influencia del cambio climático en la incidencia y mortalidad de enfermedades cardiovasculares.
 
-### Objetivos
+## Objetivos
  - Estudiar las variables meteorológicas mensuales (temperatura, presión atmosférica e insolación diaria) de todas las provincias españolas desde 2010 hasta 2019, con el fin de determinar qué meses y provincias fueron los más adversos. 
  - Una vez conocidas las provincias con climatología más adversa para cada año del periodo 2010-2019, comprobar si la morbilidad hospitalaria y la mortalidad por ECV fue significativamente mayor en dichas provincias con respecto a las climatológicamente normales.
  - Una vez conocidos qué meses y de qué año tuvieron una climatología más extrema en todo el territorio nacional, comprobar si la mortalidad por ECV fue significaticamente mayor esos meses en comparación con los demás meses.
-### Metodología
+
+
+## Metodología
  - Objetivo 1
      - Descargar todos los archivos en formato .xml/.json que contienen la información meterológica mensual por provincias desde 2010 hasta 2019 a través de la API de AEMET Open Data.
      - Combinar los archivos correspondientes a cada provincia empleando R, obteniendo 52 dataframes (uno por provincia) que contengan toda la información meteorológica desde 2010 a 2019.
@@ -30,5 +35,5 @@ Estudio de la posible influencia del cambio climático en la incidencia y mortal
      - Comprobar si hay algún mes de algún año que aparezca como adverso en más de 20 provincias, y contrastar la mortalidad por Enfermedades del sistema circulatorio en ese mes con el resto de datos normales.
      - Graficar los resultados obtenidos en todos los análisis.
 
-### Más información
+## Más información
 Para obtener mayor información acerca del proyecto, consultar la [Wiki del repositorio](https://github.com/SamuelLozanoJuarez/Cambio_climatico_y_ECV/wiki).
