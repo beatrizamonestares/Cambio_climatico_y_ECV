@@ -1,6 +1,8 @@
 # Cambio climático y enfermedades cardiovasculares
 Repositorio creado y desarrollado por los alumnos del grupo A de la asignatura "Fuentes de Datos Biomédicas y Web Semántica" del grado en Ingeniería de la Salud, Universidad de Burgos. 
 
+Para obtener mayor información acerca del proyecto, consultar la [Wiki del repositorio](https://github.com/SamuelLozanoJuarez/Cambio_climatico_y_ECV/wiki).
+
 ### Integrantes del grupo
 Beatriz Amo Nestares, Víctor Barcina Muñoz, Samuel Lozano Juárez
 
