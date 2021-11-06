@@ -1,0 +1,7 @@
+Reglas para la ejecucion de un codigo depurado:
+
+1 - Seguir el estilo de programacion marcado por Tydiverse.
+2 - Citar todo el codigo que se emplee en el R markdown empleando la funcion citation().
+3 - Antes de relizar cambios en los archivos SIEMPRE realizar un Pull Request para actualizar nuestro repositorio.
+4 - Tras cambiar un archivo de nuestro repositorio, SIEMPRE hacer un Pull Request para vincular nuestro cambio con el 'main'.
+5 - En R markdown emplear todos la misma fuente y tamaño de letra.
