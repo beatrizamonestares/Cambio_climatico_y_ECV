@@ -1,7 +1,7 @@
 ---
 title: "Cambio_climatico_y_ECV"
-author: "Samuel Lozano Juárez"
-date: "7/10/2021"
+author: "Beatriz Amo Nestares, Víctor Barcina Muñoz, Samuel Lozano Juárez"
+date: "8-11-2021"
 output: slidy_presentation
 ---
 
@@ -9,30 +9,112 @@ output: slidy_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
+## Introducción
+El proyecto realizado estudia la posible relación e influencia del cambio climático sobre la incidencia y mortalidad de enfermedades cardiovasculares.
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Se ha escogido este tema debido a que estamos ante los datos más extremos de concentraciones de gases de efecto invernadero de la historia, aumentando el calor terrestre, por lo que podría desencadenar el aumento de riesgo de muerte para aquellas personas que padecen enfermedades cardiovasculares. 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+- Cambio climático
+- Enfermedades cardiovasculares (ECV)
+- Relación entre ambas. 
 
-## Slide with Bullets
+![](https://ih1.redbubble.net/image.1167929045.9498/pp,840x830-pad,1000x1000,f8f8f8.jpg)
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
-- Bullet 4
+## Cambio climático
+- __¿Qué es?__
 
-## Slide with R Output
+El cambio climático se atribuye a los cambios a largo plazo de las temperaturas y los patrones climáticos como consecuencia de causas naturales y sobre todo humanas como la quema de combustibles fósiles de carbón, petróleo y gas. 
+Esta quema de combustibles genera la emisión de gases de efecto invernadero que actúan elevando la temperatura terrestre. La mayor parte de estos gases está compuesta por dióxido de carbono y de metano.
 
-```{r cars, echo = TRUE}
-summary(cars)
-"Hola"
-"Adios"
-```
+![](https://www.socialistasvascos.com/imagenes/noticias/CAMBIO-CLIMATICO-et.jpg)
 
-## Slide with Plot
 
-```{r pressure}
-plot(pressure)
-```
 
+
+## Cambio climático
+- __Causas__:
+
+Los cambios climáticos han existido desde el inicio de la historia de la Tierra y se han debido a causas diversas, como las relacionadas con los __cambios en los parámetros orbitales, variaciones de la radiación solar, la deriva continental, periodos de vulcanismo intenso, procesos bióticos o impactos de meteoritos.__
+El cambio climático actual es antropogénico y se relaciona principalmente con la intensificación del efecto invernadero debido a las emisiones industriales procedentes de la __quema de combustibles fósiles__. También econtramos el uso de transporte, __deforestación__, el desarrollo de la ganadería, fertilización con nitrógeno y gases fluorados entre las principales cuasas. 
+
+![](https://e00-elmundo.uecdn.es/elmundo/imagenes/2011/11/21/natura/1321871748_0.jpg)
+![](https://bacatastereo.com/wp-content/uploads/2021/02/Nueva-politica-contra-la-deforestacion.jpg)
+
+## Cambio climático
+- __Consecuencias__
+
+El cambio climático afecta a todas las regiones del mundo. Las principales consecuencias son: 
+
+- Deshielo y aumento del nivel del mar. 
+
+- Condiciones metereológicas extremas que provocan inundaciones y deterioro de la calidad del agua.
+
+- Olas de calor y sequías.
+
+- Pérdidas económicas.
+
+- Extinción y desplazamiento de especies a otros hábitats. 
+
+- Aumenta el riesgo de muerte como consecuencia de temperaturas elevadas. 
+
+
+![](https://geoinnova.org/wp-content/uploads/2021/08/deshielo-artico.jpg)
+![](https://www.meteorologiaenred.com/wp-content/uploads/2016/07/calor-830x691.jpg)
+
+
+## Enfermedades cardiovasculares (ECV).
+
+Son aquellas relacionadas con el corazón o vasos sanguíneos. Se incluyen transtornos de los vasos sanguíneos,problemas en el ritmo cardíaco (arritmias) defectos cardíacos de nacimiento (defectos cardíacos congénitos),enfermedad de las válvulas cardíacas,enfermedad del músculo cardíaco, infección del corazón.
+Este tipo de transtornos causan el mayor número de muertes en el mundo. 
+
+![](https://plustatic.com/292/conversions/enfermedades-cardiovasculares-large.jpg)
+
+
+## Enfermedades cardiovasculares(ECV)
+- __Síntomas__: 
+
+Los principales síntomas son: 
+
+- Dolor en el pecho. 
+
+- Falta de aire. 
+
+- Sensación de frío o debilidad en las extremidades. 
+
+- Latidos cardíacos acelerados (taquicardia)
+
+- Latidos cardíacos lentos (bradicardia)
+
+- Aturdimiento
+
+- Mareos
+
+- Desmayos
+
+- Hinchazón en las piernas
+
+- Fatiga. 
+
+
+![](http://hsbnoticias.com/sites/default/files/2021-10/enfermedades_cardiovasculares.jpg)
+
+## Enfermedades cardiovasculares (ECV).
+- __Causas:__
+
+Las principales causas de este tipo de transtornos son:
+
+- Infecciones.
+- Transtornos en el tejido conectivo.
+- Bacterias, virus o parásitos.
+- Diabetes.
+- Fumar.
+- Exceso de bebidas alcohólicas o con cafeína.
+- Abuso de drogas. 
+
+![](https://thumbs.dreamstime.com/b/gente-con-malos-h%C3%A1bitos-adicci%C3%B3n-las-drogas-y-los-juegos-drogadicci%C3%B3n-al-juego-comiendo-comida-chatarra-apostando-estilos-de-199569418.jpg)
+
+## Relación entre ambas. 
+
+La finalidad de este proyecto es determinar si realmente hay relación entre las ECV y el cambio climático. Para ello, se localizarán los meses  y provincias españolas con condiciones metereológicas mas adversas, y posteriormente se comprobará si en esos instantes y lugares la morbilidad y mortalidad por ECV fueron mayores o no. 
+
+Anteriormente, en Kuwait, se realizó un estudio comparando las temperaturas y las cuasas de muerte en su país a lo largo de una década y determinaron que el riesgo de muerte cardiovascular aumentaba 3 veces a partir de los 42º. También tuvieron en cuenta otros factores como la contaminación del aire o la humedad. 
