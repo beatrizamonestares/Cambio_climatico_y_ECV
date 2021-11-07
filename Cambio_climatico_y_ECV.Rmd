@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## Introducción
+
 El proyecto realizado estudia la posible relación e influencia del cambio climático sobre la incidencia y mortalidad de enfermedades cardiovasculares.
 
 Se ha escogido este tema debido a que estamos ante los datos más extremos de concentraciones de gases de efecto invernadero de la historia, aumentando el calor terrestre, por lo que podría desencadenar el aumento de riesgo de muerte para aquellas personas que padecen enfermedades cardiovasculares. 
@@ -70,7 +71,7 @@ Este tipo de transtornos causan el mayor número de muertes en el mundo.
 ![](https://plustatic.com/292/conversions/enfermedades-cardiovasculares-large.jpg)
 
 
-## Enfermedades cardiovasculares(ECV)
+## Enfermedades cardiovasculares (ECV)
 - __Síntomas__: 
 
 Los principales síntomas son: 
@@ -111,10 +112,18 @@ Las principales causas de este tipo de transtornos son:
 - Exceso de bebidas alcohólicas o con cafeína.
 - Abuso de drogas. 
 
-![](https://thumbs.dreamstime.com/b/gente-con-malos-h%C3%A1bitos-adicci%C3%B3n-las-drogas-y-los-juegos-drogadicci%C3%B3n-al-juego-comiendo-comida-chatarra-apostando-estilos-de-199569418.jpg)
+<center>
+
+![](https://thumbs.dreamstime.com/b/gente-con-malos-h%C3%A1bitos-adicci%C3%B3n-las-drogas-y-los-juegos-drogadicci%C3%B3n-al-juego-comiendo-comida-chatarra-apostando-estilos-de-199569418.jpg){width=400px}
+
+</center>
 
 ## Relación entre ambas. 
 
 La finalidad de este proyecto es determinar si realmente hay relación entre las ECV y el cambio climático. Para ello, se localizarán los meses  y provincias españolas con condiciones metereológicas mas adversas, y posteriormente se comprobará si en esos instantes y lugares la morbilidad y mortalidad por ECV fueron mayores o no. 
 
+<<<<<<< HEAD
 Anteriormente, en Kuwait, se realizó un estudio comparando las temperaturas y las cuasas de muerte en su país a lo largo de una década y determinaron que el riesgo de muerte cardiovascular aumentaba 3 veces a partir de los 42º. También tuvieron en cuenta otros factores como la contaminación del aire o la humedad. 
+=======
+Anteriormente, en Kuwait, se realizó un estudio comparando las temperaturas y las cuasas de muerte en su país a lo largo de una década y determinaron que el riesgo de muerte cardiovascular aumentaba 3 veces a partir de los 42º. También tuvieron en cuenta otros factores como la contaminación del aire o la humedad. 
+>>>>>>> b259b33a8c984d6c14a00e8d2b4ad284ab61d9e2
