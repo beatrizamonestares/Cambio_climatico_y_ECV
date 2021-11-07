@@ -1,6 +1,6 @@
 ---
 title: "Cambio_climatico_y_ECV"
-author: "Beatriz Amo Nestares, Víctor Barcina Muñoz, Samuel Lozano Juárez"
+author: _"Beatriz Amo Nestares, Víctor Barcina Muñoz, Samuel Lozano Juárez"_
 date: "8-11-2021"
 output: slidy_presentation
 ---
@@ -127,3 +127,52 @@ Anteriormente, en Kuwait, se realizó un estudio comparando las temperaturas y l
 =======
 Anteriormente, en Kuwait, se realizó un estudio comparando las temperaturas y las cuasas de muerte en su país a lo largo de una década y determinaron que el riesgo de muerte cardiovascular aumentaba 3 veces a partir de los 42º. También tuvieron en cuenta otros factores como la contaminación del aire o la humedad. 
 >>>>>>> b259b33a8c984d6c14a00e8d2b4ad284ab61d9e2
+
+## Objetivos
+
+- Estudiar las variables meteorológicas mensuales (temperatura, presión atmosférica e insolación diaria) de todas las provincias españolas desde 2010 hasta 2019, con el fin de determinar qué meses y provincias fueron los más adversos.
+
+- Una vez conocidas las provincias con climatología más adversa para cada año del periodo 2010-2019, comprobar si la morbilidad hospitalaria y la mortalidad por ECV fue significativamente mayor en dichas provincias con respecto a las climatológicamente normales.
+
+- Una vez conocidos qué meses y de qué año tuvieron una climatología más extrema en todo el territorio nacional, comprobar si la mortalidad por ECV fue significaticamente mayor esos meses en comparación con los demás meses.
+
+![](https://www.salamarkesa.com/wp-content/uploads/2016/11/apuntes-estadistica.jpg)
+
+## Metodología
+
+ __Objetivo 1:__
+
+- Descargar todos los archivos en formato .xml/.json que contienen la información meterológica mensual por provincias desde 2010 hasta 2019 a través de la API de AEMET Open Data.
+- Combinar los archivos correspondientes a cada provincia empleando R, obteniendo 52 dataframes (uno por provincia) que contengan toda la información meteorológica desde 2010 a 2019.
+- Filtrar cada dataframe para que únicamente contenga la información de cada año y mes referente a: temperatura media, temperatura media de las máximas, temperatura media de las mínimas, presión media, presión máxima absoluta, presión mínima absoluta, media de insolación y porcentaje medio mensual de la insolación diaria frente a la insolación teórica.
+- Comparar las variables meteorológicas de una misma provincia entre los diferentes meses y años y seleccionar los valores más extremos para cada variable meteorológica, almacenando en un vector aquellos meses y años con más de 2 factores extremos (entre temperatura, presión atmosférica e insolación diaria). Repetir dicho proceso con todas las provincias, de manera que se obtengan 52 vectores (como máximo) que contengan los meses más adversos correspondientes a cada provincia.
+
+![](http://www.aemet.es/imagenes_gcd/subhomes/conocenos/quienes_somos/quienes_somos.gif)
+
+![](https://www.ecoticias.com/userfiles/extra/GRGY_150.jpg)
+
+
+## Metodología
+
+ __Objetivo 2:__
+
+- Descargar todos los archivos en formato .json que contienen la información relativa a morbilidad hospitalaria y causas de defunción desde 2010 a 2019 a través de la página INEBase.
+- Combinar dichos archivos mediante R para obtener 52 dataframes (uno por provincia) que contenga toda la información referente a la morbilidad hospitalaria y causas de defunción anual desde 2010 a 2019.
+- Filtrar los dataframes para que únicamente contengan la información referente a morbilidad hospitalaria por Enfermedades del aparato circulatorio (I00-I99) y causas de defunción debido a Enfermedades del sistema circulatorio (053-061) clasificado por provincias y año.
+- Comprobar si hay alguna provincia que posea 3 meses en un mismo año con meteorología adversa, y contrastar la mortalidad y morbilidad hospitalaria para ECV en esa provincia y ese año con los datos normales.
+
+![](https://www.ine.es/infografias/calidadvida/img/logoinecaja.jpg)
+![](https://www.ine.es/images/mapashrt.gif)
+
+
+## Metodología
+
+__Objetivo 3:__
+
+- Combinar los archivos de causas de defunción mensual a nivel nacional obteniendo 10 dataframes (uno por año desde 2010 a 2019).
+- Filtrar dichos dataframes para que únicamente contengan la información referente al número de muertes por Enfermedades del sistema circulatorio (053-061) en cada mes de dicho año.
+- Comprobar si hay algún mes de algún año que aparezca como adverso en más de 20 provincias, y contrastar la mortalidad por Enfermedades del sistema circulatorio en ese mes con el resto de datos normales.
+- Graficar los resultados obtenidos en todos los análisis.
+
+![](http://coremain.com/images/casos_exito/Sigha.jpg) 
+![](https://www.questionpro.com/blog/wp-content/uploads/2021/03/Portada-tipos-de-graficas-para-encuestas-768x512.jpg)
