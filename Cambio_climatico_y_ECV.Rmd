@@ -1,151 +1,452 @@
 ---
-title: "Cambio_climatico_y_ECV"
-author: _"Beatriz Amo Nestares, Víctor Barcina Muñoz, Samuel Lozano Juárez"_
+title: "Cambio climático y ECV"
+author: "Beatriz Amo Nestares, Víctor Barcina Muñoz, Samuel Lozano Juárez"
 date: "8-11-2021"
-output: slidy_presentation
+output: 
+  ioslides_presentation:
+    footer: "UBU - Cambio climático y ECV"
+    logo: https://www.ubu.es/sites/default/files/portal_page/images/escudo_ubu_tc.png
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Introducción
+## {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
+<center>
+<font size="30">
+<span style="color:black">
+**INTRODUCCIÓN**
+
+![](https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg){width=600px}
+</span>
+</font>
+</center>
+
+## 
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**¿POR QUÉ ESTE TEMA?**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
 
 El proyecto realizado estudia la posible relación e influencia del cambio climático sobre la incidencia y mortalidad de enfermedades cardiovasculares.
 
-Se ha escogido este tema debido a que estamos ante los datos más extremos de concentraciones de gases de efecto invernadero de la historia, aumentando el calor terrestre, por lo que podría desencadenar el aumento de riesgo de muerte para aquellas personas que padecen enfermedades cardiovasculares. 
+Se ha escogido este tema debido a que estamos ante los datos más extremos de concentraciones de gases de efecto invernadero de la historia, aumentando el calor terrestre, por lo que podría desencadenar el aumento de riesgo de muerte para aquellas personas que padecen enfermedades cardiovasculares.
 
-- Cambio climático
-- Enfermedades cardiovasculares (ECV)
-- Relación entre ambas. 
-
-![](https://ih1.redbubble.net/image.1167929045.9498/pp,840x830-pad,1000x1000,f8f8f8.jpg)
-
-## Cambio climático
-- __¿Qué es?__
-
-El cambio climático se atribuye a los cambios a largo plazo de las temperaturas y los patrones climáticos como consecuencia de causas naturales y sobre todo humanas como la quema de combustibles fósiles de carbón, petróleo y gas. 
-Esta quema de combustibles genera la emisión de gases de efecto invernadero que actúan elevando la temperatura terrestre. La mayor parte de estos gases está compuesta por dióxido de carbono y de metano.
-
-![](https://www.socialistasvascos.com/imagenes/noticias/CAMBIO-CLIMATICO-et.jpg)
-
-
-
-
-## Cambio climático
-- __Causas__:
-
-Los cambios climáticos han existido desde el inicio de la historia de la Tierra y se han debido a causas diversas, como las relacionadas con los __cambios en los parámetros orbitales, variaciones de la radiación solar, la deriva continental, periodos de vulcanismo intenso, procesos bióticos o impactos de meteoritos.__
-El cambio climático actual es antropogénico y se relaciona principalmente con la intensificación del efecto invernadero debido a las emisiones industriales procedentes de la __quema de combustibles fósiles__. También econtramos el uso de transporte, __deforestación__, el desarrollo de la ganadería, fertilización con nitrógeno y gases fluorados entre las principales cuasas. 
-
-![](https://e00-elmundo.uecdn.es/elmundo/imagenes/2011/11/21/natura/1321871748_0.jpg)
-![](https://bacatastereo.com/wp-content/uploads/2021/02/Nueva-politica-contra-la-deforestacion.jpg)
-
-## Cambio climático
-- __Consecuencias__
-
-El cambio climático afecta a todas las regiones del mundo. Las principales consecuencias son: 
-
-- Deshielo y aumento del nivel del mar. 
-
-- Condiciones metereológicas extremas que provocan inundaciones y deterioro de la calidad del agua.
-
-- Olas de calor y sequías.
-
-- Pérdidas económicas.
-
-- Extinción y desplazamiento de especies a otros hábitats. 
-
-- Aumenta el riesgo de muerte como consecuencia de temperaturas elevadas. 
-
-
-![](https://geoinnova.org/wp-content/uploads/2021/08/deshielo-artico.jpg)
-![](https://www.meteorologiaenred.com/wp-content/uploads/2016/07/calor-830x691.jpg)
-
-
-## Enfermedades cardiovasculares (ECV).
-
-Son aquellas relacionadas con el corazón o vasos sanguíneos. Se incluyen transtornos de los vasos sanguíneos,problemas en el ritmo cardíaco (arritmias) defectos cardíacos de nacimiento (defectos cardíacos congénitos),enfermedad de las válvulas cardíacas,enfermedad del músculo cardíaco, infección del corazón.
-Este tipo de transtornos causan el mayor número de muertes en el mundo. 
-
-![](https://plustatic.com/292/conversions/enfermedades-cardiovasculares-large.jpg)
-
-
-## Enfermedades cardiovasculares (ECV)
-- __Síntomas__: 
-
-Los principales síntomas son: 
-
-- Dolor en el pecho. 
-
-- Falta de aire. 
-
-- Sensación de frío o debilidad en las extremidades. 
-
-- Latidos cardíacos acelerados (taquicardia)
-
-- Latidos cardíacos lentos (bradicardia)
-
-- Aturdimiento
-
-- Mareos
-
-- Desmayos
-
-- Hinchazón en las piernas
-
-- Fatiga. 
-
-
-![](http://hsbnoticias.com/sites/default/files/2021-10/enfermedades_cardiovasculares.jpg)
-
-## Enfermedades cardiovasculares (ECV).
-- __Causas:__
-
-Las principales causas de este tipo de transtornos son:
-
-- Infecciones.
-- Transtornos en el tejido conectivo.
-- Bacterias, virus o parásitos.
-- Diabetes.
-- Fumar.
-- Exceso de bebidas alcohólicas o con cafeína.
-- Abuso de drogas. 
-
+</div>
+</span>
 <center>
 
-![](https://thumbs.dreamstime.com/b/gente-con-malos-h%C3%A1bitos-adicci%C3%B3n-las-drogas-y-los-juegos-drogadicci%C3%B3n-al-juego-comiendo-comida-chatarra-apostando-estilos-de-199569418.jpg){width=400px}
+
+![](https://ih1.redbubble.net/image.1167929045.9498/pp,840x830-pad,1000x1000,f8f8f8.jpg){width=200px}
 
 </center>
 
-## Relación entre ambas. 
+## 
 
-La finalidad de este proyecto es determinar si realmente hay relación entre las ECV y el cambio climático. Para ello, se localizarán los meses  y provincias españolas con condiciones metereológicas mas adversas, y posteriormente se comprobará si en esos instantes y lugares la morbilidad y mortalidad por ECV fueron mayores o no. 
+<span style="color:black">
+<center>
+<font size="6">
 
-<<<<<<< HEAD
-Anteriormente, en Kuwait, se realizó un estudio comparando las temperaturas y las cuasas de muerte en su país a lo largo de una década y determinaron que el riesgo de muerte cardiovascular aumentaba 3 veces a partir de los 42º. También tuvieron en cuenta otros factores como la contaminación del aire o la humedad. 
-=======
-Anteriormente, en Kuwait, se realizó un estudio comparando las temperaturas y las cuasas de muerte en su país a lo largo de una década y determinaron que el riesgo de muerte cardiovascular aumentaba 3 veces a partir de los 42º. También tuvieron en cuenta otros factores como la contaminación del aire o la humedad. 
->>>>>>> b259b33a8c984d6c14a00e8d2b4ad284ab61d9e2
+**CAMBIO CLIMÁTICO**
 
-## Objetivos
+</font>
+</center>
 
-- Estudiar las variables meteorológicas mensuales (temperatura, presión atmosférica e insolación diaria) de todas las provincias españolas desde 2010 hasta 2019, con el fin de determinar qué meses y provincias fueron los más adversos.
+<div style="text-align: justify"> 
 
-- Una vez conocidas las provincias con climatología más adversa para cada año del periodo 2010-2019, comprobar si la morbilidad hospitalaria y la mortalidad por ECV fue significativamente mayor en dichas provincias con respecto a las climatológicamente normales.
+<span style="color:gray">
+_¿Qué es?_
+</span>
 
-- Una vez conocidos qué meses y de qué año tuvieron una climatología más extrema en todo el territorio nacional, comprobar si la mortalidad por ECV fue significaticamente mayor esos meses en comparación con los demás meses.
+Los cambios a largo plazo de las temperaturas y los patrones climáticos como consecuencia de causas naturales y sobre todo humanas, como la quema de combustibles fósiles.
 
-![](https://www.salamarkesa.com/wp-content/uploads/2016/11/apuntes-estadistica.jpg)
 
-## Metodología
+Esta quema de combustibles genera la emisión de gases de efecto invernadero que actúan elevando la temperatura terrestre. La mayor parte de estos gases está compuesta por dióxido de carbono y de metano.
 
- __Objetivo 1:__
+</div>
+</span>
+<center>
 
-- Descargar todos los archivos en formato .xml/.json que contienen la información meterológica mensual por provincias desde 2010 hasta 2019 a través de la API de AEMET Open Data.
-- Combinar los archivos correspondientes a cada provincia empleando R, obteniendo 52 dataframes (uno por provincia) que contengan toda la información meteorológica desde 2010 a 2019.
+![](https://www.socialistasvascos.com/imagenes/noticias/CAMBIO-CLIMATICO-et.jpg){width=300px}
+
+
+
+
+## 
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**CAMBIO CLIMÁTICO**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+<span style="color:gray">
+_Causas_
+</span>
+
+- Naturales
+  - Cambios de parámetros orbitales
+  - Variaciones de la radiación solar
+  - Deriva continental
+  - Procesos bióticos
+  - ...
+  
+
+</div>
+</span>
+<center>
+
+![](https://laverdadnoticias.com/__export/1621690617219/sites/laverdad/img/2021/05/22/cambio_climxtico_natural.jpg_911187431.jpg){width=370px}
+</center>
+
+## 
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**CAMBIO CLIMÁTICO**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+<span style="color:gray">
+_Causas_
+</span>
+
+- Humanas
+  - Quema de combustibles fósiles
+  - Transporte
+  - Deforestación
+  - Ganadería
+  - ...
+
+</div>
+</span>
+<center> 
+  
+![](https://e00-elmundo.uecdn.es/elmundo/imagenes/2011/11/21/natura/1321871748_0.jpg){width=300px}            ![](https://bacatastereo.com/wp-content/uploads/2021/02/Nueva-politica-contra-la-deforestacion.jpg){width=310px}
+</center> 
+
+
+##
+<span style="color:black">
+<center>
+<font size="6">
+
+**CAMBIO CLIMÁTICO**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+<span style="color:gray">
+_Consecuencias_
+</span>
+
+- Deshielo y aumento del nivel del mar. 
+- Condiciones metereológicas extremas que provocan inundaciones y deterioro de la calidad del agua.
+- Olas de calor y sequías.
+- Pérdidas económicas.
+- Extinción y desplazamiento de especies a otros hábitats. 
+- Aumenta el riesgo de muerte como consecuencia de temperaturas elevadas.
+
+</div>
+</span>
+
+<center>
+![](https://geoinnova.org/wp-content/uploads/2021/08/deshielo-artico.jpg){width=250px}
+</center>
+
+
+## 
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**ENFERMEDADES CARDIOVASCULARES**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+<span style="color:gray">
+_¿Qué son?_
+</span>
+
+Son aquellas relacionadas con el corazón o vasos sanguíneos. Se incluyen transtornos de los vasos sanguíneos, problemas en el ritmo cardíaco, defectos cardíacos, infecciones de corazón...
+
+Este tipo de transtornos **causan el mayor número de muertes** en el mundo (según la [OMS](https://www.who.int/es/news-room/fact-sheets/detail/the-top-10-causes-of-death))
+
+</div>
+</span>
+
+<center>
+![](https://plustatic.com/292/conversions/enfermedades-cardiovasculares-large.jpg){width=350px}
+</center>
+
+
+##
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**ENFERMEDADES CARDIOVASCULARES**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+<span style="color:gray">
+_Síntomas_
+</span>
+
+- Dolor en el pecho. 
+- Falta de aire. 
+- Taquicardia o bradicardia
+- Aturdimiento
+- Mareos
+- Fatiga
+
+</div>
+</span>
+
+<center>
+![](http://hsbnoticias.com/sites/default/files/2021-10/enfermedades_cardiovasculares.jpg){width=300px}
+</center>
+
+
+##
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**ENFERMEDADES CARDIOVASCULARES**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+<span style="color:gray">
+_Causas_
+</span>
+
+- Infecciones
+- Tabaquismo
+- Hábitos de vida insanos
+- Diabetes
+- Abuso de drogas o bebidas alcohólicas
+- Enfermedades congénitas
+
+</div>
+</span>
+
+<center>
+![](https://thumbs.dreamstime.com/b/gente-con-malos-h%C3%A1bitos-adicci%C3%B3n-las-drogas-y-los-juegos-drogadicci%C3%B3n-al-juego-comiendo-comida-chatarra-apostando-estilos-de-199569418.jpg){width=250}
+</center>
+
+##
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**RELACIÓN ENTRE AMBOS CONCEPTOS**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+El aumento de la temperatura, el estrés ambiental y las variaciones en la presión atmosférica pueden afectar a factores fisiológicos como la presión arterial o la temperatura corporal. 
+
+De igual manera el descenso de la temperatura puede influir en la viscosidad sanguínea y la frecuencia cardíaca. 
+
+Por ello, cambios extremos e inusuales en los factores ambientales pudieran estar relacionados con un aumento de la incidencia y mortalidad de las ECV.
+
+<center>
+![](https://economiadelasalud.com/wp-content/uploads/2020/03/Imagen-GettyImages-1170317567.jpg){width=300px}
+</center>
+
+</div>
+</span>
+
+##
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**RELACIÓN ENTRE AMBOS CONCEPTOS**
+
+</font>
+</center>
+
+<span style="color:gray">
+_Otros estudios_
+</span>
+
+<div style="text-align: justify"> 
+
+[1] [Peters, A., Schneider, A. Cardiovascular risks of climate change. Nature Reviews Cardiology 18, 1–2 (2021).](https://rdcu.be/cAYF8)
+
+[2] [De Blois J, Kjellstrom T, Agewall S, Ezekowitz J, A, Armstrong P, W, Atar D: The Effects of Climate Change on Cardiac Health. Cardiology 2015](https://doi.org/10.1159/000398787)
+
+[3] [Cheng X, Su H. Effects of climatic temperature stress on cardiovascular diseases. European Journal of Internal Medicine. 2010 Jun](https://doi.org/10.1016/j.ejim.2010.03.001)
+
+[4] [Wang X, Cao Y, Hong D, Zheng D, Richtering S, Anderson C, Robinson T, Hackett ML. Ambient Temperature and Stroke Occurrence: A Systematic Review and Meta-Analysis. Int J Environ Res Public Health. 2016 Jul 12](https://doi.org/10.3390/ijerph13070698)
+
+</div>
+</span>
+
+## {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
+<center>
+<font size="30">
+<span style="color:black">
+**OBJETIVOS**
+
+![](https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg){width=600px}
+</span>
+</font>
+</center>
+
+## 
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**OBJETIVO GENERAL**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+Tratar de encontrar correlación entre el cambio climático y una mayor incidencia y mortalidad de las enfermedades cardiovasculares en España en entre los años 2010 y 2019.
+
+</div>
+</span>
+
+
+## 
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**OBJETIVO ESPECÍFICO 1**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+Estudiar las variables meteorológicas mensuales (temperatura, presión atmosférica e insolación diaria) de todas las provincias españolas desde 2010 hasta 2019, con el fin de determinar qué meses y provincias fueron los más adversos.
+
+</div>
+</span>
+
+
+## 
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**OBJETIVO ESPECÍFICO 2**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+Una vez conocidas las provincias con climatología más adversa para cada año del periodo 2010-2019, comprobar si la morbilidad hospitalaria y la mortalidad por ECV fue significativamente mayor en dichas provincias con respecto a las climatológicamente normales.
+
+</div>
+</span>
+
+## 
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**OBJETIVO ESPECÍFICO 3**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+Una vez conocidos qué meses y de qué año tuvieron una climatología más extrema en todo el territorio nacional, comprobar si la mortalidad por ECV fue significaticamente mayor esos meses en comparación con los demás meses.
+
+</div>
+</span>
+
+## {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
+<center>
+<font size="30">
+<span style="color:black">
+**METODOLOGÍAS**
+
+![](https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg){width=600px}
+</span>
+</font>
+</center>
+
+## 
+
+<span style="color:black">
+<center>
+<font size="6">
+
+**METODOLOGÍAS**
+
+</font>
+</center>
+
+<span style="color:gray">
+_Objetivo 1_
+</span>
+
+<div style="text-align: justify"> 
+
+- Crear un archivo .csv que contenga las URL a los archivos con la información meterológica mensual por provincias desde 2010 hasta 2019.
+
+- Crear los archivos correspondientes a cada provincia empleando R, obteniendo 52 dataframes (uno por provincia) que contengan toda la información meteorológica desde 2010 a 2019.
+
 - Filtrar cada dataframe para que únicamente contenga la información de cada año y mes referente a: temperatura media, temperatura media de las máximas, temperatura media de las mínimas, presión media, presión máxima absoluta, presión mínima absoluta, media de insolación y porcentaje medio mensual de la insolación diaria frente a la insolación teórica.
+
 - Comparar las variables meteorológicas de una misma provincia entre los diferentes meses y años y seleccionar los valores más extremos para cada variable meteorológica, almacenando en un vector aquellos meses y años con más de 2 factores extremos (entre temperatura, presión atmosférica e insolación diaria). Repetir dicho proceso con todas las provincias, de manera que se obtengan 52 vectores (como máximo) que contengan los meses más adversos correspondientes a cada provincia.
+
+</div>
+</span>
+
+
+
 
 ![](http://www.aemet.es/imagenes_gcd/subhomes/conocenos/quienes_somos/quienes_somos.gif)
 
