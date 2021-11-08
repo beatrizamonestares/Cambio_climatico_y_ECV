@@ -3499,7 +3499,26 @@ slide:not(.current) .plotly.html-widget{
 
 <p><font size="6"></p>
 
-<p><strong>OBJETIVO 1</strong></p>
+<p><strong>OBJETIVO GENERAL</strong></p>
+
+</font>
+
+</center>
+
+<div style="text-align: justify">
+<p>Tratar de encontrar correlación entre el cambio climático y una mayor incidencia y mortalidad de las enfermedades cardiovasculares en España en entre los años 2010 y 2019.</p></div>
+
+<p></span></p>
+
+</article></slide><slide class=""><hgroup><h2></h2></hgroup><article  id="section-13">
+
+<span style="color:black">
+
+<center>
+
+<p><font size="6"></p>
+
+<p><strong>OBJETIVO ESPECÍFICO 1</strong></p>
 
 </font>
 
@@ -3510,51 +3529,256 @@ slide:not(.current) .plotly.html-widget{
 
 <p></span></p>
 
+</article></slide><slide class=""><hgroup><h2></h2></hgroup><article  id="section-14">
+
+<span style="color:black">
+
+<center>
+
+<p><font size="6"></p>
+
+<p><strong>OBJETIVO ESPECÍFICO 2</strong></p>
+
+</font>
+
+</center>
+
+<div style="text-align: justify">
+<p>Una vez conocidas las provincias con climatología más adversa para cada año del periodo 2010-2019, comprobar si la morbilidad hospitalaria y la mortalidad por ECV fue significativamente mayor en dichas provincias con respecto a las climatológicamente normales.</p></div>
+
+<p></span></p>
+
+</article></slide><slide class=""><hgroup><h2></h2></hgroup><article  id="section-15">
+
+<span style="color:black">
+
+<center>
+
+<p><font size="6"></p>
+
+<p><strong>OBJETIVO ESPECÍFICO 3</strong></p>
+
+</font>
+
+</center>
+
+<div style="text-align: justify">
+<p>Una vez conocidos qué meses y de qué año tuvieron una climatología más extrema en todo el territorio nacional, comprobar si la mortalidad por ECV fue significaticamente mayor esos meses en comparación con los demás meses.</p></div>
+
+<p></span></p>
+
+</article></slide><slide class="fill nobackground" style="background-image: url(https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg); background-size: cover; background-position: center;"><hgroup><h2></h2></hgroup><article  id="section-16">
+
+<center>
+
+<p><font size="30"> <span style="color:black"> <strong>METODOLOGÍAS</strong></p>
+
+<img width="600px" src='https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg' title=''/> </span> </font>
+
+</center>
+
+</article></slide><slide class=""><hgroup><h2></h2></hgroup><article  id="section-17">
+
+<span style="color:black">
+
+<center>
+
+<p><font size="6"></p>
+
+<p><strong>METODOLOGÍAS</strong></p>
+
+</font>
+
+</center>
+
+<p><span style="color:gray">
+ <em>Objetivo 1</em> </span></p>
+
+<div style="text-align: justify">
 <ul>
-<li><p>Una vez conocidas las provincias con climatología más adversa para cada año del periodo 2010-2019, comprobar si la morbilidad hospitalaria y la mortalidad por ECV fue significativamente mayor en dichas provincias con respecto a las climatológicamente normales.</p></li>
-<li><p>Una vez conocidos qué meses y de qué año tuvieron una climatología más extrema en todo el territorio nacional, comprobar si la mortalidad por ECV fue significaticamente mayor esos meses en comparación con los demás meses.</p></li>
-</ul>
+<li><p>Crear un archivo .csv que contenga las URL a los archivos con la información meterológica mensual por provincias desde 2010 hasta 2019.</p></li>
+<li><p>Crear los archivos correspondientes a cada provincia empleando R, obteniendo 52 dataframes (uno por provincia) que contengan toda la información meteorológica desde 2010 a 2019.</p></li>
+</ul></div>
 
-</article></slide><slide class=""><hgroup><h2>Metodología</h2></hgroup><article  id="metodología">
+<p></span></p>
 
-<p><strong>Objetivo 1:</strong></p>
-
-<ul>
-<li>Descargar todos los archivos en formato .xml/.json que contienen la información meterológica mensual por provincias desde 2010 hasta 2019 a través de la API de AEMET Open Data.</li>
-<li>Combinar los archivos correspondientes a cada provincia empleando R, obteniendo 52 dataframes (uno por provincia) que contengan toda la información meteorológica desde 2010 a 2019.</li>
-<li>Filtrar cada dataframe para que únicamente contenga la información de cada año y mes referente a: temperatura media, temperatura media de las máximas, temperatura media de las mínimas, presión media, presión máxima absoluta, presión mínima absoluta, media de insolación y porcentaje medio mensual de la insolación diaria frente a la insolación teórica.</li>
-<li>Comparar las variables meteorológicas de una misma provincia entre los diferentes meses y años y seleccionar los valores más extremos para cada variable meteorológica, almacenando en un vector aquellos meses y años con más de 2 factores extremos (entre temperatura, presión atmosférica e insolación diaria). Repetir dicho proceso con todas las provincias, de manera que se obtengan 52 vectores (como máximo) que contengan los meses más adversos correspondientes a cada provincia.</li>
-</ul>
+<center>
 
 <img src='http://www.aemet.es/imagenes_gcd/subhomes/conocenos/quienes_somos/quienes_somos.gif' title=''/>
 
-<img src='https://www.ecoticias.com/userfiles/extra/GRGY_150.jpg' title=''/>
+</center>
 
-</article></slide><slide class=""><hgroup><h2>Metodología</h2></hgroup><article  id="metodología-1">
+</article></slide><slide class=""><hgroup><h2></h2></hgroup><article  id="section-18">
 
-<p><strong>Objetivo 2:</strong></p>
+<span style="color:black">
 
+<center>
+
+<p><font size="6"></p>
+
+<p><strong>METODOLOGÍAS</strong></p>
+
+</font>
+
+</center>
+
+<p><span style="color:gray">
+ <em>Objetivo 1</em> </span></p>
+
+<div style="text-align: justify">
 <ul>
-<li>Descargar todos los archivos en formato .json que contienen la información relativa a morbilidad hospitalaria y causas de defunción desde 2010 a 2019 a través de la página INEBase.</li>
-<li>Combinar dichos archivos mediante R para obtener 52 dataframes (uno por provincia) que contenga toda la información referente a la morbilidad hospitalaria y causas de defunción anual desde 2010 a 2019.</li>
-<li>Filtrar los dataframes para que únicamente contengan la información referente a morbilidad hospitalaria por Enfermedades del aparato circulatorio (I00-I99) y causas de defunción debido a Enfermedades del sistema circulatorio (053-061) clasificado por provincias y año.</li>
-<li>Comprobar si hay alguna provincia que posea 3 meses en un mismo año con meteorología adversa, y contrastar la mortalidad y morbilidad hospitalaria para ECV en esa provincia y ese año con los datos normales.</li>
-</ul>
+<li>Filtrar cada dataframe para que únicamente contenga la información de cada año y mes referente a: temperatura media, temperatura media de las máximas, temperatura media de las mínimas, presión media, presión máxima absoluta, presión mínima absoluta, media de insolación y porcentaje medio mensual de la insolación diaria frente a la insolación teórica.</li>
+</ul></div>
 
-<p><img src='https://www.ine.es/infografias/calidadvida/img/logoinecaja.jpg' title=''/> <img src='https://www.ine.es/images/mapashrt.gif' title=''/></p>
+<p></span></p>
 
-</article></slide><slide class=""><hgroup><h2>Metodología</h2></hgroup><article  id="metodología-2">
+</article></slide><slide class=""><hgroup><h2></h2></hgroup><article  id="section-19">
 
-<p><strong>Objetivo 3:</strong></p>
+<span style="color:black">
 
+<center>
+
+<p><font size="6"></p>
+
+<p><strong>METODOLOGÍAS</strong></p>
+
+</font>
+
+</center>
+
+<p><span style="color:gray">
+ <em>Objetivo 1</em> </span></p>
+
+<div style="text-align: justify">
 <ul>
-<li>Combinar los archivos de causas de defunción mensual a nivel nacional obteniendo 10 dataframes (uno por año desde 2010 a 2019).</li>
-<li>Filtrar dichos dataframes para que únicamente contengan la información referente al número de muertes por Enfermedades del sistema circulatorio (053-061) en cada mes de dicho año.</li>
-<li>Comprobar si hay algún mes de algún año que aparezca como adverso en más de 20 provincias, y contrastar la mortalidad por Enfermedades del sistema circulatorio en ese mes con el resto de datos normales.</li>
-<li>Graficar los resultados obtenidos en todos los análisis.</li>
-</ul>
+<li>Comparar las variables meteorológicas de una misma provincia entre los diferentes meses y años y seleccionar los valores más extremos para cada variable meteorológica, almacenando en un vector aquellos meses y años con más de 2 factores extremos. Repetir dicho proceso con todas las provincias, de manera que se obtengan 52 vectores (como máximo) que contengan los meses más adversos correspondientes a cada provincia.</li>
+</ul></div>
 
-<p><img src='http://coremain.com/images/casos_exito/Sigha.jpg' title=''/> <img src='https://www.questionpro.com/blog/wp-content/uploads/2021/03/Portada-tipos-de-graficas-para-encuestas-768x512.jpg' title=''/></p></article></slide>
+<p></span></p>
+
+<center>
+
+<img width="300px" src='https://www.ecoticias.com/userfiles/extra/GRGY_150.jpg' title=''/>
+
+</center>
+
+</article></slide><slide class=""><hgroup><h2></h2></hgroup><article  id="section-20">
+
+<span style="color:black">
+
+<center>
+
+<p><font size="6"></p>
+
+<p><strong>METODOLOGÍAS</strong></p>
+
+</font>
+
+</center>
+
+<p><span style="color:gray">
+ <em>Objetivo 2</em> </span></p>
+
+<div style="text-align: justify">
+<ul>
+<li><p>Descargar todos los archivos en formato .json que contienen la información relativa a morbilidad hospitalaria y causas de defunción desde 2010 a 2019 a través de la página INEBase.</p></li>
+<li><p>Combinar dichos archivos mediante R para obtener 52 dataframes (uno por provincia) que contenga toda la información referente a la morbilidad hospitalaria y causas de defunción anual desde 2010 a 2019.</p></li>
+</ul></div>
+
+<p></span></p>
+
+<center>
+
+<img width="300px" src='https://www.ine.es/infografias/calidadvida/img/logoinecaja.jpg' title=''/>
+
+</center>
+
+</article></slide><slide class=""><hgroup><h2></h2></hgroup><article  id="section-21">
+
+<span style="color:black">
+
+<center>
+
+<p><font size="6"></p>
+
+<p><strong>METODOLOGÍAS</strong></p>
+
+</font>
+
+</center>
+
+<p><span style="color:gray">
+ <em>Objetivo 2</em> </span></p>
+
+<div style="text-align: justify">
+<ul>
+<li><p>Filtrar los dataframes para que únicamente contengan la información referente a morbilidad hospitalaria por Enfermedades del aparato circulatorio (I00-I99) y causas de defunción debido a Enfermedades del sistema circulatorio (053-061) clasificado por provincias y año.</p></li>
+<li><p>Comprobar si hay alguna provincia que posea 3 meses en un mismo año con meteorología adversa, y contrastar la mortalidad y morbilidad hospitalaria para ECV en esa provincia y ese año con los datos normales.</p></li>
+</ul></div>
+
+<p></span></p>
+
+</article></slide><slide class=""><hgroup><h2></h2></hgroup><article  id="section-22">
+
+<span style="color:black">
+
+<center>
+
+<p><font size="6"></p>
+
+<p><strong>METODOLOGÍAS</strong></p>
+
+</font>
+
+</center>
+
+<p><span style="color:gray">
+ <em>Objetivo 3</em> </span></p>
+
+<div style="text-align: justify">
+<ul>
+<li><p>Combinar los archivos de causas de defunción mensual a nivel nacional obteniendo 10 dataframes (uno por año desde 2010 a 2019).</p></li>
+<li><p>Filtrar dichos dataframes para que únicamente contengan la información referente al número de muertes por Enfermedades del sistema circulatorio (053-061) en cada mes de dicho año.</p></li>
+</ul></div>
+
+<p></span></p>
+
+<center>
+
+<img width="300px" src='http://coremain.com/images/casos_exito/Sigha.jpg' title=''/>
+
+</center>
+
+</article></slide><slide class=""><hgroup><h2></h2></hgroup><article  id="section-23">
+
+<span style="color:black">
+
+<center>
+
+<p><font size="6"></p>
+
+<p><strong>METODOLOGÍAS</strong></p>
+
+</font>
+
+</center>
+
+<p><span style="color:gray">
+ <em>Objetivo 3</em> </span></p>
+
+<div style="text-align: justify">
+<ul>
+<li><p>Comprobar si hay algún mes de algún año que aparezca como adverso en más de 20 provincias, y contrastar la mortalidad por Enfermedades del sistema circulatorio en ese mes con el resto de datos normales.</p></li>
+<li><p>Graficar los resultados obtenidos en todos los análisis.</p></li>
+</ul></div>
+
+<p></span></p>
+
+<center>
+
+<img width="400px" src='https://www.questionpro.com/blog/wp-content/uploads/2021/03/Portada-tipos-de-graficas-para-encuestas-768x512.jpg' title=''/>
+
+</center></article></slide>
 
 
   <slide class="backdrop"></slide>
