@@ -34,3 +34,25 @@ for (i in 1:length(Provincias)){
 }
 
 
+
+tbl <-
+  list.files(pattern = "*.csv") %>% 
+  map_df(~read_csv(.))
+
+
+library(tidyverse)
+
+library(readxl)
+morbilidad2010 <- read_excel("INPUT/morbilidad2010.xlsx", 
+                             sheet = "tabla-0", skip = 6)
+
+
+
+
+### how to read excel with map_def several files 
+
+# tbl <-
+  list.files(path = "INPUT/", pattern = "*.xlsx") %>% 
+  map_df(~read_excel(path="INPUT/", 
+                     sheet = "tabla-0", skip = 6))
+
