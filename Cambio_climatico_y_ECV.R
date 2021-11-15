@@ -9,10 +9,14 @@
 # El proyecto se encuentra amparado bajo una licencia creativa Creative Commons.
 # 
 
+
+# CARGA DE LOS PAQUETES ---------------------------------------------------
 # Carga de los paquetes que se van a emplear a lo largo del código
 library(climaemet)
 library(dplyr)
 
+
+# API KEY AEMET -----------------------------------------------------------
 # Si no se detecta la presencia de una API KEY de AEMET, se abrirá la página oportuna para su obtención
 if(aemet_detect_api_key() == FALSE){
   browseURL("https://opendata.aemet.es/centrodedescargas/altaUsuario?")
@@ -21,38 +25,74 @@ if(aemet_detect_api_key() == FALSE){
 # Instalación de la API KEY de AEMET en el equipo para poder acceder a los datos de climatología
 aemet_api_key("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW11ZWxsb3phbm9qdWFyZXpAZ21haWwuY29tIiwianRpIjoiZjEzZWM0NDktOTc1Ny00MGNjLTg5MDktZmFhOTZjZmFkMTcxIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE2MzYzNzMwMDAsInVzZXJJZCI6ImYxM2VjNDQ5LTk3NTctNDBjYy04OTA5LWZhYTk2Y2ZhZDE3MSIsInJvbGUiOiIifQ.HSs6bokk9cYquyGSRBOSC6_fxQoK8ZSlRQR64qMtBns", overwrite = TRUE, install = TRUE)
 
+
+# DECLARACIÓN VARIABLES GLOBALES --------------------------------------------
+
+# * Vector de provincias --------------------------------------------------
 # Vector que contiene el nombre de las 52 provincias de España y que va a ser empleado para dar nombre a los diferentes data frames
 Provincias <- c("Alava","Albacete","Alicante","Almeria","Asturias","Avila","Badajoz","Islas_Baleares","Barcelona","Bizkaia","Burgos","Caceres","Cadiz","Cantabria","Castellon","Ceuta","Ciudad_Real","Cordoba","A_Coruna","Cuenca","Girona","Granada","Guadalajara","Guipuzkoa","Huelva","Huesca","Jaen","Leon","Lleida","Lugo","Madrid","Malaga","Melilla","Murcia","Navarra","Ourense","Palencia","Las_Palmas","Pontevedra","La_Rioja","Salamanca","Tenerife","Segovia","Sevilla","Soria","Tarragona","Teruel","Toledo","Valencia","Valladolid","Zamora","Zaragoza")
 
+# * Vector de estaciones --------------------------------------------------
 # Vector que contiene el identificador de cada estación provincial de AEMET. Ocupan la misma posición en este vector que su provincia correspondiente en el vector Provincias, así el identificador 9091O se corresponde con Álava, el 8175 con Albacete ... y el 9434 con Zaragoza.
 Estaciones <- c("9091O","8175","8019","6325O","1212E","2444","4452","B954","0201D","1082","2331","3469A","5960","1109","8500A","5000C","4121","5402","1387E","8096","0367","5530E","3168D","1014A","4642E","9898","5270B","2661","9771C","1505","3129","6155A","6000A","7178I","9263D","1690A","2374X","C029O","1495","9170","2867","C447A","2465","5783","2030","9981A","9381I","3260B","8416","2422","2614","9434")
 
+
+
+# CARGA DE DATOS ----------------------------------------------------------
+
+# * Datos meteorológicos --------------------------------------------------
+# A continuación empleando un bucle for y la función aemet_monthly_period() del paquete climaemet vamos a importar los datos meteorológicos de cada provincia en el periodo temportal de 2010 a 2019, creando un Data Frame para cada provincia.
 for (i in 1:length(Provincias)){
   Nam <- paste(Provincias[i], "Meteo", sep="")
   Objeto <- aemet_monthly_period(station = Estaciones[i], start = 2010, end = 2019)
   assign(Nam, Objeto)
 }
 
+# Debido a que las estaciones seleccionadas de Guadalajara, Málaga, Palencia, Soria y Valladolid carecen de la información de determinados años, vamos a inconporar la información ausente de forma manual empleando la información para esos años de otras estaciones de esas mismas provincias.
+# Además en Guadalajara vamos a sustituir la información del año 2011 de la estación 3168D por 3168C.
+GuadalajaraMeteo <- filter(GuadalajaraMeteo, fecha )
+GuadalajaraMeteo <- bind_rows(GuadalajaraMeteo, aemet_monthly_clim(station = "3168C", year = 2010), aemet_monthly_clim(station = "3168C", year = 2011))
+
+# * Datos de morbilidad ---------------------------------------------------
+# Forma de importar los datos empleando un bucle for
+Archivos_Morb <- as.character(dir_ls(path = "INPUT", regexp="morbilidad"))
+DFMorbilidad <- data.frame()
+
+for (i in Archivos_Morb){
+  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
+  DFMorbilidad <- bind_rows(DFMorbilidad, temporal)
+}
 
 
+# Importar los datos empleando programación funcional
 tbl <-
   list.files(pattern = "*.csv") %>% 
   map_df(~read_csv(.))
 
 
 library(tidyverse)
+library(fs)
 
 library(readxl)
 morbilidad2010 <- read_excel("INPUT/morbilidad2010.xlsx", 
                              sheet = "tabla-0", skip = 6)
 
-
-
-
 ### how to read excel with map_def several files 
+
+DFMorbilidad <- dir_ls("INPUT", regexp = "morbilidad") %>% 
+  map_df(read_excel, .id = "Periodo")
 
 # tbl <-
   list.files(path = "INPUT/", pattern = "*.xlsx") %>% 
-  map_df(~read_excel(path="INPUT/", 
+  map_df(~read_excel(path="INPUT/*.xlsx", 
                      sheet = "tabla-0", skip = 6))
 
+# * Datos de mortalidad nacional mensual---------------------------------------------------
+
+# * Datos de mortalidad provincial ----------------------------------------
+
+
+# REFINAMIENTO DE LOS DATOS -----------------------------------------------
+
+
+  
