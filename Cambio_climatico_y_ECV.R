@@ -14,7 +14,9 @@
 # Carga de los paquetes que se van a emplear a lo largo del código
 library(climaemet)
 library(dplyr)
-
+library(tidyverse)
+library(fs)
+library(readxl)
 
 # API KEY AEMET -----------------------------------------------------------
 # Si no se detecta la presencia de una API KEY de AEMET, se abrirá la página oportuna para su obtención
@@ -49,13 +51,17 @@ for (i in 1:length(Provincias)){
 }
 
 # Debido a que las estaciones seleccionadas de Guadalajara, Málaga, Palencia, Soria y Valladolid carecen de la información de determinados años, vamos a inconporar la información ausente de forma manual empleando la información para esos años de otras estaciones de esas mismas provincias.
-# Además en Guadalajara vamos a sustituir la información del año 2011 de la estación 3168D por 3168C.
-GuadalajaraMeteo <- filter(GuadalajaraMeteo, fecha )
+# Además en Guadalajara vamos a sustituir la información del año 2011 de la estación 3168D por la de 3168C.
+GuadalajaraMeteo <- GuadalajaraMeteo[14:nrow(GuadalajaraMeteo), ]
 GuadalajaraMeteo <- bind_rows(GuadalajaraMeteo, aemet_monthly_clim(station = "3168C", year = 2010), aemet_monthly_clim(station = "3168C", year = 2011))
 
+MalagaMeteo <- bind_rows(MalagaMeteo, aemet_monthly_clim(station = "6084X", year = 2015))
+PalenciaMeteo <- bind_rows(PalenciaMeteo, aemet_monthly_clim(station = "2374X", year = 2016))
+SoriaMeteo <- bind_rows(SoriaMeteo, aemet_monthly_clim(station = "2030", year = 2011))
+ValladolidMeteo <- bind_rows(ValladolidMeteo, aemet_monthly_clim(station = "2422", year = 2012))
+
 # * Datos de morbilidad ---------------------------------------------------
-# Forma de importar los datos empleando un bucle for
-Archivos_Morb <- as.character(dir_ls(path = "INPUT", regexp="morbilidad"))
+Archivos_Morb <- dir_ls(path = "INPUT", regexp="morbilidad")
 DFMorbilidad <- data.frame()
 
 for (i in Archivos_Morb){
@@ -63,23 +69,10 @@ for (i in Archivos_Morb){
   DFMorbilidad <- bind_rows(DFMorbilidad, temporal)
 }
 
-
 # Importar los datos empleando programación funcional
-tbl <-
-  list.files(pattern = "*.csv") %>% 
-  map_df(~read_csv(.))
-
-
-library(tidyverse)
-library(fs)
-
-library(readxl)
-morbilidad2010 <- read_excel("INPUT/morbilidad2010.xlsx", 
-                             sheet = "tabla-0", skip = 6)
 
 ### how to read excel with map_def several files 
-
-DFMorbilidad <- dir_ls("INPUT", regexp = "morbilidad") %>% 
+DFMorb_func<- dir_ls("INPUT", regexp = "morbilidad") %>% 
   map_df(read_excel, .id = "Periodo")
 
 # tbl <-
@@ -88,11 +81,29 @@ DFMorbilidad <- dir_ls("INPUT", regexp = "morbilidad") %>%
                      sheet = "tabla-0", skip = 6))
 
 # * Datos de mortalidad nacional mensual---------------------------------------------------
+Archivos_Mort_Mens <- dir_ls(path = "INPUT", regexp="Mort_nacion")
+DFMort_Mens <- data.frame()
+
+for (i in Archivos_Mort_Mens){
+  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
+  DFMort_Mens <- bind_rows(DFMort_Mens, temporal)
+}
 
 # * Datos de mortalidad provincial ----------------------------------------
+Archivos_Mort_Prov <- dir_ls(path = "INPUT", regexp="Mort")
+DFMort_Mens <- data.frame()
+
+for (i in Archivos_Mort_Mens){
+  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
+  DFMort_Mens <- bind_rows(DFMort_Mens, temporal)
+}
 
 
 # REFINAMIENTO DE LOS DATOS -----------------------------------------------
 
-
-  
+# * Datos de morbilidad --------------------------------------------------
+# Seleccionamos únicamente los datos relativos a enfermedades del sistema circulatorio, eliminamos la columna CAUSA (ya no es necesaria), incluimos una columna que especifique el año de los datos y el sexo al que se refieren los datos y movemos estas columnas recién creadas al inicio.
+DFMorbilidad <- filter(DFMorbilidad, CAUSA %in% c("390-459 VII ENFERMEDADES DEL SISTEMA CIRCULATORIO", "0900 ENFERMEDADES DEL APARATO CIRCULATORIO I00-I99")) %>% 
+  bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3), Sexo = rep(c("Ambos sexos", "Hombres", "Mujeres"), 10)) %>% 
+  relocate(Periodo:Sexo, .before = CAUSA) %>% 
+  subset(select = - CAUSA)
