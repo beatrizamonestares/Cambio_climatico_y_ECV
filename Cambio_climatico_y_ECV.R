@@ -103,14 +103,29 @@ for (i in dir_ls(path = "INPUT", regexp="Mort")){
 # * Datos meteorológicos --------------------------------------------------
 
 # * Datos de morbilidad --------------------------------------------------
-# Seleccionamos únicamente los datos relativos a enfermedades del sistema circulatorio, eliminamos la columna CAUSA (ya no es necesaria), incluimos una columna que especifique el año de los datos y el sexo al que se refieren los datos y movemos estas columnas recién creadas al inicio.
+# Seleccionamos únicamente los datos relativos a enfermedades del sistema circulatorio, eliminamos la columna CAUSA (ya no es necesaria), incluimos una columna que especifique el año de los datos y el sexo al que se refieren los datos.
 DFMorbilidad <- filter(DFMorbilidad, CAUSA %in% c("390-459 VII ENFERMEDADES DEL SISTEMA CIRCULATORIO", "0900 ENFERMEDADES DEL APARATO CIRCULATORIO I00-I99")) %>% 
   bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3), Sexo = rep(c("Ambos sexos", "Hombres", "Mujeres"), 10)) %>% 
-  relocate(Periodo:Sexo, .before = CAUSA) %>% 
   subset(select = - CAUSA)
 
 # A continuación vamos a eliminar las columnas referentes a las comunidades autónomas, para quedarnos exclusivamente con las columnas de provincias.
 DFMorbilidad <- subset(DFMorbilidad, select = -c(`Total Nacional`,`Andalucía`,`Aragón`,`Canarias`,`Castilla y León`,`Castilla - La Mancha`,`Cataluña`,`Comunitat Valenciana`,`Extremadura`,`Galicia`,`País Vasco`,`Extranjero`))
 
-# Por último vamos a renombrar las columnas para emplear un conjunto de nombres uniforme para las provincias. Ese conjunto es el definido en el vector Provincias
+# Por último vamos a renombrar las columnas para emplear un conjunto de nombres uniforme para las provincias. Ese conjunto es el definido en el vector Provincias y colocamos las columnas "Periodo" y "Sexo" como las 2 primeras.
+DFMorbilidad <- DFMorbilidad[ ,order(names(DFMorbilidad))] %>% 
+  relocate(.,`Araba/Álava`, .before = `Albacete`) %>% 
+  relocate(., `Gipuzkoa`, .after = `Guadalajara`)
 
+j <- 1
+for (i in 1:length(DFMorbilidad)){
+  if (!colnames(DFMorbilidad)[i] %in% c("Sexo","Periodo")){
+    colnames(DFMorbilidad)[i] = Provincias[j]
+    j <- j+1
+  }
+}
+
+DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`)
+
+# * Datos de mortalidad nacional mensual -------------------------------------------
+
+# * Datos de mortalidad provincial ----------------------------------------
