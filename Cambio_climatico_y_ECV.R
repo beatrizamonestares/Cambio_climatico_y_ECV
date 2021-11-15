@@ -61,39 +61,38 @@ SoriaMeteo <- bind_rows(SoriaMeteo, aemet_monthly_clim(station = "2030", year = 
 ValladolidMeteo <- bind_rows(ValladolidMeteo, aemet_monthly_clim(station = "2422", year = 2012))
 
 # * Datos de morbilidad ---------------------------------------------------
-Archivos_Morb <- dir_ls(path = "INPUT", regexp="morbilidad")
 DFMorbilidad <- data.frame()
-
-for (i in Archivos_Morb){
+for (i in dir_ls(path = "INPUT", regexp="morbilidad")){
   temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
   DFMorbilidad <- bind_rows(DFMorbilidad, temporal)
 }
 
-# Importar los datos empleando programación funcional
+# Incluimos también la posibilidad de importar los datos empleando programación funcional (función map_df())
 
-### how to read excel with map_def several files 
-DFMorb_func<- dir_ls("INPUT", regexp = "morbilidad") %>% 
-  map_df(read_excel, .id = "Periodo")
-
-# tbl <-
-  list.files(path = "INPUT/", pattern = "*.xlsx") %>% 
-  map_df(~read_excel(path="INPUT/*.xlsx", 
-                     sheet = "tabla-0", skip = 6))
+# DFMorb_func <- dir_ls("INPUT", regexp = "morbilidad") %>% 
+#   map_df(read_excel, .id = "Periodo")
+# 
+# DFMorb_func <- subset(DFMorb_func, select = -c(`Encuesta de morbilidad hospitalaria 2011`,`Encuesta de morbilidad hospitalaria 2012`,`Encuesta de morbilidad hospitalaria 2013`,`Resultados por comunidades autónomas y provincias`,`Lista detallada`,`Encuesta de morbilidad hospitalaria. Año 2016`,`Encuesta de morbilidad hospitalaria. Año 2017`,`Encuesta de morbilidad hospitalaria. Año 2018`,`Encuesta de morbilidad hospitalaria. Año 2019`))%>%
+#   drop_na(.)
+# 
+# DFMorb_headers <- c()
+# for (i in DFMorb_func[1, ]){
+#   DFMorb_headers <- c(DFMorb_headers, i)
+# }
+# 
+# colnames(DFMorb_func) = DFMorb_headers
+# DFMorb_func <- filter(DFMorb_func, CAUSA != "CAUSA")
 
 # * Datos de mortalidad nacional mensual---------------------------------------------------
-Archivos_Mort_Mens <- dir_ls(path = "INPUT", regexp="Mort_nacion")
 DFMort_Mens <- data.frame()
-
-for (i in Archivos_Mort_Mens){
+for (i in dir_ls(path = "INPUT", regexp="Mort_nacion")){
   temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
   DFMort_Mens <- bind_rows(DFMort_Mens, temporal)
 }
 
 # * Datos de mortalidad provincial ----------------------------------------
-Archivos_Mort_Prov <- dir_ls(path = "INPUT", regexp="Mort")
 DFMort_Mens <- data.frame()
-
-for (i in Archivos_Mort_Mens){
+for (i in dir_ls(path = "INPUT", regexp="Mort")){
   temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
   DFMort_Mens <- bind_rows(DFMort_Mens, temporal)
 }
@@ -101,9 +100,17 @@ for (i in Archivos_Mort_Mens){
 
 # REFINAMIENTO DE LOS DATOS -----------------------------------------------
 
+# * Datos meteorológicos --------------------------------------------------
+
 # * Datos de morbilidad --------------------------------------------------
 # Seleccionamos únicamente los datos relativos a enfermedades del sistema circulatorio, eliminamos la columna CAUSA (ya no es necesaria), incluimos una columna que especifique el año de los datos y el sexo al que se refieren los datos y movemos estas columnas recién creadas al inicio.
 DFMorbilidad <- filter(DFMorbilidad, CAUSA %in% c("390-459 VII ENFERMEDADES DEL SISTEMA CIRCULATORIO", "0900 ENFERMEDADES DEL APARATO CIRCULATORIO I00-I99")) %>% 
   bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3), Sexo = rep(c("Ambos sexos", "Hombres", "Mujeres"), 10)) %>% 
   relocate(Periodo:Sexo, .before = CAUSA) %>% 
   subset(select = - CAUSA)
+
+# A continuación vamos a eliminar las columnas referentes a las comunidades autónomas, para quedarnos exclusivamente con las columnas de provincias.
+DFMorbilidad <- subset(DFMorbilidad, select = -c(`Total Nacional`,`Andalucía`,`Aragón`,`Canarias`,`Castilla y León`,`Castilla - La Mancha`,`Cataluña`,`Comunitat Valenciana`,`Extremadura`,`Galicia`,`País Vasco`,`Extranjero`))
+
+# Por último vamos a renombrar las columnas para emplear un conjunto de nombres uniforme para las provincias. Ese conjunto es el definido en el vector Provincias
+
