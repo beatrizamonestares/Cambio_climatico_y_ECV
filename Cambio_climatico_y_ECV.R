@@ -63,9 +63,11 @@ ValladolidMeteo <- bind_rows(ValladolidMeteo, aemet_monthly_clim(station = "2422
 # * Datos de morbilidad ---------------------------------------------------
 DFMorbilidad <- data.frame()
 for (i in dir_ls(path = "INPUT", regexp="morbilidad")){
-  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
+  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6,col_types = c("text",rep("numeric",64))) 
   DFMorbilidad <- bind_rows(DFMorbilidad, temporal)
 }
+
+str(DFMorbilidad)
 
 # Incluimos también la posibilidad de importar los datos empleando programación funcional (función map_df())
 
@@ -91,10 +93,10 @@ for (i in dir_ls(path = "INPUT", regexp="Mort_nacion")){
 }
 
 # * Datos de mortalidad provincial ----------------------------------------
-DFMort_Mens <- data.frame()
+DFMort_Prov <- data.frame()
 for (i in dir_ls(path = "INPUT", regexp="Mort")){
   temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
-  DFMort_Mens <- bind_rows(DFMort_Mens, temporal)
+  DFMort_Prov <- bind_rows(DFMort_Prov, temporal)
 }
 
 
