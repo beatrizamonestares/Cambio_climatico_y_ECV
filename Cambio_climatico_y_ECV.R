@@ -103,6 +103,11 @@ for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
 
 # * Datos meteorológicos --------------------------------------------------
 
+for (i in 1:length(Provincias)){
+  Nam <- paste(Provincias[i],"Meteo",sep="")
+  print(Nam)
+}
+
 # * Datos de morbilidad --------------------------------------------------
 # Seleccionamos únicamente los datos relativos a enfermedades del sistema circulatorio, eliminamos la columna CAUSA (ya no es necesaria), incluimos una columna que especifique el año de los datos y el sexo al que se refieren los datos.
 DFMorbilidad <- filter(DFMorbilidad, CAUSA %in% c("390-459 VII ENFERMEDADES DEL SISTEMA CIRCULATORIO", "0900 ENFERMEDADES DEL APARATO CIRCULATORIO I00-I99")) %>% 
@@ -125,9 +130,12 @@ for (i in 1:length(DFMorbilidad)){
   }
 }
 
-DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`)
+DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>% 
+  pivot_longer(data = ., names_to = "Provincias", values_to = "Altas", cols= c(Alava:Zaragoza))
 
 # * Datos de mortalidad nacional mensual -------------------------------------------
+
+
 
 # * Datos de mortalidad provincial ----------------------------------------
 
