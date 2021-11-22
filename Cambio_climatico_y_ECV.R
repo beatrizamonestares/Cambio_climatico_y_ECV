@@ -103,6 +103,14 @@ for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
 
 # * Datos meteorológicos --------------------------------------------------
 
+A_Cor_Copia <- A_CorunaMeteo
+A_Cor_Copia <- select(A_Cor_Copia, c(`fecha`,`tm_max`,`tm_min`,`q_max`,`q_min`,`p_sol`)) %>% 
+  filter(.data = . , !`fecha` %in% c("2010-13","2011-13","2012-13","2013-13","2014-13","2015-13","2016-13","2017-13","2018-13","2019-13")) %>% 
+  bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=12), Mes = rep(c("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"), 10)) %>% 
+  relocate(.,c(`Periodo`,`Mes`),.before = `fecha`) %>% 
+  subset(select = -`fecha`)
+
+
 for (i in 1:length(Provincias)){
   Nam <- paste(Provincias[i],"Meteo",sep="")
   print(Nam)
