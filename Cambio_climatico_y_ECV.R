@@ -53,18 +53,31 @@ for (i in 1:length(Provincias)){
 GuadalajaraMeteo <- GuadalajaraMeteo[14:nrow(GuadalajaraMeteo), ] # de esta manera logramos eliminar las filas referentes al año 2011
 GuadalajaraMeteo <- bind_rows(GuadalajaraMeteo, aemet_monthly_clim(station = "3168C", year = 2010), aemet_monthly_clim(station = "3168C", year = 2011))
 
-for (i in GuadalajaraMeteo$fecha){
-  if (length(i)<6){
-    print(i)
-    i <- paste(str_sub(i,start = 1L, end = 5L),"0",str_sub(i,start = -1L, end = -1L),sep = "")
+# Vamos a reordenar las filas por fecha, para ello primero debemos añadir un "0" en los meses del 1 al 9, para que no tome como mayor el mes 2 que el 12 (vamos a realizarlo mediante programación funcional para reciclar código y no copiar y pegar).
+Reorder <- function(provincia){
+  for (i in 1:length(provincia$fecha)){
+    if(nchar(provincia$fecha[i])<7){
+      provincia$fecha[i] <- paste(str_sub(provincia$fecha[i], start = 1L, end = 5L), "0", str_sub(provincia$fecha[i], start = -1L, end=-1L), sep = "")
+    }
   }
+  return(arrange(provincia, fecha))
 }
 
-# A continuación añadimos de forma manual los años que faltan en las estaciones mencionadas
+GuadalajaraMeteo <- Reorder(GuadalajaraMeteo)
+
+
+# A continuación añadimos de forma manual los años que faltan en las estaciones mencionadas (y reordenamos cada una de ellas por fecha)
 MalagaMeteo <- bind_rows(MalagaMeteo, aemet_monthly_clim(station = "6084X", year = 2015))
+MalagaMeteo <- Reorder(MalagaMeteo)
+
 PalenciaMeteo <- bind_rows(PalenciaMeteo, aemet_monthly_clim(station = "2374X", year = 2016))
+PalenciaMeteo <- Reorder(PalenciaMeteo)
+
 SoriaMeteo <- bind_rows(SoriaMeteo, aemet_monthly_clim(station = "2030", year = 2011))
+SoriaMeteo <- Reorder(SoriaMeteo)
+
 ValladolidMeteo <- bind_rows(ValladolidMeteo, aemet_monthly_clim(station = "2422", year = 2012))
+ValladolidMeteo <- Reorder(ValladolidMeteo)
 
 # * Datos de morbilidad ---------------------------------------------------
 DFMorbilidad <- data.frame()
