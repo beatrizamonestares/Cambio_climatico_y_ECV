@@ -53,6 +53,13 @@ for (i in 1:length(Provincias)){
 GuadalajaraMeteo <- GuadalajaraMeteo[14:nrow(GuadalajaraMeteo), ] # de esta manera logramos eliminar las filas referentes al año 2011
 GuadalajaraMeteo <- bind_rows(GuadalajaraMeteo, aemet_monthly_clim(station = "3168C", year = 2010), aemet_monthly_clim(station = "3168C", year = 2011))
 
+for (i in GuadalajaraMeteo$fecha){
+  if (length(i)<6){
+    print(i)
+    i <- paste(str_sub(i,start = 1L, end = 5L),"0",str_sub(i,start = -1L, end = -1L),sep = "")
+  }
+}
+
 # A continuación añadimos de forma manual los años que faltan en las estaciones mencionadas
 MalagaMeteo <- bind_rows(MalagaMeteo, aemet_monthly_clim(station = "6084X", year = 2015))
 PalenciaMeteo <- bind_rows(PalenciaMeteo, aemet_monthly_clim(station = "2374X", year = 2016))
