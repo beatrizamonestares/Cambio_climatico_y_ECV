@@ -50,9 +50,10 @@ for (i in 1:length(Provincias)){
 
 # Debido a que las estaciones seleccionadas de Guadalajara, Málaga, Palencia, Soria y Valladolid carecen de la información de determinados años, vamos a inconporar la información ausente de forma manual empleando la información para esos años de otras estaciones de esas mismas provincias.
 # Además en Guadalajara vamos a sustituir la información del año 2011 de la estación 3168D por la de 3168C.
-GuadalajaraMeteo <- GuadalajaraMeteo[14:nrow(GuadalajaraMeteo), ]
+GuadalajaraMeteo <- GuadalajaraMeteo[14:nrow(GuadalajaraMeteo), ] # de esta manera logramos eliminar las filas referentes al año 2011
 GuadalajaraMeteo <- bind_rows(GuadalajaraMeteo, aemet_monthly_clim(station = "3168C", year = 2010), aemet_monthly_clim(station = "3168C", year = 2011))
 
+# A continuación añadimos de forma manual los años que faltan en las estaciones mencionadas
 MalagaMeteo <- bind_rows(MalagaMeteo, aemet_monthly_clim(station = "6084X", year = 2015))
 PalenciaMeteo <- bind_rows(PalenciaMeteo, aemet_monthly_clim(station = "2374X", year = 2016))
 SoriaMeteo <- bind_rows(SoriaMeteo, aemet_monthly_clim(station = "2030", year = 2011))
