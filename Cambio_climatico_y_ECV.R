@@ -36,9 +36,7 @@ Provincias <- c("Alava","Albacete","Alicante","Almeria","Asturias","Avila","Bada
 
 # * Vector de estaciones --------------------------------------------------
 # Vector que contiene el identificador de cada estación provincial de AEMET. Ocupan la misma posición en este vector que su provincia correspondiente en el vector Provincias, así el identificador 9091O se corresponde con Álava, el 8175 con Albacete ... y el 9434 con Zaragoza.
-Estaciones <- c("9091O","8175","8019","6325O","1212E","2444","4452","B954","0201D","1082","2331","3469A","5960","1109","8500A","5000C","4121","5402","1387E","8096","0367","5530E","3168D","1014A","4642E","9898","5270B","2661","9771C","1505","3129","6155A","6000A","7178I","9263D","1690A","2374X","C029O","1495","9170","2867","C447A","2465","5783","2030","9981A","9381I","3260B","8416","2422","2614","9434")
-
-
+Estaciones <- c("9091O","8175","8019","6325O","1212E","2444","4452","B954","0200E","1082","2331","3469A","5960","1109","8500A","5000C","4121","5402","1387E","8096","0367","5530E","3168D","1014A","4642E","9898","5270B","2661","9771C","1505","3129","6155A","6000A","7178I","9263D","1690A","2374X","C029O","1495","9170","2867","C447A","2465","5783","2030","9981A","9381I","3260B","8416","2422","2614","9434")
 
 # CARGA DE DATOS ----------------------------------------------------------
 
@@ -103,21 +101,29 @@ for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
 
 # * Datos meteorológicos --------------------------------------------------
 
-
-A_Cor_Copia <- A_CorunaMeteo
-A_Cor_Copia <- select(A_Cor_Copia, c(`fecha`,`tm_max`,`tm_min`,`q_max`,`q_min`,`p_sol`)) %>% 
-  filter(.data = . , !`fecha` %in% c("2010-13","2011-13","2012-13","2013-13","2014-13","2015-13","2016-13","2017-13","2018-13","2019-13")) %>% 
-  bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=12), Mes = rep(c("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"), 10)) %>% 
-  relocate(.,c(`Periodo`,`Mes`),.before = `fecha`) %>% 
-  subset(select = -`fecha`)
-
-for (i in 1:length(A_Cor_Copia$q_max)){
-  A_Cor_Copia$q_max[i] <- str_sub(string = A_Cor_Copia$q_max[i], start = 1L, end = -5L)
-  A_Cor_Copia$q_min[i] <- str_sub(string = A_Cor_Copia$q_min[i], start = 1L, end = -5L)
+Mod_meteo <- function(prov){
+  Objeto <- get(prov)
+  Objeto <- select(Objeto, c(`fecha`,`tm_max`,`tm_min`,`q_max`,`q_min`,`p_sol`)) %>% 
+    filter(.data = . , !`fecha` %in% c("2010-13","2011-13","2012-13","2013-13","2014-13","2015-13","2016-13","2017-13","2018-13","2019-13")) %>% 
+    bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=12), Mes = rep(c("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"), 10)) %>% 
+    relocate(.,c(`Periodo`,`Mes`),.before = `fecha`) %>% 
+    subset(select = -`fecha`)
+  
+  for (i in 1:length(Objeto$q_max)){
+    Objeto$q_max[i] <- str_sub(string = Objeto$q_max[i], start = 1L, end = -5L)
+    Objeto$q_min[i] <- str_sub(string = Objeto$q_min[i], start = 1L, end = -5L)
+  }
+  
+  Objeto$q_max <- as.numeric(Objeto$q_max)
+  Objeto$q_min <- as.numeric(Objeto$q_min)
+  
+  return(Objeto)
 }
 
-A_Cor_Copia$q_max <- as.numeric(A_Cor_Copia$q_max)
-A_Cor_Copia$q_min <- as.numeric(A_Cor_Copia$q_min)
+for (i in 1:length(Provincias)){
+  Nam <- paste(Provincias[i],"Meteo",sep = "")
+  assign(Nam,Mod_meteo(Nam))
+}
 
 # * Datos de morbilidad --------------------------------------------------
 # Seleccionamos únicamente los datos relativos a enfermedades del sistema circulatorio, eliminamos la columna CAUSA (ya no es necesaria), incluimos una columna que especifique el año de los datos y el sexo al que se refieren los datos.
