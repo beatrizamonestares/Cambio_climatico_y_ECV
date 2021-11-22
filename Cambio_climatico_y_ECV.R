@@ -63,7 +63,7 @@ ValladolidMeteo <- bind_rows(ValladolidMeteo, aemet_monthly_clim(station = "2422
 # * Datos de morbilidad ---------------------------------------------------
 DFMorbilidad <- data.frame()
 for (i in dir_ls(path = "INPUT", regexp="morbilidad")){
-  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6,col_types = c("text",rep("numeric",64))) 
+  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6, col_types = c("text",rep("numeric",64))) 
   DFMorbilidad <- bind_rows(DFMorbilidad, temporal)
 }
 
@@ -94,11 +94,10 @@ for (i in dir_ls(path = "INPUT", regexp="Mort_nacion")){
 
 # * Datos de mortalidad provincial ----------------------------------------
 DFMort_Prov <- data.frame()
-for (i in dir_ls(path = "INPUT", regexp="Mort")){
+for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
   temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
   DFMort_Prov <- bind_rows(DFMort_Prov, temporal)
 }
-
 
 # REFINAMIENTO DE LOS DATOS -----------------------------------------------
 
@@ -131,3 +130,4 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`)
 # * Datos de mortalidad nacional mensual -------------------------------------------
 
 # * Datos de mortalidad provincial ----------------------------------------
+
