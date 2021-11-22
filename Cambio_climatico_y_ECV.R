@@ -103,6 +103,7 @@ for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
 
 # * Datos meteorológicos --------------------------------------------------
 
+
 A_Cor_Copia <- A_CorunaMeteo
 A_Cor_Copia <- select(A_Cor_Copia, c(`fecha`,`tm_max`,`tm_min`,`q_max`,`q_min`,`p_sol`)) %>% 
   filter(.data = . , !`fecha` %in% c("2010-13","2011-13","2012-13","2013-13","2014-13","2015-13","2016-13","2017-13","2018-13","2019-13")) %>% 
@@ -110,11 +111,13 @@ A_Cor_Copia <- select(A_Cor_Copia, c(`fecha`,`tm_max`,`tm_min`,`q_max`,`q_min`,`
   relocate(.,c(`Periodo`,`Mes`),.before = `fecha`) %>% 
   subset(select = -`fecha`)
 
-
-for (i in 1:length(Provincias)){
-  Nam <- paste(Provincias[i],"Meteo",sep="")
-  print(Nam)
+for (i in 1:length(A_Cor_Copia$q_max)){
+  A_Cor_Copia$q_max[i] <- str_sub(string = A_Cor_Copia$q_max[i], start = 1L, end = -5L)
+  A_Cor_Copia$q_min[i] <- str_sub(string = A_Cor_Copia$q_min[i], start = 1L, end = -5L)
 }
+
+A_Cor_Copia$q_max <- as.numeric(A_Cor_Copia$q_max)
+A_Cor_Copia$q_min <- as.numeric(A_Cor_Copia$q_min)
 
 # * Datos de morbilidad --------------------------------------------------
 # Seleccionamos únicamente los datos relativos a enfermedades del sistema circulatorio, eliminamos la columna CAUSA (ya no es necesaria), incluimos una columna que especifique el año de los datos y el sexo al que se refieren los datos.
