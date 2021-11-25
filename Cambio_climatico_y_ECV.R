@@ -28,7 +28,6 @@ if(aemet_detect_api_key() == FALSE){
 # Instalación de la API KEY de AEMET en el equipo para poder acceder a los datos de climatología
 aemet_api_key("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW11ZWxsb3phbm9qdWFyZXpAZ21haWwuY29tIiwianRpIjoiZjEzZWM0NDktOTc1Ny00MGNjLTg5MDktZmFhOTZjZmFkMTcxIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE2MzYzNzMwMDAsInVzZXJJZCI6ImYxM2VjNDQ5LTk3NTctNDBjYy04OTA5LWZhYTk2Y2ZhZDE3MSIsInJvbGUiOiIifQ.HSs6bokk9cYquyGSRBOSC6_fxQoK8ZSlRQR64qMtBns", overwrite = TRUE, install = TRUE)
 
-
 # DECLARACIÓN VARIABLES GLOBALES --------------------------------------------
 
 # * Vector de provincias --------------------------------------------------
@@ -127,7 +126,7 @@ for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
 
 Mod_meteo <- function(prov){
   Objeto <- get(prov)
-  Objeto <- select(Objeto, c(`fecha`,`tm_max`,`tm_min`,`q_max`,`q_min`,`p_sol`)) %>% 
+  Objeto <- select(Objeto, c(`fecha`,`tm_max`,`tm_min`,`q_max`,`q_min`,`p_sol`,`hr`)) %>% 
     filter(.data = . , !`fecha` %in% c("2010-13","2011-13","2012-13","2013-13","2014-13","2015-13","2016-13","2017-13","2018-13","2019-13")) %>% 
     bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=12), Mes = rep(c("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"), 10)) %>% 
     relocate(.,c(`Periodo`,`Mes`),.before = `fecha`) %>% 
@@ -187,26 +186,67 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
 
 # * Datos meteorológicos --------------------------------------------------
 
-y<- left_join(x = A_CorunaMeteo, y = A_CorunaMeteo %>% 
-                group_by(Mes) %>% 
-                summarise(Av_tmax = mean(tm_max, na.rm = TRUE),Av_tmin = mean(tm_min, na.rm = TRUE),Av_qmax = mean(q_max, na.rm = TRUE),Av_qmin = mean(q_min, na.rm = TRUE),Av_psol = mean(p_sol, na.rm = TRUE))
-                , by = "Mes") %>% 
-  mutate(Anom_tmax = (`tm_max`-`Av_tmax`)**2, Periodo_Mes = paste(Periodo,Mes,sep=" "), Anom_tmin = (`tm_min`-`Av_tmin`)**2, Anom_qmax = (`q_max`-`Av_qmax`)**2, Anom_qmin = ((`q_min`-`Av_qmin`)**2), Anom_psol = ((`p_sol`-`Av_psol`)**2))
+Generador_Av_Anom <- function(provincia){
+  Interna <- left_join(x = provincia, y = provincia %>% 
+                         group_by(Mes) %>% 
+                         summarise(Av_tmax = mean(tm_max, na.rm = TRUE),Av_tmin = mean(tm_min, na.rm = TRUE),Av_qmax = mean(q_max, na.rm = TRUE),Av_qmin = mean(q_min, na.rm = TRUE),Av_psol = mean(p_sol, na.rm = TRUE),Av_hr = mean(hr, na.rm = TRUE))
+                       , by = "Mes") %>% 
+    mutate(Anom_tmax = (`tm_max`-`Av_tmax`), Periodo_Mes = paste(Periodo,Mes,sep=" "), Anom_tmin = (`tm_min`-`Av_tmin`), Anom_qmax = (`q_max`-`Av_qmax`), Anom_qmin = ((`q_min`-`Av_qmin`)), Anom_psol = ((`p_sol`-`Av_psol`)), Anom_hr = ((`hr`-`Av_hr`)))
+  return(Interna)
+}
 
-ggplot(y , aes(x = Periodo_Mes)) + 
-  geom_line(aes(y = Anom_tmax, group = 1), colour = "red",) + 
-  geom_point(size = 1.5, aes(y = Anom_tmax), colour = "red") + 
-  geom_smooth(aes( y = Anom_tmax, group = 1), fill = "red", alpha = 0.25, colour = "red")+
-  geom_line(aes(y = Anom_tmin,  group = 1), colour = "blue",) + 
-  geom_point(size = 1.5, aes(y = Anom_tmin), colour = "blue") + 
-  geom_smooth(aes(y = Anom_tmin, group = 1), fill = "blue", alpha = 0.25, colour = "blue")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+for (i in Provincias){
+  Nam <- paste(i,"Meteo",sep = "")
+  assign(Nam, Generador_Av_Anom(get(Nam)))
+}
 
-ggplot(y , aes(x = Periodo_Mes)) + 
-  geom_line(aes(y = Anom_qmax, group = 1), colour = "red",) + 
-  geom_point(size = 1.5, aes(y = Anom_qmax), colour = "red") + 
-  geom_smooth(aes( y = Anom_qmax, group = 1), fill = "red", alpha = 0.25, colour = "red")+
-  geom_line(aes(y = Anom_qmin,  group = 1), colour = "blue",) + 
-  geom_point(size = 1.5, aes(y = Anom_qmin), colour = "blue") + 
-  geom_smooth(aes(y = Anom_qmin, group = 1), fill = "blue", alpha = 0.25, colour = "blue")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+Graf_filt_Meteo <- function(provincia){
+  graf_temp <- ggplot(provincia , aes(x = Periodo_Mes)) + 
+    geom_line(aes(y = Anom_tmax**2, group = 1), colour = "red",) + 
+    geom_point(size = 1.5, aes(y = Anom_tmax**2), colour = "red") + 
+    geom_smooth(aes( y = Anom_tmax**2, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
+    geom_line(aes(y = Anom_tmin**2,  group = 1), colour = "blue",) + 
+    geom_point(size = 1.5, aes(y = Anom_tmin**2), colour = "blue") + 
+    geom_smooth(aes(y = Anom_tmin**2, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+    labs(x = "Periodo Mes",
+         y = "Anomalía^2") + 
+    ggtitle(label = "Anomalía Temperatura", subtitle = as.character(quote(MadridMeteo)))
+  
+  graf_presion <- ggplot(provincia , aes(x = Periodo_Mes)) + 
+    geom_line(aes(y = Anom_qmax**2, group = 1), colour = "red") + 
+    geom_point(size = 1.5, aes(y = Anom_qmax**2), colour = "red") + 
+    geom_smooth(aes( y = Anom_qmax**2, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
+    geom_line(aes(y = Anom_qmin**2,  group = 1), colour = "blue",) + 
+    geom_point(size = 1.5, aes(y = Anom_qmin**2), colour = "blue") + 
+    geom_smooth(aes(y = Anom_qmin**2, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+    labs(x = "Periodo Mes",
+         y = "Anomalía^2") + 
+    ggtitle(label = "Anomalía Presión Atm", subtitle = as.character(quote(MadridMeteo)))
+  
+  graf_sol_hr <- ggplot(provincia , aes(x = Periodo_Mes)) + 
+    geom_line(aes(y = Anom_psol**2, group = 1), colour = "red") + 
+    geom_point(size = 1.5, aes(y = Anom_psol**2), colour = "red") + 
+    geom_smooth(aes( y = Anom_psol**2, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
+    geom_line(aes(y = Anom_hr**2,  group = 1), colour = "blue",) + 
+    geom_point(size = 1.5, aes(y = Anom_hr**2), colour = "blue") + 
+    geom_smooth(aes(y = Anom_hr**2, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+ 
+    labs(x = "Periodo Mes",
+         y = "Anomalía^2") + 
+    ggtitle(label = "Anomalía Insolación y Humedad", subtitle = as.character(quote(provincia)))
+  
+}
+
+Graf_filt_Meteo(A_CorunaMeteo)
+
+IC_tmax <- ggplot_build(grafica)$data[[3]] %>% 
+  select(. , c(ymax)) %>% 
+  rename(high_IC_tmax = ymax)
+
+IC_tmin <- ggplot_build(grafica)$data[[6]] %>% 
+  select(. , c(ymax)) %>% 
+  rename(high_IC_tmin = ymax)
+
+y <- bind_cols(y, IC_tmax, IC_tmin)
