@@ -178,7 +178,15 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
 
 
 # * Datos de mortalidad provincial ----------------------------------------
-
+DFMort_Prov <- data.frame()
+for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
+  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
+  DFMort_Prov <- bind_rows(DFMort_Prov, temporal)
+}DFMort_Prov <- data.frame()
+for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
+  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
+  DFMort_Prov <- bind_rows(DFMort_Prov, temporal)
+}
 
 
 # ANÁLISIS DE LOS DATOS ---------------------------------------------------
