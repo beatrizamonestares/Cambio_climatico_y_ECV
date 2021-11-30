@@ -48,18 +48,24 @@ for (i in 1:length(Provincias)){
   assign(Nam, Objeto)
 }
 
-# Debido a que las estaciones seleccionadas de Guadalajara, Málaga, Palencia, Soria y Valladolid carecen de la información de determinados años, vamos a inconporar la información ausente de forma manual empleando la información para esos años de otras estaciones de esas mismas provincias.
+# Debido a que las estaciones seleccionadas de Guadalajara, Málaga, Palencia, Soria y Valladolid carecen de la información de determinados años, vamos a incorporar la información ausente de forma manual empleando la información para esos años de otras estaciones de esas mismas provincias.
 # Además en Guadalajara vamos a sustituir la información del año 2011 de la estación 3168D por la de 3168C.
 GuadalajaraMeteo <- GuadalajaraMeteo[14:nrow(GuadalajaraMeteo), ] # de esta manera logramos eliminar las filas referentes al año 2011
 GuadalajaraMeteo <- bind_rows(GuadalajaraMeteo, aemet_monthly_clim(station = "3168C", year = 2010), aemet_monthly_clim(station = "3168C", year = 2011))
 
 # Vamos a reordenar las filas por fecha, para ello primero debemos añadir un "0" en los meses del 1 al 9, para que no tome como mayor el mes 2 que el 12 (vamos a realizarlo mediante programación funcional para reciclar código y no copiar y pegar).
+# Declaramos la función Reorder para poder emplearla con el resto de provincias
+
 Reorder <- function(provincia){
+  #recorre todos los elementos de la columna fecha de la provincia pasada como parámetro
   for (i in 1:length(provincia$fecha)){
+    #comprueba si el tamaño del elemento actual de la columna fecha tiene menos de 7 caracteres
     if(nchar(provincia$fecha[i])<7){
+      #en caso de que así sea, corta la cadena donde debiera ir el 0, lo introduce y pega la parte de después del 0
       provincia$fecha[i] <- paste(str_sub(provincia$fecha[i], start = 1L, end = 5L), "0", str_sub(provincia$fecha[i], start = -1L, end=-1L), sep = "")
     }
   }
+  #por último devuelve la provincia pasada, pero ahora ordenada por fecha (donde ya sí que se puede ordenar correctamente por fecha)
   return(arrange(provincia, fecha))
 }
 
@@ -82,13 +88,14 @@ ValladolidMeteo <- Reorder(ValladolidMeteo)
 
 
 # * Datos de morbilidad ---------------------------------------------------
+
+#La carga de datos de morbilidad se lleva a cabo mediante un bucle for. Leemos todos los archivos de la carpeta INPUT que empiecen con 'morbilidad' y vamos pegando su contenido uno debajo de otro. Es importante indicar el tipo de columnas, para que nos introduzca las numéricas como tal y no como carácter.
 DFMorbilidad <- data.frame()
 for (i in dir_ls(path = "INPUT", regexp="morbilidad")){
   temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6, col_types = c("text",rep("numeric",64))) 
   DFMorbilidad <- bind_rows(DFMorbilidad, temporal)
 }
 
-str(DFMorbilidad)
 
 # Incluimos también la posibilidad de importar los datos empleando programación funcional (función map_df())
 
@@ -107,6 +114,8 @@ str(DFMorbilidad)
 # DFMorb_func <- filter(DFMorb_func, CAUSA != "CAUSA")
 
 # * Datos de mortalidad nacional mensual---------------------------------------------------
+
+# La carda de datos de mortalidad se realiza exactamente igual a los datos de morbilidad, solo que en vez de leer todos los archivos que empiecen por 'morbilidad', le pasamos como criterio que los archivos empiecen por 'Mort_nacion'.
 DFMort_Mens <- data.frame()
 for (i in dir_ls(path = "INPUT", regexp="Mort_nacion")){
   temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
@@ -114,41 +123,69 @@ for (i in dir_ls(path = "INPUT", regexp="Mort_nacion")){
 }
 
 # * Datos de mortalidad provincial ----------------------------------------
+
+# Al igual que en los dos casos anteriores empleamos el bucle for y leemos y añadimos uno a uno los ficheros que empiecen por 'mort_prov'
 DFMort_Prov <- data.frame()
 for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
   temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
   DFMort_Prov <- bind_rows(DFMort_Prov, temporal)
 }
 
+
 # REFINAMIENTO DE LOS DATOS -----------------------------------------------
 
 # * Datos meteorológicos --------------------------------------------------
 
+# Para el refinamiento de datos meterológicos vamos a:
+#     - Eliminar las filas referentes a las medias anuales (seleccionar solo la información de los meses)
+#     - Eliminar las columnas referentes a variables no deseadaes (solo vamos a registrar tm_max, tm_min, q_max, q_min, hr y p_sol)
+#     - Vamos a añadir una columna 'Periodo' con el año y otra columna 'Mes' con el mes del año para cada dato.
+#     - Vamos a eliminar la columna `fecha` que viene por defecto en los datos (ya que ahora hemos introducido el formato Perido-Mes)
+#     - Vamos a convertir la columna q_max y q_min de character a numeric
+# Para realizar todo ello vamos a definir una función 'Mod_meteo' y posteriormente aplicarla a cada uno de los dataframes de las diferentes provincias.
+
 Mod_meteo <- function(prov){
+  # Como vamos a emplear la función sobre una lista de nombres (y no con los objetos directamente), debemos emplear la función 'get()' que nos permita obtener el objeto al que referencia ese nombre
   Objeto <- get(prov)
+  # Nos quedamos solo con las columnas de interés
   Objeto <- select(Objeto, c(`fecha`,`tm_max`,`tm_min`,`q_max`,`q_min`,`p_sol`,`hr`)) %>% 
+    # Eliminamos las filas referentes a valores de medias anuales
     filter(.data = . , !`fecha` %in% c("2010-13","2011-13","2012-13","2013-13","2014-13","2015-13","2016-13","2017-13","2018-13","2019-13")) %>% 
+    # Introducimos las columnas de Periodo y de Mes
     bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=12), Mes = rep(c("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"), 10)) %>% 
+    # Colocamos estas columnas recién creadas como las 2 primeras y eliminamos la columna de fecha empleando el subset y el complementario de fecha (indicado como - `fecha`) 
     relocate(.,c(`Periodo`,`Mes`),.before = `fecha`) %>% 
     subset(select = -`fecha`)
   
+  # Recorremos cada elemento de la columna q_max del dataframe respectivo y eliminamos las posiciones que contienen caracteres no numéricos.
   for (i in 1:length(Objeto$q_max)){
     Objeto$q_max[i] <- str_sub(string = Objeto$q_max[i], start = 1L, end = -5L)
     Objeto$q_min[i] <- str_sub(string = Objeto$q_min[i], start = 1L, end = -5L)
   }
   
+  # Forzamos la conversión a numeric una vez eliminados los elementos del tipo character
   Objeto$q_max <- as.numeric(Objeto$q_max)
   Objeto$q_min <- as.numeric(Objeto$q_min)
   
   return(Objeto)
 }
 
+# Aplicamos esta función 'Mod_meteo' a cada elemento del vector Provincias, unido con la palabra 'Meteo', lo que da lugar al nombre de cada dataframe meteorológico de cada provincia.
 for (i in 1:length(Provincias)){
   Nam <- paste(Provincias[i],"Meteo",sep = "")
   assign(Nam,Mod_meteo(Nam))
 }
 
+
 # * Datos de morbilidad --------------------------------------------------
+
+# Para el refinamiento de datos de morbilidad vamos a:
+#     - Seleccionar solo aquellas filas que contienen información de enfermedades relacionadas con ECV (para ambos sexos)
+#     - Eliminar las columnas referentes a las comunidades autónomas (seleccionar solo las que contienen información de las provincias)
+#     - Una vez seleccionadas las filas de ECV vamos a eliminar la columna de Causa (ya que ahora solo va a haber 1 causa: ECV)
+#     - Añadimos una columna `Periodo` que contiene los años y otra `Sexo` con los sexos para cada dato.
+#     - Por último renombramos las columnas empleando los nombres del vector Provincias
+
 # Seleccionamos únicamente los datos relativos a enfermedades del sistema circulatorio, eliminamos la columna CAUSA (ya no es necesaria), incluimos una columna que especifique el año de los datos y el sexo al que se refieren los datos.
 DFMorbilidad <- filter(DFMorbilidad, CAUSA %in% c("390-459 VII ENFERMEDADES DEL SISTEMA CIRCULATORIO", "0900 ENFERMEDADES DEL APARATO CIRCULATORIO I00-I99")) %>% 
   bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3), Sexo = rep(c("Ambos sexos", "Hombres", "Mujeres"), 10)) %>% 
@@ -170,6 +207,7 @@ for (i in 1:length(DFMorbilidad)){
   }
 }
 
+#Por último vamos a recolocar las columnas periodo y sexo y a cambiar la tabla a formato 'longer' para que se adecúe más a nuestro tipo de datos de meteorología
 DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>% 
   pivot_longer(data = ., names_to = "Provincias", values_to = "Altas", cols= c(Alava:Zaragoza))
 
@@ -178,15 +216,7 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
 
 
 # * Datos de mortalidad provincial ----------------------------------------
-DFMort_Prov <- data.frame()
-for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
-  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
-  DFMort_Prov <- bind_rows(DFMort_Prov, temporal)
-}DFMort_Prov <- data.frame()
-for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
-  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
-  DFMort_Prov <- bind_rows(DFMort_Prov, temporal)
-}
+
 
 
 # ANÁLISIS DE LOS DATOS ---------------------------------------------------
