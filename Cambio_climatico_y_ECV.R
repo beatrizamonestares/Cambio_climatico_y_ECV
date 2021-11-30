@@ -205,48 +205,100 @@ Graf_filt_Meteo <- function(provincia){
     geom_line(aes(y = Anom_tmax**2, group = 1), colour = "red",) + 
     geom_point(size = 1.5, aes(y = Anom_tmax**2), colour = "red") + 
     geom_smooth(aes( y = Anom_tmax**2, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
-    geom_line(aes(y = Anom_tmin**2,  group = 1), colour = "blue",) + 
+    geom_line(aes(y = Anom_tmin**2,  group = 1), colour = "blue") + 
     geom_point(size = 1.5, aes(y = Anom_tmin**2), colour = "blue") + 
     geom_smooth(aes(y = Anom_tmin**2, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
     labs(x = "Periodo Mes",
          y = "Anomalía^2") + 
-    ggtitle(label = "Anomalía Temperatura", subtitle = as.character(quote(MadridMeteo)))
+    ggtitle(label = "Anomalía Temperatura", subtitle = deparse(substitute(provincia)))
   
   graf_presion <- ggplot(provincia , aes(x = Periodo_Mes)) + 
     geom_line(aes(y = Anom_qmax**2, group = 1), colour = "red") + 
     geom_point(size = 1.5, aes(y = Anom_qmax**2), colour = "red") + 
     geom_smooth(aes( y = Anom_qmax**2, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
-    geom_line(aes(y = Anom_qmin**2,  group = 1), colour = "blue",) + 
+    geom_line(aes(y = Anom_qmin**2,  group = 1), colour = "blue") + 
     geom_point(size = 1.5, aes(y = Anom_qmin**2), colour = "blue") + 
     geom_smooth(aes(y = Anom_qmin**2, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
     labs(x = "Periodo Mes",
          y = "Anomalía^2") + 
-    ggtitle(label = "Anomalía Presión Atm", subtitle = as.character(quote(MadridMeteo)))
+    ggtitle(label = "Anomalía Presión Atm", subtitle = deparse(substitute(provincia)))
   
   graf_sol_hr <- ggplot(provincia , aes(x = Periodo_Mes)) + 
     geom_line(aes(y = Anom_psol**2, group = 1), colour = "red") + 
     geom_point(size = 1.5, aes(y = Anom_psol**2), colour = "red") + 
     geom_smooth(aes( y = Anom_psol**2, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
-    geom_line(aes(y = Anom_hr**2,  group = 1), colour = "blue",) + 
+    geom_line(aes(y = Anom_hr**2,  group = 1), colour = "blue") + 
     geom_point(size = 1.5, aes(y = Anom_hr**2), colour = "blue") + 
     geom_smooth(aes(y = Anom_hr**2, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+ 
     labs(x = "Periodo Mes",
          y = "Anomalía^2") + 
-    ggtitle(label = "Anomalía Insolación y Humedad", subtitle = as.character(quote(provincia)))
+    ggtitle(label = "Anomalía Insolación y Humedad", subtitle = deparse(substitute(provincia)))
+  
+  ggsave(
+    filename = paste(deparse(substitute(provincia)), "Temperatura.png", sep = "_"),
+    plot = graf_temp ,
+    path = paste(getwd(), "/OUTPUT", sep = ""),
+    scale = 1,
+    width = 40,
+    height = 20,
+    units = "cm",
+    dpi = 320
+  )
+  
+  ggsave(
+    filename = paste(deparse(substitute(provincia)), "Presion.png", sep = "_"),
+    plot = graf_presion ,
+    path = paste(getwd(), "/OUTPUT", sep = ""),
+    scale = 1,
+    width = 40,
+    height = 20,
+    units = "cm",
+    dpi = 320
+  )
+  
+  ggsave(
+    filename = paste(deparse(substitute(provincia)), "Sol_Humedad.png", sep = "_"),
+    plot = graf_sol_hr ,
+    path = paste(getwd(), "/OUTPUT", sep = ""),
+    scale = 1,
+    width = 40,
+    height = 20,
+    units = "cm",
+    dpi = 320
+  )
+  
+  return(list(graf_temp,graf_presion,graf_sol_hr))
   
 }
 
-Graf_filt_Meteo(A_CorunaMeteo)
+x <- Graf_filt_Meteo(A_CorunaMeteo)
+x[[1]]
 
-IC_tmax <- ggplot_build(grafica)$data[[3]] %>% 
+IC_tmax <- ggplot_build(x[[1]])$data[[3]] %>% 
   select(. , c(ymax)) %>% 
   rename(high_IC_tmax = ymax)
 
-IC_tmin <- ggplot_build(grafica)$data[[6]] %>% 
+IC_tmin <- ggplot_build(x[[1]])$data[[6]] %>% 
   select(. , c(ymax)) %>% 
   rename(high_IC_tmin = ymax)
 
-y <- bind_cols(y, IC_tmax, IC_tmin)
+IC_pmax <- ggplot_build(x[[2]])$data[[3]] %>% 
+  select(. , c(ymax)) %>% 
+  rename(high_IC_pmax = ymax)
+
+IC_pmin <- ggplot_build(x[[2]])$data[[6]] %>% 
+  select(. , c(ymax)) %>% 
+  rename(high_IC_pmin = ymax)
+
+IC_psol <- ggplot_build(x[[3]])$data[[3]] %>% 
+  select(. , c(ymax)) %>% 
+  rename(high_IC_psol = ymax)
+
+IC_hr <- ggplot_build(x[[3]])$data[[6]] %>% 
+  select(. , c(ymax)) %>% 
+  rename(high_IC_hr = ymax)
+
+A_CorunaMeteo <- bind_cols(A_CorunaMeteo, IC_tmax, IC_tmin, IC_pmax, IC_pmin, IC_psol, IC_hr) # da error pq IC_psol y IC_hr tienen dos valores NA, hay que buscar la forma de sustituir los NA
