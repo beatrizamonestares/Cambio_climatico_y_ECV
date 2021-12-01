@@ -224,21 +224,44 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
 
 # * Datos meteorológicos --------------------------------------------------
 
+# Una vez ya tenemos modificados nuestro datos meteorológicos comenzamos a comprobar qué meses y en qué provincias fueron los más dispares climatológicamente hablando. Para ello vamos a seguir los siguientes pases:
+#     - Para cada dataframe de meteorología de cada provincia, calcular la media de cada variable meteorológica entre el mismo mes de los diferentes años (obtendremos una media para todos los eneros, otra para todos los febreros, otra para marzos...).
+#     - Calcular la anomalía de cada valor meteorológico (calculado como la diferencia entre el valor y la media de dicho valor)
+#     - Obtener una gráfica para representar cada una de estas anomalías elevadas al cuadrado para cada provincia.
+#     - Con los valores de la gráfica seleccionar aquellos  meses cuya anomalía fue especialmente grande y añadirlos a un dataframe: DFMeteo_Extremos
+
+# Comenzamos definiendo una función 'Generador_Av_Anom' que calcula la media y anomalía para las variables meteorológicas del dataframe pasado como parámetro.
 Generador_Av_Anom <- function(provincia){
+  # Para cada mes, calcula la media a lo largo de los años y la añade en una columna `Av_nombre_variable`.
   Interna <- left_join(x = provincia, y = provincia %>% 
                          group_by(Mes) %>% 
                          summarise(Av_tmax = mean(tm_max, na.rm = TRUE),Av_tmin = mean(tm_min, na.rm = TRUE),Av_qmax = mean(q_max, na.rm = TRUE),Av_qmin = mean(q_min, na.rm = TRUE),Av_psol = mean(p_sol, na.rm = TRUE),Av_hr = mean(hr, na.rm = TRUE))
-                       , by = "Mes") %>% 
-    mutate(Anom_tmax = (`tm_max`-`Av_tmax`), Periodo_Mes = paste(Periodo,Mes,sep=" "), Anom_tmin = (`tm_min`-`Av_tmin`), Anom_qmax = (`q_max`-`Av_qmax`), Anom_qmin = ((`q_min`-`Av_qmin`)), Anom_psol = ((`p_sol`-`Av_psol`)), Anom_hr = ((`hr`-`Av_hr`)))
+                       , by = "Mes")
+  # A continuación vamos a sustituir los valores NA que encontremos en las columnas hr y p_sol por el valor de la media calculada para ese mes
+  for (i in 1:length(Interna$hr)){
+    if (is.na(Interna$hr[i])){
+      Interna$hr[i] <- Interna$Av_hr[i]
+    }
+    if (is.na(Interna$p_sol[i])){
+      Interna$p_sol[i] <- Interna$Av_psol[i]
+    }
+  }
+    # Una vez creada esta nueva columna, resta el valor mensual particular y esa nueva columna, generando así la anomalía y almacenándola en la columna `Anom_nombre_variable`
+  Interna <-mutate(.data = Interna, Anom_tmax = (`tm_max`-`Av_tmax`), Periodo_Mes = paste(Periodo,Mes,sep=" "), Anom_tmin = (`tm_min`-`Av_tmin`), Anom_qmax = (`q_max`-`Av_qmax`), Anom_qmin = ((`q_min`-`Av_qmin`)), Anom_psol = ((`p_sol`-`Av_psol`)), Anom_hr = ((`hr`-`Av_hr`)))
   return(Interna)
 }
 
+# Aplicamos la función que acabamos de definir para cada dataframe de meteorología de las provincias.
 for (i in Provincias){
   Nam <- paste(i,"Meteo",sep = "")
   assign(Nam, Generador_Av_Anom(get(Nam)))
 }
 
+# Para el filtrado de aquellos meses y provincias que tienen valores extremos (con anomalías muy grandes) vamos a definir 2 funciones: una primera 'Graf_filt_Meteo()' que va a generar las gráficas para las anomalías de tm_max, tm_min por un ladom q_max, q_min por otro y hr y p_sol en una tercera gráfica y va a guardar esas gráficas; y una segunda función que va a seleccionar a partir de los datos de las gráficas aquellos meses de cada provincia cuya anomalía se sale del Intervalo de Confianza para esa anomalía.
+
+
 Graf_filt_Meteo <- function(provincia){
+  # Creamos la gráfica que representa las anomalías al cuadrado de tm_max y tm_min. Vamos a generarla por capas para poder juntar distintos estilos de representación.
   graf_temp <- ggplot(provincia , aes(x = Periodo_Mes)) + 
     geom_line(aes(y = Anom_tmax**2, group = 1), colour = "red",) + 
     geom_point(size = 1.5, aes(y = Anom_tmax**2), colour = "red") + 
@@ -249,8 +272,10 @@ Graf_filt_Meteo <- function(provincia){
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
     labs(x = "Periodo Mes",
          y = "Anomalía^2") + 
+    # A continuación se emplea la función 'deparse()' junto con 'substitute()' que nos permite obtener en forma de character el nombre del objeto pasado como parámetro.
     ggtitle(label = "Anomalía Temperatura", subtitle = deparse(substitute(provincia)))
-  
+
+  # Creamos la gráfica que representa las anomalías al cuadrado de q_max y q_min. Vamos a generarla por capas para poder juntar distintos estilos de representación.
   graf_presion <- ggplot(provincia , aes(x = Periodo_Mes)) + 
     geom_line(aes(y = Anom_qmax**2, group = 1), colour = "red") + 
     geom_point(size = 1.5, aes(y = Anom_qmax**2), colour = "red") + 
@@ -263,6 +288,7 @@ Graf_filt_Meteo <- function(provincia){
          y = "Anomalía^2") + 
     ggtitle(label = "Anomalía Presión Atm", subtitle = deparse(substitute(provincia)))
   
+  # Por último creamos la gráfica que representa las anomalías al cuadrado de p_sol y hr. Vamos a generarla por capas para poder juntar distintos estilos de representación.
   graf_sol_hr <- ggplot(provincia , aes(x = Periodo_Mes)) + 
     geom_line(aes(y = Anom_psol**2, group = 1), colour = "red") + 
     geom_point(size = 1.5, aes(y = Anom_psol**2), colour = "red") + 
@@ -275,6 +301,7 @@ Graf_filt_Meteo <- function(provincia){
          y = "Anomalía^2") + 
     ggtitle(label = "Anomalía Insolación y Humedad", subtitle = deparse(substitute(provincia)))
   
+  # A cotinuación guardamos cada una de las gráficas generadas en la carpeta /OUTPUT bajo el nombre de la provincia seguido del nombre de la variable meteorológica de la cual se almacenan las anomalías.
   ggsave(
     filename = paste(deparse(substitute(provincia)), "Temperatura.png", sep = "_"),
     plot = graf_temp ,
@@ -312,6 +339,7 @@ Graf_filt_Meteo <- function(provincia){
   
 }
 
+
 x <- Graf_filt_Meteo(A_CorunaMeteo)
 x[[1]]
 
@@ -339,4 +367,4 @@ IC_hr <- ggplot_build(x[[3]])$data[[6]] %>%
   select(. , c(ymax)) %>% 
   rename(high_IC_hr = ymax)
 
-A_CorunaMeteo <- bind_cols(A_CorunaMeteo, IC_tmax, IC_tmin, IC_pmax, IC_pmin, IC_psol, IC_hr) # da error pq IC_psol y IC_hr tienen dos valores NA, hay que buscar la forma de sustituir los NA
+A_CorunaMeteo <- bind_cols(A_CorunaMeteo, IC_tmax, IC_tmin, IC_pmax, IC_pmin, IC_psol, IC_hr) 
