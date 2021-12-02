@@ -1,7 +1,7 @@
 # 
 # Autores: Amo Nestares, Beatriz; Barcina Muñoz, Víctor; Lozano Juárez, Samuel
 # Organización: Universidad de Burgos (UBU)
-# Fecha: 12 - Noviembre - 2021
+# Fecha: 1 - Diciembre - 2021
 # Grado: 3º Ingeniería de la Salud
 # Asignatura: Fuentes de Datos Biomédicas y Web Semántica
 # 
@@ -230,13 +230,14 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
 #     - Obtener una gráfica para representar cada una de estas anomalías elevadas al cuadrado para cada provincia.
 #     - Con los valores de la gráfica seleccionar aquellos  meses cuya anomalía fue especialmente grande y añadirlos a un dataframe: DFMeteo_Extremos
 
-# Comenzamos definiendo una función 'Generador_Av_Anom' que calcula la media y anomalía para las variables meteorológicas del dataframe pasado como parámetro.
+# Comenzamos definiendo una función 'Generador_Av_Anom' que calcula la media y anomalía AL CUADRADO para las variables meteorológicas del dataframe pasado como parámetro.
 Generador_Av_Anom <- function(provincia){
   # Para cada mes, calcula la media a lo largo de los años y la añade en una columna `Av_nombre_variable`.
   Interna <- left_join(x = provincia, y = provincia %>% 
                          group_by(Mes) %>% 
                          summarise(Av_tmax = mean(tm_max, na.rm = TRUE),Av_tmin = mean(tm_min, na.rm = TRUE),Av_qmax = mean(q_max, na.rm = TRUE),Av_qmin = mean(q_min, na.rm = TRUE),Av_psol = mean(p_sol, na.rm = TRUE),Av_hr = mean(hr, na.rm = TRUE))
                        , by = "Mes")
+  
   # A continuación vamos a sustituir los valores NA que encontremos en las columnas hr y p_sol por el valor de la media calculada para ese mes
   for (i in 1:length(Interna$hr)){
     if (is.na(Interna$hr[i])){
@@ -247,7 +248,7 @@ Generador_Av_Anom <- function(provincia){
     }
   }
     # Una vez creada esta nueva columna, resta el valor mensual particular y esa nueva columna, generando así la anomalía y almacenándola en la columna `Anom_nombre_variable`
-  Interna <-mutate(.data = Interna, Anom_tmax = (`tm_max`-`Av_tmax`), Periodo_Mes = paste(Periodo,Mes,sep=" "), Anom_tmin = (`tm_min`-`Av_tmin`), Anom_qmax = (`q_max`-`Av_qmax`), Anom_qmin = ((`q_min`-`Av_qmin`)), Anom_psol = ((`p_sol`-`Av_psol`)), Anom_hr = ((`hr`-`Av_hr`)))
+  Interna <-mutate(.data = Interna, Anom_tmax = (`tm_max`-`Av_tmax`)**2, Anom_tmin = (`tm_min`-`Av_tmin`)**2, Anom_qmax = (`q_max`-`Av_qmax`)**2, Anom_qmin = (`q_min`-`Av_qmin`)**2, Anom_psol = (`p_sol`-`Av_psol`)**2, Anom_hr = (`hr`-`Av_hr`)**2)
   return(Interna)
 }
 
@@ -262,13 +263,13 @@ for (i in Provincias){
 
 Graf_filt_Meteo <- function(provincia){
   # Creamos la gráfica que representa las anomalías al cuadrado de tm_max y tm_min. Vamos a generarla por capas para poder juntar distintos estilos de representación.
-  graf_temp <- ggplot(provincia , aes(x = Periodo_Mes)) + 
-    geom_line(aes(y = Anom_tmax**2, group = 1), colour = "red",) + 
-    geom_point(size = 1.5, aes(y = Anom_tmax**2), colour = "red") + 
-    geom_smooth(aes( y = Anom_tmax**2, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
-    geom_line(aes(y = Anom_tmin**2,  group = 1), colour = "blue") + 
-    geom_point(size = 1.5, aes(y = Anom_tmin**2), colour = "blue") + 
-    geom_smooth(aes(y = Anom_tmin**2, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
+  graf_temp <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
+    geom_line(aes(y = Anom_tmax, group = 1), colour = "red",) + 
+    geom_point(size = 1.5, aes(y = Anom_tmax), colour = "red") + 
+    geom_smooth(aes( y = Anom_tmax, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
+    geom_line(aes(y = Anom_tmin,  group = 1), colour = "blue") + 
+    geom_point(size = 1.5, aes(y = Anom_tmin), colour = "blue") + 
+    geom_smooth(aes(y = Anom_tmin, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
     labs(x = "Periodo Mes",
          y = "Anomalía^2") + 
@@ -276,32 +277,33 @@ Graf_filt_Meteo <- function(provincia){
     ggtitle(label = "Anomalía Temperatura", subtitle = deparse(substitute(provincia)))
 
   # Creamos la gráfica que representa las anomalías al cuadrado de q_max y q_min. Vamos a generarla por capas para poder juntar distintos estilos de representación.
-  graf_presion <- ggplot(provincia , aes(x = Periodo_Mes)) + 
-    geom_line(aes(y = Anom_qmax**2, group = 1), colour = "red") + 
-    geom_point(size = 1.5, aes(y = Anom_qmax**2), colour = "red") + 
-    geom_smooth(aes( y = Anom_qmax**2, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
-    geom_line(aes(y = Anom_qmin**2,  group = 1), colour = "blue") + 
-    geom_point(size = 1.5, aes(y = Anom_qmin**2), colour = "blue") + 
-    geom_smooth(aes(y = Anom_qmin**2, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
+  graf_presion <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
+    geom_line(aes(y = Anom_qmax, group = 1), colour = "red") + 
+    geom_point(size = 1.5, aes(y = Anom_qmax), colour = "red") + 
+    geom_smooth(aes( y = Anom_qmax, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
+    geom_line(aes(y = Anom_qmin,  group = 1), colour = "blue") + 
+    geom_point(size = 1.5, aes(y = Anom_qmin), colour = "blue") + 
+    geom_smooth(aes(y = Anom_qmin, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
     labs(x = "Periodo Mes",
          y = "Anomalía^2") + 
     ggtitle(label = "Anomalía Presión Atm", subtitle = deparse(substitute(provincia)))
   
   # Por último creamos la gráfica que representa las anomalías al cuadrado de p_sol y hr. Vamos a generarla por capas para poder juntar distintos estilos de representación.
-  graf_sol_hr <- ggplot(provincia , aes(x = Periodo_Mes)) + 
-    geom_line(aes(y = Anom_psol**2, group = 1), colour = "red") + 
-    geom_point(size = 1.5, aes(y = Anom_psol**2), colour = "red") + 
-    geom_smooth(aes( y = Anom_psol**2, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
-    geom_line(aes(y = Anom_hr**2,  group = 1), colour = "blue") + 
-    geom_point(size = 1.5, aes(y = Anom_hr**2), colour = "blue") + 
-    geom_smooth(aes(y = Anom_hr**2, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
+  graf_sol_hr <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
+    geom_line(aes(y = Anom_psol, group = 1), colour = "red") + 
+    geom_point(size = 1.5, aes(y = Anom_psol), colour = "red") + 
+    geom_smooth(aes( y = Anom_psol, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
+    geom_line(aes(y = Anom_hr,  group = 1), colour = "blue") + 
+    geom_point(size = 1.5, aes(y = Anom_hr), colour = "blue") + 
+    geom_smooth(aes(y = Anom_hr, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+ 
     labs(x = "Periodo Mes",
          y = "Anomalía^2") + 
     ggtitle(label = "Anomalía Insolación y Humedad", subtitle = deparse(substitute(provincia)))
   
   # A cotinuación guardamos cada una de las gráficas generadas en la carpeta /OUTPUT bajo el nombre de la provincia seguido del nombre de la variable meteorológica de la cual se almacenan las anomalías.
+  
   ggsave(
     filename = paste(deparse(substitute(provincia)), "Temperatura.png", sep = "_"),
     plot = graf_temp ,
@@ -339,32 +341,86 @@ Graf_filt_Meteo <- function(provincia){
   
 }
 
+Filtro_Extremos <- function(provincia, dataframe){
+  lista_graficas <- Graf_filt_Meteo(provincia)
+  
+  IC_tmax <- left_join(ggplot_build(lista_graficas[[1]])$data[[2]] %>% 
+                         select(. , c(x)),
+                       ggplot_build(lista_graficas[[1]])$data[[3]] %>% 
+                         select(. , c(x, ymax)) %>% 
+                         rename(high_IC_tmax = ymax), 
+                       by = "x")
+  
+  IC_tmin <- left_join(ggplot_build(lista_graficas[[1]])$data[[5]] %>% 
+                         select(. , c(x)),
+                       ggplot_build(lista_graficas[[1]])$data[[6]] %>% 
+                         select(. , c(x, ymax)) %>% 
+                         rename(high_IC_tmin = ymax), 
+                       by = "x")
+  
+  IC_qmax <- left_join(ggplot_build(lista_graficas[[2]])$data[[2]] %>% 
+                         select(. , c(x)),
+                       ggplot_build(lista_graficas[[2]])$data[[3]] %>% 
+                         select(. , c(x, ymax)) %>% 
+                         rename(high_IC_qmax = ymax), 
+                       by = "x")
+  
+  IC_qmin <- left_join(ggplot_build(lista_graficas[[2]])$data[[5]] %>% 
+                         select(. , c(x)),
+                       ggplot_build(lista_graficas[[2]])$data[[6]] %>% 
+                         select(. , c(x, ymax)) %>% 
+                         rename(high_IC_qmin = ymax), 
+                       by = "x")
+  
+  IC_psol <- left_join(ggplot_build(lista_graficas[[3]])$data[[2]] %>% 
+                         select(. , c(x)),
+                       ggplot_build(x[[3]])$data[[3]] %>% 
+                         select(. , c(x, ymax)) %>% 
+                         rename(high_IC_psol = ymax), 
+                       by = "x")
+  
+  IC_hr <- left_join(ggplot_build(lista_graficas[[3]])$data[[5]] %>% 
+                       select(. , c(x)),
+                     ggplot_build(lista_graficas[[3]])$data[[6]] %>% 
+                       select(. , c(x, ymax)) %>% 
+                       rename(high_IC_hr = ymax), 
+                     by = "x")
+  
+  
+  Interna <- bind_cols(provincia, IC_tmax) %>% 
+    left_join(.,IC_tmin, by = "x") %>% 
+    left_join(.,IC_qmax, by = "x") %>% 
+    left_join(.,IC_qmin, by = "x") %>% 
+    left_join(.,IC_psol, by = "x") %>% 
+    left_join(.,IC_hr, by = "x") %>% 
+    subset(select = -x) %>% 
+    mutate(Provincia = deparse(substitute(provincia))) %>% 
+    relocate(., Provincia, .before = Periodo)
+  
+  dataframe <- bind_rows(dataframe, filter(Interna,
+    Anom_tmax>high_IC_tmax
+  )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_tmin>high_IC_tmin
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_qmax>high_IC_qmax
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_qmin>high_IC_qmin
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_psol>high_IC_psol
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_hr>high_IC_hr
+    ))
+  
+  return(dataframe)
+  
+}
 
-x <- Graf_filt_Meteo(A_CorunaMeteo)
-x[[1]]
+DFPrueba1 <- data.frame()
+DFPrueba1 <- Filtro_Extremos(A_CorunaMeteo, DFPrueba1)
 
-IC_tmax <- ggplot_build(x[[1]])$data[[3]] %>% 
-  select(. , c(ymax)) %>% 
-  rename(high_IC_tmax = ymax)
-
-IC_tmin <- ggplot_build(x[[1]])$data[[6]] %>% 
-  select(. , c(ymax)) %>% 
-  rename(high_IC_tmin = ymax)
-
-IC_pmax <- ggplot_build(x[[2]])$data[[3]] %>% 
-  select(. , c(ymax)) %>% 
-  rename(high_IC_pmax = ymax)
-
-IC_pmin <- ggplot_build(x[[2]])$data[[6]] %>% 
-  select(. , c(ymax)) %>% 
-  rename(high_IC_pmin = ymax)
-
-IC_psol <- ggplot_build(x[[3]])$data[[3]] %>% 
-  select(. , c(ymax)) %>% 
-  rename(high_IC_psol = ymax)
-
-IC_hr <- ggplot_build(x[[3]])$data[[6]] %>% 
-  select(. , c(ymax)) %>% 
-  rename(high_IC_hr = ymax)
-
-A_CorunaMeteo <- bind_cols(A_CorunaMeteo, IC_tmax, IC_tmin, IC_pmax, IC_pmin, IC_psol, IC_hr) 
+DFPrueba1 <- Filtro_Extremos(AlavaMeteo, DFPrueba1)
