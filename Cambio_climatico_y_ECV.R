@@ -214,7 +214,6 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
 # * Datos de mortalidad nacional mensual -------------------------------------------
 
 
-
 # * Datos de mortalidad provincial ----------------------------------------
 
 
@@ -261,8 +260,10 @@ for (i in Provincias){
 # Para el filtrado de aquellos meses y provincias que tienen valores extremos (con anomalías muy grandes) vamos a definir 2 funciones: una primera 'Graf_filt_Meteo()' que va a generar las gráficas para las anomalías de tm_max, tm_min por un ladom q_max, q_min por otro y hr y p_sol en una tercera gráfica y va a guardar esas gráficas; y una segunda función que va a seleccionar a partir de los datos de las gráficas aquellos meses de cada provincia cuya anomalía se sale del Intervalo de Confianza para esa anomalía.
 
 
-Graf_filt_Meteo <- function(provincia){
+Graf_filt_Meteo <- function(objeto){
   # Creamos la gráfica que representa las anomalías al cuadrado de tm_max y tm_min. Vamos a generarla por capas para poder juntar distintos estilos de representación.
+  provincia <- get(objeto)
+  
   graf_temp <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
     geom_line(aes(y = Anom_tmax, group = 1), colour = "red",) + 
     geom_point(size = 1.5, aes(y = Anom_tmax), colour = "red") + 
@@ -274,7 +275,7 @@ Graf_filt_Meteo <- function(provincia){
     labs(x = "Periodo Mes",
          y = "Anomalía^2") + 
     # A continuación se emplea la función 'deparse()' junto con 'substitute()' que nos permite obtener en forma de character el nombre del objeto pasado como parámetro.
-    ggtitle(label = "Anomalía Temperatura", subtitle = deparse(substitute(provincia)))
+    ggtitle(label = "Anomalía Temperatura", subtitle = str_sub(objeto, start = 1L, end = -6L))
 
   # Creamos la gráfica que representa las anomalías al cuadrado de q_max y q_min. Vamos a generarla por capas para poder juntar distintos estilos de representación.
   graf_presion <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
@@ -287,7 +288,7 @@ Graf_filt_Meteo <- function(provincia){
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
     labs(x = "Periodo Mes",
          y = "Anomalía^2") + 
-    ggtitle(label = "Anomalía Presión Atm", subtitle = deparse(substitute(provincia)))
+    ggtitle(label = "Anomalía Presión Atm", subtitle = str_sub(objeto, start = 1L, end = -6L))
   
   # Por último creamos la gráfica que representa las anomalías al cuadrado de p_sol y hr. Vamos a generarla por capas para poder juntar distintos estilos de representación.
   graf_sol_hr <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
@@ -300,12 +301,12 @@ Graf_filt_Meteo <- function(provincia){
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+ 
     labs(x = "Periodo Mes",
          y = "Anomalía^2") + 
-    ggtitle(label = "Anomalía Insolación y Humedad", subtitle = deparse(substitute(provincia)))
+    ggtitle(label = "Anomalía Insolación y Humedad", subtitle = str_sub(objeto, start = 1L, end = -6L))
   
   # A cotinuación guardamos cada una de las gráficas generadas en la carpeta /OUTPUT bajo el nombre de la provincia seguido del nombre de la variable meteorológica de la cual se almacenan las anomalías.
   
   ggsave(
-    filename = paste(deparse(substitute(provincia)), "Temperatura.png", sep = "_"),
+    filename = paste(str_sub(objeto, start = 1L, end = -6L), "Temperatura.png", sep = "_"),
     plot = graf_temp ,
     path = paste(getwd(), "/OUTPUT", sep = ""),
     scale = 1,
@@ -316,7 +317,7 @@ Graf_filt_Meteo <- function(provincia){
   )
   
   ggsave(
-    filename = paste(deparse(substitute(provincia)), "Presion.png", sep = "_"),
+    filename = paste(str_sub(objeto, start = 1L, end = -6L), "Presion.png", sep = "_"),
     plot = graf_presion ,
     path = paste(getwd(), "/OUTPUT", sep = ""),
     scale = 1,
@@ -327,7 +328,7 @@ Graf_filt_Meteo <- function(provincia){
   )
   
   ggsave(
-    filename = paste(deparse(substitute(provincia)), "Sol_Humedad.png", sep = "_"),
+    filename = paste(str_sub(objeto, start = 1L, end = -6L), "Sol_Humedad.png", sep = "_"),
     plot = graf_sol_hr ,
     path = paste(getwd(), "/OUTPUT", sep = ""),
     scale = 1,
@@ -342,7 +343,9 @@ Graf_filt_Meteo <- function(provincia){
 }
 
 Filtro_Extremos <- function(provincia, dataframe){
-  lista_graficas <- Graf_filt_Meteo(provincia)
+  
+  name <- str_sub(deparse(substitute(provincia)))
+  lista_graficas <- Graf_filt_Meteo(name)
   
   IC_tmax <- left_join(ggplot_build(lista_graficas[[1]])$data[[2]] %>% 
                          select(. , c(x)),
@@ -394,7 +397,7 @@ Filtro_Extremos <- function(provincia, dataframe){
     left_join(.,IC_psol, by = "x") %>% 
     left_join(.,IC_hr, by = "x") %>% 
     subset(select = -x) %>% 
-    mutate(Provincia = deparse(substitute(provincia))) %>% 
+    mutate(Provincia = str_sub(name, start = 1L, end = -6L)) %>% 
     relocate(., Provincia, .before = Periodo)
   
   dataframe <- bind_rows(dataframe, filter(Interna,
@@ -420,7 +423,57 @@ Filtro_Extremos <- function(provincia, dataframe){
   
 }
 
-DFPrueba1 <- data.frame()
-DFPrueba1 <- Filtro_Extremos(A_CorunaMeteo, DFPrueba1)
+DFMeteo_Extrem <- data.frame()
+DFMeteo_Extrem <- Filtro_Extremos(A_CorunaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(AlavaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(AlbaceteMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(AlicanteMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(AlmeriaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(AsturiasMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(AvilaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(BadajozMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(BarcelonaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(BizkaiaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(BurgosMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(CaceresMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(CadizMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(CantabriaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(CastellonMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(CeutaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(Ciudad_RealMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(CordobaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(CuencaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(GironaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(GranadaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(GuadalajaraMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(GuipuzkoaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(HuelvaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(HuescaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(Islas_BalearesMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(JaenMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(La_RiojaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(Las_PalmasMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(LeonMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(LleidaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(LugoMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(MadridMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(MalagaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(MelillaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(MurciaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(NavarraMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(OurenseMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(PalenciaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(PontevedraMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(SalamancaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(SegoviaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(SevillaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(SoriaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(TarragonaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(TenerifeMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(TeruelMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(ToledoMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(ValenciaMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(ValladolidMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(ZamoraMeteo, DFPrueba1)
+DFMeteo_Extrem <- Filtro_Extremos(ZaragozaMeteo, DFPrueba1)
 
-DFPrueba1 <- Filtro_Extremos(AlavaMeteo, DFPrueba1)
