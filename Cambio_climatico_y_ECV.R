@@ -18,6 +18,7 @@ library(tidyverse)
 library(fs)
 library(readxl)
 library(ggplot2)
+library(Hmisc)
 
 # API KEY AEMET -----------------------------------------------------------
 # Si no se detecta la presencia de una API KEY de AEMET, se abrirá la página oportuna para su obtención
@@ -86,6 +87,12 @@ ValladolidMeteo <- bind_rows(ValladolidMeteo, aemet_monthly_clim(station = "2422
 ValladolidMeteo <- Reorder(ValladolidMeteo)
 
 
+#  * Datos poblacionales --------------------------------------------------
+
+# Cargamos un excel que contiene información acerca del número de habitantes de cada provincia
+
+DFPoblacion <- read_excel("C:/Users/samue/Documents/UBU/3er curso/FDB y Web Semántica/Cambio_climatico_y_ECV/INPUT/Poblacion_prov.xlsx", 
+                          skip = 6)
 
 # * Datos de morbilidad ---------------------------------------------------
 
@@ -177,6 +184,12 @@ for (i in 1:length(Provincias)){
 }
 
 
+#  * Datos de población ---------------------------------------------------
+names(DFPoblacion)[1] <- "Localidad"
+DFPoblacion <- select(DFPoblacion, starts_with(c("Localidad","1 de enero"))) %>% 
+  select(. , ends_with(c("Localidad","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019")))
+# FALTA CAMBIAR EL NOMBRE DE LAS FILAS PARA QUE SEA EL QUE SE AJUSTE AL STANDARD DE PROVINCIAS
+
 # * Datos de morbilidad --------------------------------------------------
 
 # Para el refinamiento de datos de morbilidad vamos a:
@@ -213,13 +226,65 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
 
 # * Datos de mortalidad nacional mensual -------------------------------------------
 
+# Primero obtenemos aquellas posiciones de las filas que contienen las muertes correspondientes a la causa que nos interesa
+
+posiciones <- which(DFMort_Mens$Causa %in% c("053-061 IX.Enfermedades del sistema circulatorio"))
+
+# Vamos a crear un data frame temporal que va a servirnos de pivote donde cargar temporalmente el DFMort_Mens antes de cargarlo definitivamente
+
+temporal <- data.frame()
+
+# Ahora empleamos las posiciones en que se encuentran los datos de interés y seleccionamos las 3 filas siguientes (que contienen los datos de Ambos Sexos, Hombres y Mujeres en ese orden)
+for(i in posiciones){
+  temporal <- bind_rows(temporal, DFMort_Mens[(i+1):(i+3), ])
+}
+
+# Guardamos ahora sí esta información en el dataframe DFMort_Mens y le realizamos una serie de modificaciones para facilitar su lectura (incorporamos la columna año, la recolocamos y eliminamos la columna de `Todos los meses`)
+DFMort_Mens <- mutate(temporal, Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3)) %>% 
+  mutate(Sexo = Causa) %>% 
+  relocate(`Sexo`, .before = `Todos los meses`) %>% 
+  relocate(`Periodo`, .before = `Sexo`) %>% 
+  subset(select = -c(`Todos los meses`,`Causa`)) %>% 
+  # Realizamos también un pivot_longer() para almacenar los datos en formato longer y ponemos en mayúsculas el nombre de los meses para facilitar posteriores join con otras tablas
+  pivot_longer(names_to = "Mes", values_to = "Muertes", cols = c(enero:diciembre)) %>% 
+  relocate(Mes, .before = `Sexo`) %>% 
+  mutate(Mes = capitalize(Mes))
+
 
 # * Datos de mortalidad provincial ----------------------------------------
 
+# Primero vamos a nombrar la primera columna como CAUSA para poder manejarla de forma más cómoda
+names(DFMort_Prov)[1] <-"Causa"
+# Al igual que en el refinamiento anterior, vamos a localizar aquellas filas que contienen la información referente a los datos que nos interesan (muertes por ECV)
+posiciones <- which(DFMort_Prov$Causa %in% c("053-061 IX.Enfermedades del sistema circulatorio"))
+
+# E igual que antes almacenamos los datos en un dataframe temporal que usaremos como pivote
+
+temporal <- data.frame()
+
+# Ahora empleamos las posiciones en que se encuentran los datos de interés y seleccionamos las 3 filas siguientes (que contienen los datos de Ambos Sexos, Hombres y Mujeres en ese orden)
+for(i in posiciones){
+  temporal <- bind_rows(temporal, DFMort_Prov[(i+1):(i+3), ])
+}
+
+DFMort_Prov <- temporal
+
+DFMort_Prov <- DFMort_Prov[ ,1:(length(DFMort_Prov)-3)] %>% 
+  mutate(Sexo = Causa, Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3)) %>% 
+  relocate(Periodo, .before = Causa) %>% 
+  relocate(Sexo, .before = Causa) %>% 
+  subset(select = -c(Causa, Total)) %>% 
+  relocate(.,`Araba/Álava`, .before = `Albacete`) %>% 
+  relocate(., `Gipuzkoa`, .after = `Guadalajara`) %>%
+  relocate(., `Ceuta`, .before = `Ciudad Real`) %>% 
+  relocate(., Melilla, .before = `Murcia`) %>% 
+  pivot_longer(names_to = "temporal", values_to = "Mortalidad", cols = c(`Araba/Álava`:`Zaragoza`)) %>% 
+  mutate(., `Provincia` = rep(Provincias, 30)) %>% 
+  relocate(Provincia, .before = temporal) %>% 
+  subset(select = -temporal)
 
 
 # ANÁLISIS DE LOS DATOS ---------------------------------------------------
-
 
 # * Datos meteorológicos --------------------------------------------------
 
@@ -476,4 +541,3 @@ DFMeteo_Extrem <- Filtro_Extremos(ValenciaMeteo, DFPrueba1)
 DFMeteo_Extrem <- Filtro_Extremos(ValladolidMeteo, DFPrueba1)
 DFMeteo_Extrem <- Filtro_Extremos(ZamoraMeteo, DFPrueba1)
 DFMeteo_Extrem <- Filtro_Extremos(ZaragozaMeteo, DFPrueba1)
-
