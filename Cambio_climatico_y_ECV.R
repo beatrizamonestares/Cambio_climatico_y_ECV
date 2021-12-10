@@ -357,17 +357,18 @@ for (i in Provincias){
 Graf_filt_Meteo <- function(objeto){
   # Creamos la gráfica que representa las anomalías al cuadrado de tm_max y tm_min. Vamos a generarla por capas para poder juntar distintos estilos de representación.
   provincia <- get(objeto)
+  colors <- c("Anom_tmax" = "red", "Anom_tmin" = "blue", )
   
   graf_temp <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
-    geom_line(aes(y = Anom_tmax, group = 1), colour = "red",) + 
+    geom_line(aes(y = Anom_tmax, group = 1), colour = "Anom_tmax",) + 
     geom_point(size = 1.5, aes(y = Anom_tmax), colour = "red") + 
-    geom_smooth(aes( y = Anom_tmax, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
-    geom_line(aes(y = Anom_tmin,  group = 1), colour = "blue") + 
+    geom_smooth(aes( y = Anom_tmax, group = 1), fill = "Anom_tmax", alpha = 0.25, colour = "Anom_tmax", level = 0.995) +
+    geom_line(aes(y = Anom_tmin,  group = 1), colour = "Anom_tmin") + 
     geom_point(size = 1.5, aes(y = Anom_tmin), colour = "blue") + 
-    geom_smooth(aes(y = Anom_tmin, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
+    geom_smooth(aes(y = Anom_tmin, group = 1), fill = "Anom_tmin", alpha = 0.25, colour = "Anom_tmin", level = 0.995) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
-    labs(x = "Periodo Mes",
-         y = "Anomalía^2") + 
+    labs(x = "Periodo Mes", y = expression("Anomalía"~^2), colour = "Serie") + 
+    scale_color_manual(values = colors) +
     # A continuación se emplea la función 'deparse()' junto con 'substitute()' que nos permite obtener en forma de character el nombre del objeto pasado como parámetro.
     ggtitle(label = "Anomalía Temperatura", subtitle = str_sub(objeto, start = 1L, end = -6L))
 
