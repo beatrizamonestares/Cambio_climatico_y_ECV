@@ -185,10 +185,39 @@ for (i in 1:length(Provincias)){
 
 
 #  * Datos de población ---------------------------------------------------
+
 names(DFPoblacion)[1] <- "Localidad"
 DFPoblacion <- select(DFPoblacion, starts_with(c("Localidad","1 de enero"))) %>% 
-  select(. , ends_with(c("Localidad","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019")))
-# FALTA CAMBIAR EL NOMBRE DE LAS FILAS PARA QUE SEA EL QUE SE AJUSTE AL STANDARD DE PROVINCIAS
+  select(. , ends_with(c("Localidad","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"))) %>%
+  filter(!Localidad %in% c("Total","Total Nacional"))
+names(DFPoblacion) <- c("Localidad","2010","2011","2012","2013","2014","2015","2016","2017", "2018","2019")
+
+
+i <- 2
+while(i<length(DFPoblacion$Localidad)){
+  nombre <- DFPoblacion$Localidad[i]
+  DFPoblacion$Localidad[i+1] <- nombre
+  i <- i+2
+}
+
+DFPoblacion <- drop_na(DFPoblacion)
+DFPoblacion <- filter(.data = DFPoblacion, Localidad != "Ambos sexos")
+
+for (i in 1:length(DFPoblacion$Localidad)){
+  DFPoblacion$Localidad[i] <- str_sub(DFPoblacion$Localidad[i], start = 4)
+}
+
+DFPoblacion$Localidad[which(DFPoblacion$Localidad %in% c("Araba/Álava"))] <- "Alava"
+DFPoblacion$Localidad[which(DFPoblacion$Localidad %in% c("Gipuzkoa"))] <- "Guipuzkoa"
+
+DFPoblacion <- arrange(DFPoblacion, Localidad)
+
+DFPoblacion <- mutate(DFPoblacion, "Provincia" = Provincias) %>% 
+  relocate(., `Provincia`, .before = `Localidad`) %>% 
+  subset(., select = - "Localidad") %>% 
+  pivot_longer(., names_to = "Periodo", values_to = "Habitantes", cols = c(`2010`:`2019`))
+
+DFPoblacion <- pivot_longer(DFPoblacion, names_to = "Periodo", values_to = "Habitantes", cols = c(`2010`:`2019`))
 
 # * Datos de morbilidad --------------------------------------------------
 
@@ -222,7 +251,7 @@ for (i in 1:length(DFMorbilidad)){
 
 #Por último vamos a recolocar las columnas periodo y sexo y a cambiar la tabla a formato 'longer' para que se adecúe más a nuestro tipo de datos de meteorología
 DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>% 
-  pivot_longer(data = ., names_to = "Provincias", values_to = "Altas", cols= c(Alava:Zaragoza))
+  pivot_longer(data = ., names_to = "Provincia", values_to = "Altas", cols= c(Alava:Zaragoza))
 
 # * Datos de mortalidad nacional mensual -------------------------------------------
 
