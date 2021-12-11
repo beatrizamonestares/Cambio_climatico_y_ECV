@@ -778,8 +778,47 @@ for (i in 1:length(Provincias)){
 
 De esta manera hemos logrado modificar los datos de meteorología, dejándolos más legibles y entendibles. 
 
-<img src="Dataframe A Coruña.jpg"
+<img src="IMAGENES/Dataframe A Coruña.jpg"
      width="400"
      height="341">
 
 Las columnas Periodo y Mes son de tipo carácter y representan el año y mes al que corresponden los datos. Las columnas tm_max (temperatura media de las máximas), tm_min (temperatura media de las mínimas), q_max (presión media de las máximas), q_min (presión media de las mínimas), p_sol(porcentaje de insolación real frente a insolación teórica) y hr (humedad relativa) son de tipo numeric. Cada dataframe de meteorología posee 120 filas (12 meses*10 años) y 8 columnas.
+
+#### _2.2 Datos de morbilidad_
+
+En el refinamiento de estos datos se busca seleccionar las filas que contienen información únicamente sobre ECV (eliminando el resto de filas), eliminando también la columna CAUSA e introduciendo la columna Periodo que contiene los años de cada dato y la columna Sexo con el sexo de cada dato:
+
+``` {r eval=FALSE}
+DFMorbilidad <- filter(DFMorbilidad, CAUSA %in% c("390-459 VII ENFERMEDADES DEL SISTEMA CIRCULATORIO", "0900 ENFERMEDADES DEL APARATO CIRCULATORIO I00-I99")) %>% 
+  bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3), Sexo = rep(c("Ambos sexos", "Hombres", "Mujeres"), 10)) %>% 
+  subset(select = - CAUSA)
+```
+
+Posteriormente eliminar las columnas que hacen referencia a comunidades autónomas (seleccionando solo las que contienen información de provincias):
+
+``` {r eval=FALSE}
+DFMorbilidad <- DFMorbilidad[ ,order(names(DFMorbilidad))] %>% 
+  relocate(.,`Araba/Álava`, .before = `Albacete`) %>% 
+  relocate(., `Gipuzkoa`, .after = `Guadalajara`)
+
+j <- 1
+for (i in 1:length(DFMorbilidad)){
+  if (!colnames(DFMorbilidad)[i] %in% c("Sexo","Periodo")){
+    colnames(DFMorbilidad)[i] = Provincias[j]
+    j <- j+1
+  }
+}
+```
+
+Por último vamos a recolocar las columnas periodo y sexo y a cambiar la tabla a formato 'longer' para que se adecúe más a nuestro tipo de datos de meteorología.
+
+```{r eval=FALSE}
+DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>% 
+  pivot_longer(data = ., names_to = "Provincia", values_to = "Altas", cols= c(Alava:Zaragoza))
+```
+
+<img src="IMAGENES/2.2.jpg"
+     width="400"
+     height="341">
+     
+Este es el aspecto final del dataframe DFMorbilidad, donde la variable Periodo, Sexo y Provincia son de tipo carácter, y la columna Altas (que representa el número de altas hospitalarias por ECV para ese triplete de Periodo, Sexo, Provincia) es de tipo numeric.
