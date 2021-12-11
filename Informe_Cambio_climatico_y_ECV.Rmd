@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
+### {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
 <center>
 <font size="30">
 <span style="color:black">
@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 </font>
 </center>
 
-## 
+###
 <span style="color:black">
 <center>
 <font size="6">
@@ -42,7 +42,7 @@ Se ha escogido este tema debido a que estamos ante los datos más extremos de co
 ![](https://ih1.redbubble.net/image.1167929045.9498/pp,840x830-pad,1000x1000,f8f8f8.jpg){width=200px}
 </center>
 
-## 
+###
 <span style="color:black">
 <center>
 <font size="6">
@@ -160,7 +160,8 @@ _Consecuencias_
 </center>
 
 
-## 
+
+###
 <span style="color:black">
 <center>
 <font size="6">
@@ -250,7 +251,7 @@ _Causas_
 ![](https://thumbs.dreamstime.com/b/gente-con-malos-h%C3%A1bitos-adicci%C3%B3n-las-drogas-y-los-juegos-drogadicci%C3%B3n-al-juego-comiendo-comida-chatarra-apostando-estilos-de-199569418.jpg){width=250}
 </center>
 
-##
+###
 <span style="color:black">
 <center>
 <font size="6">
@@ -304,19 +305,19 @@ _Otros estudios_
 </div>
 </span>
 
-## {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
+### {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
 <center>
 <font size="30">
 <span style="color:black">
 
 **OBJETIVOS**
 
-![](https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg){width=600px}
+![](https://www.google.com/url?sa=i&url=https%3A%2F%2Fcoworkingfy.com%2Fcomo-definir-objetivos-metodos%2F&psig=AOvVaw3QuTp5DQe0R0Sd6BkR0T0H&ust=1639334416362000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKC5reOy3PQCFQAAAAAdAAAAABAD){width=600px}
 </span>
 </font>
 </center>
 
-## 
+####
 <span style="color:black">
 <center>
 <font size="6">
@@ -334,7 +335,7 @@ Tratar de encontrar correlación entre el cambio climático y una mayor incidenc
 </span>
 
 
-## 
+####
 <span style="color:black">
 <center>
 <font size="6">
@@ -352,7 +353,7 @@ Estudiar las variables meteorológicas mensuales (temperatura, presión atmosfé
 </span>
 
 
-## 
+####
 <span style="color:black">
 <center>
 <font size="6">
@@ -369,7 +370,7 @@ Una vez conocidas las provincias con climatología más adversa para cada año d
 </div>
 </span>
 
-## 
+####
 <span style="color:black">
 <center>
 <font size="6">
@@ -386,14 +387,16 @@ Una vez conocidos qué meses y de qué año tuvieron una climatología más extr
 </div>
 </span>
 
-## {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
+
+
+### {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
 <center>
 <font size="30">
 <span style="color:black">
 
 **METODOLOGÍAS**
 
-![](https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg){width=600px}
+![](https://www.google.com/url?sa=i&url=https%3A%2F%2Fconceptodefinicion.de%2Fmetodologia%2F&psig=AOvVaw0N-y90BoVqMFhsZ0ZIYVU_&ust=1639334519373000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCPjh9ZKz3PQCFQAAAAAdAAAAABAD){width=600px}
 </span>
 </font>
 </center>
@@ -569,7 +572,7 @@ _Objetivo 3_
 </center>
 
 
-## {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
+### {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
 <center>
 <font size="30">
 <span style="color:black">
@@ -580,7 +583,7 @@ _Objetivo 3_
 </center> 
 
 <div style="text-align: justify"> 
-### **1. Carga de los datos**
+#### **1. Carga de los datos**
 
 En el proyecto desarrollado se va a tratar de vincular el cambio climático con las enfermedades cardiovasculares, para ello se emplean 5 fuentes de datos distintas:
 
