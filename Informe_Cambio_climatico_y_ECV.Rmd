@@ -1116,3 +1116,94 @@ Una vez ya ordenado alfabéticamente introducimos la nueva columna Provincia que
 <div style="text-align: justify">
 
 Que posee 520 filas (52 provincias * 10 años) y 3 columnas: 2 de ellas caracteres (Provincia y Periodo) y una de tipo numeric (Habitantes) que representa el número de habitantes en esa provincia ese año.
+
+
+<div style="text-align: justify">
+#### **3. ANALISIS DE LOS DATOS.**
+Llegados a este punto ya hemos logrado obtener los datos refinados de manera que se pueda comenzar a trabajar con  ellos para obtener nueva información. Debemos recordar cuál es el objetivo del proyecto: buscar una posible correlación entre el cambio climático y las enfermedades cardiovasculares.
+
+#### **3.1 Obtener los meses y provincias mas adversos**
+
+En primer lugar vamos a tomar el objetivo específico 1: estudiar las variables meteorológicas mensuales de cada provincia, para determinar qué meses de qué provincias tuvieron algún valor adverso (climatológicamente hablando). 
+Para saber qué entendemos por valor climatológico adverso vamos a basarnos en la anomalía (diferencia entre el valor de un dato y la media para ese tipo de dato). Para ello el primer paso es calcular la media de cada variable meteorológica estudiada (tm_max, tm_min, q_max, q_min, hr y p_sol) para cada mes, es decir, obtener una media de las tm_max de todos los eneros, febreros, marzos… y así con tm_min, q_max, q_min, hr y p_sol. Una vez obtenida esta media, se almacenará en cada dataframe meteorológico (recordemos que tenemos 52 dataframes meteorológicos llamados ProvinciaMeteo) dentro de una columna con el nombre Av_variable_meteorológica (e.g. Av_tmax, Av_tmin, Av_qmax…). En el fragmento de código que aparece a continuación no se emplea directamente el dataframe de la provincia, ya que el código pertenece a una función en la que empleamos un objeto pivote denominado _Interna_ para poder solventar un problema con los datos NA que se explica en el paso siguiente.
+
+``` {r eval=FALSE}
+`Av_nombre_variable`.
+  Interna <- left_join(x = provincia, y = provincia %>% 
+                         group_by(Mes) %>% 
+                         summarise(Av_tmax = mean(tm_max, na.rm = TRUE),Av_tmin = mean(tm_min, na.rm = TRUE),Av_qmax = mean(q_max, na.rm = TRUE),Av_qmin = mean(q_min, na.rm = TRUE),Av_psol = mean(p_sol, na.rm = TRUE),Av_hr = mean(hr, na.rm = TRUE))
+                       , by = "Mes")
+```
+
+El siguiente paso es para cada fila (que recordemos representa un mes de un año concreto) restar el valor concreto de ese mes contenido en la columna tm_max, tm_min, q_max… y el valor de la media para ese mes, almacenado en Av_tmax, Av_tmin, Av_qmax… El valor de esta resta será la anomalía que buscamos. Con el fin de despreciar los meses donde la anomalía sea pequeña y acentuar aquellos con anomalía grande, vamos a elevar el valor de la anomalía al cuadrado, y posteriormente a almacenarlo en una columna nueva llamada Anom_vble_met (e.g. Anom_tmax, Anom_tmin, Anom_qmax…). En el transcurso de este paso del análisis nos percatamos de un fallo, algunos valores meteorológicos constaban como NA (por motivos de muestreo por parte de AEMET). Esto suponía un gran problema, ya que al ser el valor concreto NA, la anomalía también resultaba como NA y nos devolvía ciertos errores en la lectura. Por ello se decidió sustituir estos valores de NA por el valor de la media calculada en el paso anterior (Av_vble_meteo). En el código que aparece a continuación se muestra cómo se realizó esta sustitución:
+
+```{r eval=FALSE}
+# A continuación vamos a sustituir los valores NA que encontremos en las columnas hr y p_sol por el valor de la media calculada para ese mes
+  for (i in 1:length(Interna$hr)){
+    if (is.na(Interna$hr[i])){
+      Interna$hr[i] <- Interna$Av_hr[i]
+    }
+    if (is.na(Interna$p_sol[i])){
+      Interna$p_sol[i] <- Interna$Av_psol[i]
+    }
+  }
+```
+
+Para calcular la anomalía se empleó el siguiente código:
+``` {r eval=FALSE}
+    # Una vez creada esta nueva columna, resta el valor mensual particular y esa nueva columna, generando así la anomalía y almacenándola en la columna `Anom_nombre_variable`
+  Interna <-mutate(.data = Interna, Anom_tmax = (`tm_max`-`Av_tmax`)**2, Anom_tmin = (`tm_min`-`Av_tmin`)**2, Anom_qmax = (`q_max`-`Av_qmax`)**2, Anom_qmin = (`q_min`-`Av_qmin`)**2, Anom_psol = (`p_sol`-`Av_psol`)**2, Anom_hr = (`hr`-`Av_hr`)**2)
+  return(Interna)
+}
+```
+Todos estos segmentos se agruparon dentro de una función denominada _Generador_Av_Anom(provincia)_ que recibe ese parámetro provincia, que es un objeto de tipo dataframe correspondiente a los diferentes dataframes meteorológicos (ProvinciaMeteo). El aspecto de esta función es:
+``` {r eval=FALSE}
+Generador_Av_Anom <- function(provincia){
+  # Para cada mes, calcula la media a lo largo de los años y la añade en una columna `Av_nombre_variable`.
+  Interna <- left_join(x = provincia, y = provincia %>% 
+                         group_by(Mes) %>% 
+                         summarise(Av_tmax = mean(tm_max, na.rm = TRUE),Av_tmin = mean(tm_min, na.rm = TRUE),Av_qmax = mean(q_max, na.rm = TRUE),Av_qmin = mean(q_min, na.rm = TRUE),Av_psol = mean(p_sol, na.rm = TRUE),Av_hr = mean(hr, na.rm = TRUE))
+                       , by = "Mes")
+  
+  # A continuación vamos a sustituir los valores NA que encontremos en las columnas hr y p_sol por el valor de la media calculada para ese mes
+  for (i in 1:length(Interna$hr)){
+    if (is.na(Interna$hr[i])){
+      Interna$hr[i] <- Interna$Av_hr[i]
+    }
+    if (is.na(Interna$p_sol[i])){
+      Interna$p_sol[i] <- Interna$Av_psol[i]
+    }
+  }
+    # Una vez creada esta nueva columna, resta el valor mensual particular y esa nueva columna, generando así la anomalía y almacenándola en la columna `Anom_nombre_variable`
+  Interna <-mutate(.data = Interna, Anom_tmax = (`tm_max`-`Av_tmax`)**2, Anom_tmin = (`tm_min`-`Av_tmin`)**2, Anom_qmax = (`q_max`-`Av_qmax`)**2, Anom_qmin = (`q_min`-`Av_qmin`)**2, Anom_psol = (`p_sol`-`Av_psol`)**2, Anom_hr = (`hr`-`Av_hr`)**2)
+  return(Interna)
+}
+```
+La creación de esta función permitió reutilizar el código y aplicarla a cada uno de los 52 dataframes meteorológicos mediante iteración:
+``` {r eval=FALSE}
+# Aplicamos la función que acabamos de definir para cada dataframe de meteorología de las provincias.
+for (i in Provincias){
+  Nam <- paste(i,"Meteo",sep = "")
+  assign(Nam, Generador_Av_Anom(get(Nam)))
+}
+```
+Una vez realizado todo este proceso, ya tenemos nuestros dataframes meteorológicos de cada provincia con las nuevas columnas que contienen la media y la anomalía al cuadrado. Un ejemplo es el siguiente dataframe A_CorunaMeteo:
+
+<center>
+<figure>
+<img src="IMAGENES/3.jpg"
+     width="500"
+     height="700" alt="an image">
+<figcaption>Dataframe A CoruñaMeteo</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
+Una vez tenemos nuestros dataframes ya con este aspecto, vamos a filtrar y seleccionar aquellos cuya anomalía sea muy extrema. Para ello vamos a apoyarnos en la graficación. Para ello vamos a definir 2 funciones: 
+
+_•	Graf_filt_Meteo(objeto)_, que va a generar las gráficas representanMdo la anomalía al cuadrado en el eje y frente al doblete ‘Periodo Mes’ de cada provincia pasada como objeto en el eje x. Este parámetro objeto no es el dataframe de la provincia, sino que ha de ser el nombre del dataframe (deberemos pasarlo como carácter). Va a generar 3 gráficas para la provincia dada: una que representa la anomalía de tm_max y tm_min, otra de q_max y q_min y una tercera que representa la anomalía de hr y p_sol.
+
+_•	Filtro_Extremos(provinvia, dataframe)_ que recibirá un dataframe meteorológico de una determinada provincia, calculará sus gráficas empleando la función mencionada anteriormente Graf_filt_Meteo(objeto) y empleando los datos que se obtengan de la gráfica determinará qué dobletes ‘Periodo Mes’ de la provincia pasada como parámetro poseen una anomalía al cuadrado extrema. Para determinar qué es extremo y qué no va comprobar si el valor de anomalía cuadrada para ese periodo y ese mes es superior al límite superior del intervalo de confianza dado por la gráfica _geom_smooth()_.
+A continuación vamos a desgranar un poco el funcionamiento interno de cada una de estas funciones. 
