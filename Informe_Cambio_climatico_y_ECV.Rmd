@@ -1603,4 +1603,54 @@ Así obtenemos un dataframe DFMeteo_Extrem que contiene 6174 filas, correspondie
 
 Finalmente, tras todo el tratamiento previo y el manejo de los datos, llegamos a la última etapa: establecer relación entre los datos meteorológicos y la salud humana.
 
-Las conclusiones que vamos a obtener van a ser basadas en gráficas, donde relacionaremos los datos meteorológicos con la morbilidad en este caso. Un factor a tener en cuenta es que la morbilidad no se puede computar en bruto, sino que hay que calcularla como morbilidad/población de la provincia estudiada. Para ello el primer paso es unir el dataframe DFPoblación obtenido anteriormente y el dataframe DFMorbilidad. 
+Las conclusiones que vamos a obtener van a ser basadas en gráficas, donde relacionaremos los datos meteorológicos con la morbilidad en este caso. Un factor a tener en cuenta es que la morbilidad no se puede computar en bruto, sino que hay que calcularla como morbilidad/población de la provincia estudiada. Para ello el primer paso es unir el dataframe DFPoblación obtenido anteriormente y el dataframe DFMorbilidad.
+
+``` {r eval=FALSE}
+DFMorbilidad <- left_join(DFMorbilidad, DFPoblacion, by = c("Provincia", "Periodo"))
+```
+
+Una vez realizado este paso ya podemos comenzar a graficar. Se va a representar en el eje x el número de sucesos adversos por Provincia y Periodo (año) frente al índice de morbilidad (calculado como número de altas/población de la provincia * 100) en el eje y. Para calcular el número de sucesos meteorológicos adversos vamos a agrupar el dataframe DFMeteo_Extrem por Provincia y Periodo, y posteriormente resumir este agrupamiento contando el número de filas que posee cada conjunto:
+
+<center>
+<figure>
+<img src="IMAGENES/3.2.jpg"
+     width="500"
+     height="700" alt="an image">
+<figcaption>Dataframe de sucesos metereológicos adversos en A Coruña</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
+De esta manera tenemos una correspondencia entre el periodo, la provincia y el número de sucesos adversos. A continuación vamos a unir esta tabla obtenida con la tabla DFMorbilidad haciendo un join mediante las columnas Periodo y Provincia, lo que va a permitir relacionar las altas médicas y el número de habitantes con el número de sucesos meteorológicos adversos:
+
+<center>
+<figure>
+<img src="IMAGENES/3.2.2.jpg"
+     width="500"
+     height="700" alt="an image">
+<figcaption>Dataframe común con todos los datos.</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
+Hasta aquí es la parte común a todas las gráficas que vamos a obtener, a continuación se realiza una división, pues vamos a analizar los datos según el sexo (Ambos Sexos, Hombres, Mujeres). Por último vamos a graficar toda la información empleando ggplot. Tenemos 1557 (519 de Ambos Sexos, 519 de hombres y 519 de mujeres) relaciones entre número de sucesos y número de altas, pero como el número de sucesos es una variable discreta no vamos a encontrar estas relaciones diseminadas por el plot, sino que se van a concentrar de forma vertical según su número de sucesos (desde 1 hasta 26), por ello el gráfico empleado es del tipo _geom_boxplot()_.
+
+El código encargado de realizar esta gráfica es el siguiente (el ejemplo hace referencia a la relación entre número de sucesos y morbilidad para ambos sexos, pero para hombres y mujeres es muy similar, cambiando únicamente el valor del _filter_):
+
+``` {r eval=FALSE}
+Grafica_Meteo_Morbi_AS <- DFMeteo_Extrem %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMorbilidad, by = c("Periodo", "Provincia")) %>% 
+  filter(., `Sexo` == "Ambos sexos")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Altas/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Morbilidad Nacional por número de sucesos meteorológicos extremos - Ambos Sexos", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Morbilidad anual")
+```
+
+
