@@ -1,7 +1,7 @@
 # 
 # Autores: Amo Nestares, Beatriz; Barcina Muñoz, Víctor; Lozano Juárez, Samuel
 # Organización: Universidad de Burgos (UBU)
-# Fecha: 1 - Diciembre - 2021
+# Fecha: 12 - Diciembre - 2021
 # Grado: 3º Ingeniería de la Salud
 # Asignatura: Fuentes de Datos Biomédicas y Web Semántica
 # 
@@ -360,7 +360,7 @@ Graf_filt_Meteo <- function(objeto){
   colors <- c("Anom_tmax" = "red", "Anom_tmin" = "blue", )
   
   graf_temp <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
-    geom_line(aes(y = Anom_tmax, group = 1), colour = "Anom_tmax",) + 
+    geom_line(aes(y = Anom_tmax, group = 1), colour = "Anom_tmax") + 
     geom_point(size = 1.5, aes(y = Anom_tmax), colour = "red") + 
     geom_smooth(aes( y = Anom_tmax, group = 1), fill = "Anom_tmax", alpha = 0.25, colour = "Anom_tmax", level = 0.995) +
     geom_line(aes(y = Anom_tmin,  group = 1), colour = "Anom_tmin") + 
@@ -520,6 +520,7 @@ Filtro_Extremos <- function(provincia, dataframe){
 
 DFMeteo_Extrem <- data.frame()
 DFMeteo_Extrem <- Filtro_Extremos(A_CorunaMeteo, DFMeteo_Extrem)
+DFMeteo_Extrem <- Filtro_Extremos(AlavaMeteo, DFMeteo_Extrem)
 DFMeteo_Extrem <- Filtro_Extremos(AlbaceteMeteo, DFMeteo_Extrem)
 DFMeteo_Extrem <- Filtro_Extremos(AlicanteMeteo, DFMeteo_Extrem)
 DFMeteo_Extrem <- Filtro_Extremos(AlmeriaMeteo, DFMeteo_Extrem)
@@ -570,3 +571,845 @@ DFMeteo_Extrem <- Filtro_Extremos(ValenciaMeteo, DFMeteo_Extrem)
 DFMeteo_Extrem <- Filtro_Extremos(ValladolidMeteo, DFMeteo_Extrem)
 DFMeteo_Extrem <- Filtro_Extremos(ZamoraMeteo, DFMeteo_Extrem)
 DFMeteo_Extrem <- Filtro_Extremos(ZaragozaMeteo, DFMeteo_Extrem)
+
+
+DFMorbilidad$Periodo <- as.character(DFMorbilidad$Periodo)
+DFMort_Prov$Periodo <- as.character(DFMort_Prov$Periodo)
+DFMeteo_Extrem$Periodo <- as.character(DFMeteo_Extrem$Periodo)
+DFMort_Mens$Periodo <- as.character(DFMort_Mens$Periodo)
+
+DFMorbilidad <- left_join(DFMorbilidad, DFPoblacion, by = c("Provincia", "Periodo"))
+DFMort_Prov <- left_join(DFMort_Prov, DFPoblacion, by = c("Provincia", "Periodo"))
+
+
+Grafica_Meteo_Morbi_AS <- DFMeteo_Extrem %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMorbilidad, by = c("Periodo", "Provincia")) %>% 
+  filter(., `Sexo` == "Ambos sexos")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Altas/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Morbilidad Nacional por número de sucesos meteorológicos extremos - Ambos Sexos", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Morbilidad anual")
+
+Grafica_Meteo_Morbi_Hombres <- DFMeteo_Extrem %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMorbilidad, by = c("Periodo", "Provincia")) %>% 
+  filter(., `Sexo` == "Hombres")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Altas*2/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Morbilidad Nacional por número de sucesos meteorológicos extremos - Hombres", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Morbilidad anual")
+
+Grafica_Meteo_Morbi_Mujeres <- DFMeteo_Extrem %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMorbilidad, by = c("Periodo", "Provincia")) %>% 
+  filter(., `Sexo` == "Mujeres")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Altas*2/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) + 
+  ggtitle(label = "Morbilidad Nacional por número de sucesos meteorológicos extremos - Mujeres", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Morbilidad anual")
+
+ggsave(
+  filename = "Morbilidad frente a sucesos extremos Ambos Sexos.png",
+  plot = Grafica_Meteo_Morbi_AS,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Morbilidad frente a sucesos extremos Hombres.png",
+  plot = Grafica_Meteo_Morbi_Hombres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Morbilidad frente a sucesos extremos Mujeres.png",
+  plot = Grafica_Meteo_Morbi_Mujeres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+Grafica_Meteo_MortPro_AS <- DFMeteo_Extrem %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia","Periodo")) %>% 
+  filter(., `Sexo` == "Ambos sexos")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Mortalidad/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Mortalidad Nacional por número de sucesos meteorológicos extremos - Ambos Sexos", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Mortalidad anual")
+
+Grafica_Meteo_MortPro_Hombres <- DFMeteo_Extrem %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia","Periodo")) %>% 
+  filter(., `Sexo` == "Hombres")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Mortalidad/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Mortalidad Nacional por número de sucesos meteorológicos extremos - Hombres", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Mortalidad anual")
+
+Grafica_Meteo_MortPro_Mujeres <- DFMeteo_Extrem %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia","Periodo")) %>% 
+  filter(., `Sexo` == "Mujeres")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Mortalidad/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Mortalidad por número de sucesos meteorológicos extremos - Mujeres", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Mortalidad anual")
+
+ggsave(
+  filename = "Mortalidad frente a sucesos extremos Ambos Sexos (Prov).png",
+  plot = Grafica_Meteo_MortPro_AS,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad frente a sucesos extremos Hombres (Prov).png",
+  plot = Grafica_Meteo_MortPro_Hombres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad frente a sucesos extremos Mujeres (Prov).png",
+  plot = Grafica_Meteo_MortPro_Mujeres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+Grafica_Meteo_MortNac_AS <- DFMeteo_Extrem %>% 
+  group_by(Periodo, Mes) %>% 
+  summarise(Sucesos = length(Mes)) %>% 
+  left_join(., DFMort_Mens, by = c("Periodo", "Mes")) %>% 
+  filter(., `Sexo` == "Ambos sexos") %>% 
+  ggplot(., aes(x = reorder(paste(Periodo, Mes, sep = " "), +Sucesos))) + 
+  geom_bar(stat = "identity", aes(y = Sucesos, fill = Periodo), color = "black") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  scale_fill_manual(values=c("grey99", "grey85", "grey75", "grey65","grey55", "grey45", "grey35","grey25","grey15","grey5")) + 
+  geom_point(aes(y = (Muertes/100)), color = "red", size = 1.5) + 
+  stat_smooth(aes(y = (Muertes/100), group = 1), color = "red") + 
+  ggtitle(label = "Mortalidad Nacional por mes y número de sucesos meteorológicos extremos - Ambos Sexos") + 
+  labs(x = "Mes y Año", y = "Cantidad de sucesos // Muertes nacionales/100")
+  
+Grafica_Meteo_MortNac_Hombres <- DFMeteo_Extrem %>% 
+  group_by(Periodo, Mes) %>% 
+  summarise(Sucesos = length(Mes)) %>% 
+  left_join(., DFMort_Mens, by = c("Periodo", "Mes")) %>% 
+  filter(., `Sexo` == "Hombres") %>% 
+  ggplot(., aes(x = reorder(paste(Periodo, Mes, sep = " "), +Sucesos))) + 
+  geom_bar(stat = "identity", aes(y = Sucesos, fill = Periodo), color = "black") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  scale_fill_manual(values=c("grey99", "grey85", "grey75", "grey65","grey55", "grey45", "grey35","grey25","grey15","grey5")) + 
+  geom_point(aes(y = (Muertes/50)), color = "red", size = 1.5) + 
+  stat_smooth(aes(y = (Muertes/50), group = 1), color = "red") + 
+  ggtitle(label = "Mortalidad Nacional por mes y número de sucesos meteorológicos extremos - Hombres") + 
+  labs(x = "Mes y Año", y = "Cantidad de sucesos // Muertes nacionales/50")
+
+Grafica_Meteo_MortNac_Mujeres <- DFMeteo_Extrem %>% 
+  group_by(Periodo, Mes) %>% 
+  summarise(Sucesos = length(Mes)) %>% 
+  left_join(., DFMort_Mens, by = c("Periodo", "Mes")) %>% 
+  filter(., `Sexo` == "Mujeres") %>% 
+  ggplot(., aes(x = reorder(paste(Periodo, Mes, sep = " "), +Sucesos))) + 
+  geom_bar(stat = "identity", aes(y = Sucesos, fill = Periodo), color = "black") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  scale_fill_manual(values=c("grey99", "grey85", "grey75", "grey65","grey55", "grey45", "grey35","grey25","grey15","grey5")) +
+  geom_point(aes(y = (Muertes/50)), color = "red", size = 1.5) + 
+  stat_smooth(aes(y = (Muertes/50), group = 1), color = "red") + 
+  ggtitle(label = "Mortalidad Nacional por mes y número de sucesos meteorológicos extremos - Mujeres") + 
+  labs(x = "Mes y Año", y = "Cantidad de sucesos // Muertes nacionales/50")
+
+ggsave(
+  filename = "Mortalidad por mes frente a sucesos meteorológicos extremos - Ambos Sexos.png",
+  plot = Grafica_Meteo_MortNac_AS,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad por mes frente a sucesos meteorológicos extremos - Hombres.png",
+  plot = Grafica_Meteo_MortNac_Hombres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad por mes frente a sucesos meteorológicos extremos - Mujeres.png",
+  plot = Grafica_Meteo_MortNac_Mujeres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+
+
+# ANÁLISIS EXTRA DE LOS DATOS ---------------------------------------------
+
+# Hemos realizado este estudio basándonos en la hipótesis de que los valores meteorológicos extremos (aquellos que se salían de lo normal)
+# podían estar relacionados con las enfermedades cardiovasculares, a continuación vamos a formular una segunda hipótesis. Ya no nos vamos a
+# basar en valores extremos, sino en valores de riesgo. Para ello primero tenemos que definir qué valores de riesgo existen para las
+# variables meteorológicas medidas:
+# - Temperatura media de las máximas: aquellos valores más altos son de mayor riesgo
+# - Temperatura media de las mínimas: aquellos valores más bajos son de mayor riesgo
+# - Presión media de las máximas: aquellos valores más altos son de mayor riesgo
+# - Presión media de las mínimas: aquellos valores más altos son de mayor riesgo
+# - Humedad relativa: valores más altos son de mayor riesgo
+# - Insolación diaria: valores más altos son de mayor riesgo
+
+# Ahora vamos a obtener un dataframe que contenga los 100 valores de mayor riesgo para cada variable.
+
+DFMeteo_Risk <- data.frame()
+for(i in 1:length(Provincias)){
+  Nam <- paste(Provincias[i], "Meteo", sep = "")
+  Obj <- get(Nam)
+  tmax <- slice_max(Obj, order_by = `tm_max`, n = 20) %>% 
+    mutate(Provincia = Provincias[i])
+  tmin <- slice_min(Obj, order_by = `tm_min`, n = 20) %>% 
+    mutate(Provincia = Provincias[i])
+  qmax <- slice_max(Obj, order_by = `q_max`, n = 20) %>% 
+    mutate(Provincia = Provincias[i])
+  qmin <- slice_max(Obj, order_by = `q_max`, n = 20) %>% 
+    mutate(Provincia = Provincias[i])
+  hr <- slice_max(Obj, order_by = `hr`, n = 20) %>% 
+    mutate(Provincia = Provincias[i])
+  psol <- slice_max(Obj, order_by = `p_sol`, n = 20) %>% 
+    mutate(Provincia = Provincias[i])
+  DFMeteo_Risk <- bind_rows(DFMeteo_Risk, tmax, tmin, qmax, qmin, hr, psol)
+}
+
+DFMeteo_Risk$Periodo <- as.character(DFMeteo_Risk$Periodo)
+
+Grafica_Risk_Morbi_AS <- DFMeteo_Risk %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMorbilidad, by = c("Periodo", "Provincia")) %>% 
+  filter(., `Sexo` == "Ambos sexos")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Altas/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Morbilidad Nacional por número de sucesos meteorológicos de riesgo - Ambos Sexos", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Morbilidad anual")
+
+Grafica_Risk_Morbi_Hombres <- DFMeteo_Risk %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMorbilidad, by = c("Periodo", "Provincia")) %>% 
+  filter(., `Sexo` == "Hombres")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Altas*2/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Morbilidad Nacional por número de sucesos meteorológicos de riesgo - Hombres", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Morbilidad anual")
+
+Grafica_Risk_Morbi_Mujeres <- DFMeteo_Risk %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMorbilidad, by = c("Periodo", "Provincia")) %>% 
+  filter(., `Sexo` == "Mujeres")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Altas*2/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Morbilidad Nacional por número de sucesos meteorológicos de riesgo - Mujeres", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Morbilidad anual")
+
+ggsave(
+  filename = "Morbilidad por mes frente a sucesos meteorológicos de riesgo - Ambos Sexos.png",
+  plot = Grafica_Risk_Morbi_AS,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Morbilidad por mes frente a sucesos meteorológicos de riesgo - Hombres.png",
+  plot = Grafica_Risk_Morbi_Hombres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Morbilidad por mes frente a sucesos meteorológicos de riesgo - Mujeres.png",
+  plot = Grafica_Risk_Morbi_Mujeres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+Grafica_Risk_MortPro_AS <- DFMeteo_Risk %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia","Periodo")) %>% 
+  filter(., `Sexo` == "Ambos sexos")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Mortalidad/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Mortalidad Nacional por número de sucesos meteorológicos de riesgo - Ambos Sexos", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Mortalidad anual")
+
+Grafica_Risk_MortPro_Hombres <- DFMeteo_Risk %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia","Periodo")) %>% 
+  filter(., `Sexo` == "Hombres")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Mortalidad*2/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Mortalidad Nacional por número de sucesos meteorológicos de riesgo - Hombres", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Mortalidad anual")
+
+Grafica_Risk_MortPro_Mujeres <- DFMeteo_Risk %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia","Periodo")) %>% 
+  filter(., `Sexo` == "Mujeres")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Mortalidad*2/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Mortalidad Nacional por número de sucesos meteorológicos de riesgo - Mujeres", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Mortalidad anual")
+
+ggsave(
+  filename = "Mortalidad anual frente a sucesos meteorológicos de riesgo - Ambos Sexo.png",
+  plot = Grafica_Risk_MortPro_AS,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad anual frente a sucesos meteorológicos de riesgo - Hombres.png",
+  plot = Grafica_Risk_MortPro_Hombres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad anual frente a sucesos meteorológicos de riesgo - Mujeres.png",
+  plot = Grafica_Risk_MortPro_Mujeres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+Grafica_Risk_MortNac_AS <- DFMeteo_Risk %>% 
+  group_by(Periodo, Mes) %>% 
+  summarise(Sucesos = length(Mes)) %>% 
+  left_join(., DFMort_Mens, by = c("Periodo", "Mes")) %>% 
+  filter(., `Sexo` == "Ambos sexos") %>% 
+  ggplot(., aes(x = reorder(paste(Periodo, Mes, sep = " "), +Sucesos))) + 
+  geom_bar(stat = "identity", aes(y = Sucesos, fill = Periodo), color = "black") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  scale_fill_manual(values=c("grey99", "grey85", "grey75", "grey65","grey55", "grey45", "grey35","grey25","grey15","grey5")) + 
+  geom_point(aes(y = (Muertes/100)), color = "red", size = 1.5) + 
+  stat_smooth(aes(y = (Muertes/100), group = 1), color = "red") + 
+  ggtitle(label = "Mortalidad Nacional por mes y número de sucesos meteorológicos de riesgo - Ambos Sexos") + 
+  labs(x = "Mes y Año", y = "Cantidad de sucesos // Muertes nacionales/100")
+
+Grafica_Risk_MortNac_Hombres <- DFMeteo_Risk %>% 
+  group_by(Periodo, Mes) %>% 
+  summarise(Sucesos = length(Mes)) %>% 
+  left_join(., DFMort_Mens, by = c("Periodo", "Mes")) %>% 
+  filter(., `Sexo` == "Hombres") %>% 
+  ggplot(., aes(x = reorder(paste(Periodo, Mes, sep = " "), +Sucesos))) + 
+  geom_bar(stat = "identity", aes(y = Sucesos, fill = Periodo), color = "black") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  scale_fill_manual(values=c("grey99", "grey85", "grey75", "grey65","grey55", "grey45", "grey35","grey25","grey15","grey5")) + 
+  geom_point(aes(y = (Muertes/50)), color = "red", size = 1.5) + 
+  stat_smooth(aes(y = (Muertes/50), group = 1), color = "red") + 
+  ggtitle(label = "Mortalidad Nacional por mes y número de sucesos meteorológicos de riesgo - Hombres") + 
+  labs(x = "Mes y Año", y = "Cantidad de sucesos // Muertes nacionales/50")
+
+Grafica_Risk_MortNac_Mujeres <- DFMeteo_Risk %>% 
+  group_by(Periodo, Mes) %>% 
+  summarise(Sucesos = length(Mes)) %>% 
+  left_join(., DFMort_Mens, by = c("Periodo", "Mes")) %>% 
+  filter(., `Sexo` == "Mujeres") %>% 
+  ggplot(., aes(x = reorder(paste(Periodo, Mes, sep = " "), +Sucesos))) + 
+  geom_bar(stat = "identity", aes(y = Sucesos, fill = Periodo), color = "black") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  scale_fill_manual(values=c("grey99", "grey85", "grey75", "grey65","grey55", "grey45", "grey35","grey25","grey15","grey5")) + 
+  geom_point(aes(y = (Muertes/50)), color = "red", size = 1.5) + 
+  stat_smooth(aes(y = (Muertes/50), group = 1), color = "red") + 
+  ggtitle(label = "Mortalidad Nacional por mes y número de sucesos meteorológicos de riesgo - Mujeres") + 
+  labs(x = "Mes y Año", y = "Cantidad de sucesos // Muertes nacionales/50")
+
+ggsave(
+  filename = "Mortalidad anual frente a sucesos meteorológicos de riesgo (Mensual)- Ambos Sexos.png",
+  plot = Grafica_Risk_MortNac_AS,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad anual frente a sucesos meteorológicos de riesgo (Mensual)- Hombres.png",
+  plot = Grafica_Risk_MortNac_Hombres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad anual frente a sucesos meteorológicos de riesgo (Mensual)- Mujeres.png",
+  plot = Grafica_Risk_MortNac_Mujeres,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+#Graficación de la relación entre las variables meteorológicas de riesgo con la morbilidad
+
+Grafica_tmax_Morbilidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(tmax = mean(`tm_max`, na.rm = TRUE)) %>% 
+  left_join(., DFMorbilidad, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = tmax, y = Altas/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth() + 
+  ggtitle(label = "Morbilidad nacional respecto a la temperatura media de las máximas")
+
+Grafica_tmin_Morbilidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(tmin = mean(`tm_min`, na.rm = TRUE)) %>% 
+  left_join(., DFMorbilidad, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = tmin, y = Altas/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth() +
+  ggtitle(label = "Morbilidad nacional respecto a la temperatura media de las mínimas")
+
+Grafica_qmax_Morbilidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(qmax = mean(`q_max`, na.rm = TRUE)) %>% 
+  left_join(., DFMorbilidad, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = qmax, y = Altas/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth(method = "lm")+
+  ggtitle(label = "Morbilidad nacional respecto a la presión media de las máximas")
+
+Grafica_qmin_Morbilidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(qmin = mean(`q_min`, na.rm = TRUE)) %>% 
+  left_join(., DFMorbilidad, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = qmin, y = Altas/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth(method = "lm")+
+  ggtitle(label = "Morbilidad nacional respecto a la presión media de las mínimas")
+
+Grafica_hr_Morbilidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(hr = mean(`hr`, na.rm = TRUE)) %>% 
+  left_join(., DFMorbilidad, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = hr, y = Altas/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Morbilidad nacional respecto a la humedad relativa")
+
+Grafica_psol_Morbilidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(psol = mean(`p_sol`, na.rm = TRUE)) %>% 
+  left_join(., DFMorbilidad, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = psol, y = Altas/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Morbilidad nacional respecto a la insolación real / insolación teórica (%)")
+
+#Graficación de la relación entre las variables meteorológicas de riesgo con la mortalidad (obtenida por provincias y año)
+
+Grafica_tmax_Mortalidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(tmax = mean(`tm_max`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = tmax, y = Mortalidad/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Mortalidad nacional respecto a la temperatura media de las máximas (calculada por provincias)")
+
+Grafica_tmin_Mortalidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(tmin = mean(`tm_min`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = tmin, y = Mortalidad/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Mortalidad nacional respecto a la temperatura media de las mínimas (calculada por provincias)")
+
+Grafica_qmax_Mortalidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(qmax = mean(`q_max`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = qmax, y = Mortalidad/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth(method = "lm")+
+  ggtitle(label = "Mortalidad nacional respecto a la presión media de las máximas (calculada por provincias)")
+
+Grafica_qmin_Mortalidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(qmin = mean(`q_min`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = qmin, y = Mortalidad/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth(method = "lm")+
+  ggtitle(label = "Mortalidad nacional respecto a la presión media de las mínimas (calculada por provincias)")
+
+Grafica_hr_Mortalidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(hr = mean(`hr`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = hr, y = Mortalidad/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Mortalidad nacional respecto a la humedad relativa (calculada por provincias)")
+
+Grafica_psol_Mortalidad <- DFMeteo_Extrem %>% 
+  group_by(Provincia, Periodo) %>% 
+  summarise(psol = mean(`p_sol`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = psol, y = Mortalidad/Habitantes*100)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Mortalidad nacional respecto a la insolación real / insolación teórica (%)(calculada por provincias)")
+
+#Graficación de la relación entre las variables meteorológicas de riesgo con la mortalidad (Nacional y mensual)
+
+Grafica_tmax_MortalidadMes <- DFMeteo_Extrem %>% 
+  group_by(Mes, Periodo) %>% 
+  summarise(tmax = mean(`tm_max`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Mens, by = c("Mes", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = tmax, y = Muertes)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Mortalidad nacional respecto a la temperatura media de las máximas (calculada nacional por mes)")
+
+Grafica_tmin_MortalidadMes <- DFMeteo_Extrem %>% 
+  group_by(Mes, Periodo) %>% 
+  summarise(tmin = mean(`tm_min`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Mens, by = c("Mes", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = tmin, y = Muertes)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Mortalidad nacional respecto a la temperatura media de las mínimas (calculada nacional por mes)")
+
+Grafica_qmax_MortalidadMes <- DFMeteo_Extrem %>% 
+  group_by(Mes, Periodo) %>% 
+  summarise(qmax = mean(`q_max`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Mens, by = c("Mes", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = qmax, y = Muertes)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Mortalidad nacional respecto a la presión media de las máximas (calculada nacional por mes)")
+
+Grafica_qmin_MortalidadMes <- DFMeteo_Extrem %>% 
+  group_by(Mes, Periodo) %>% 
+  summarise(qmin = mean(`q_min`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Mens, by = c("Mes", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = qmin, y = Muertes)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Mortalidad nacional respecto a la presión media de las mínimas (calculada nacional por mes)")
+
+Grafica_hr_MortalidadMes <- DFMeteo_Extrem %>% 
+  group_by(Mes, Periodo) %>% 
+  summarise(hr = mean(`hr`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Mens, by = c("Mes", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = hr, y = Muertes)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Mortalidad nacional respecto a la humedad relativa (calculada nacional por mes)")
+
+Grafica_psol_MortalidadMes <- DFMeteo_Extrem %>% 
+  group_by(Mes, Periodo) %>% 
+  summarise(psol = mean(`p_sol`, na.rm = TRUE)) %>% 
+  left_join(., DFMort_Mens, by = c("Mes", "Periodo")) %>% 
+  filter(., Sexo == "Ambos sexos")%>% 
+  ggplot(., aes(x = psol, y = Muertes)) + 
+  geom_point(size = 1.5) + 
+  geom_smooth()+
+  ggtitle(label = "Mortalidad nacional respecto a la insolación real / insolación teórica (%) (calculada nacional por mes)")
+
+# Por último vamos a guardar las gráficas recién creadas 
+
+# MORBILIDAD
+
+ggsave(
+  filename = "Morbilidad nacional frente a temperatura media de las máximas.png",
+  plot = Grafica_tmax_Morbilidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Morbilidad nacional frente a temperatura media de las mínimas.png",
+  plot = Grafica_tmin_Morbilidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Morbilidad nacional frente a presión media de las máximas.png",
+  plot = Grafica_qmax_Morbilidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Morbilidad nacional frente a presión media de las mínimas",
+  plot = Grafica_qmin_Morbilidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Morbilidad nacional frente a humedad relativa.png",
+  plot = Grafica_hr_Morbilidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Morbilidad nacional frente a insolación diaria.png",
+  plot = Grafica_psol_Morbilidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+# MORTALIDAD CALCULADA MEDIANTE PROVINCIAS
+
+ggsave(
+  filename = "Mortalidad nacional frente a temperatura media de las máximas (provincias).png",
+  plot = Grafica_tmax_Mortalidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad nacional frente a temperatura media de las mínimas (provincias).png",
+  plot = Grafica_tmin_Mortalidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad nacional frente a presión media de las máximas (provincias).png",
+  plot = Grafica_qmax_Mortalidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad nacional frente a presión media de las mínimas (provincias).png",
+  plot = Grafica_qmin_Mortalidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad nacional frente a humedad relativa (provincias).png",
+  plot = Grafica_hr_Mortalidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad nacional frente a insolación diaria (provincias).png",
+  plot = Grafica_psol_Mortalidad,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+# MORTALIDAD NACIONAL CALCULADA POR MESES
+
+ggsave(
+  filename = "Mortalidad nacional frente a temperatura media de las máximas (mensual).png",
+  plot = Grafica_tmax_MortalidadMes,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad nacional frente a temperatura media de las mínimas (mensual).png",
+  plot = Grafica_tmin_MortalidadMes,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad nacional frente a presión media de las máximas (mensual).png",
+  plot = Grafica_qmax_MortalidadMes,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad nacional frente a presión media de las mínimas (mensual).png",
+  plot = Grafica_qmin_MortalidadMes,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad nacional frente a humedad relativa.png",
+  plot = Grafica_hr_MortalidadMes,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+
+ggsave(
+  filename = "Mortalidad nacional frente a insolación diaria (mensual).png",
+  plot = Grafica_psol_MortalidadMes,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
