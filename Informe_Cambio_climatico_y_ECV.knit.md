@@ -5,9 +5,7 @@ date: "13/12/2021"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 ## {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
 <center>
@@ -607,7 +605,8 @@ Para ello se empleó la función climaemet::aemet_monthly_period(station, start,
 
 El objetivo era crear 52 dataframes, uno para cada provincia. El nombre de estos dataframes esta compuesto por el nombre de la provincia + la palabra ‘Meteo’. Para emplear un formato estándar de nombres de provincias se declararon 2 vectores:
 
-```{r eval=FALSE}
+
+```r
 Provincias <- c("Alava","Albacete","Alicante","Almeria","Asturias","Avila","Badajoz","Islas_Baleares","Barcelona","Bizkaia","Burgos","Caceres","Cadiz","Cantabria","Castellon","Ceuta","Ciudad_Real","Cordoba","A_Coruna","Cuenca","Girona","Granada","Guadalajara","Guipuzkoa","Huelva","Huesca","Jaen","Leon","Lleida","Lugo","Madrid","Malaga","Melilla","Murcia","Navarra","Ourense","Palencia","Las_Palmas","Pontevedra","La_Rioja","Salamanca","Tenerife","Segovia","Sevilla","Soria","Tarragona","Teruel","Toledo","Valencia","Valladolid","Zamora","Zaragoza")
 
 Estaciones <- c("9091O","8175","8019","6325O","1212E","2444","4452","B954","0200E","1082","2331","3469A","5960","1109","8500A","5000C","4121","5402","1387","8096","0367","5530E","3168D","1014A","4642E","9898","5270B","2661","9771C","1505","3129","6155A","6000A","7178I","9263D","1690A","2374X","C029O","1495","9170","2867","C447A","2465","5783","2030","9981A","9381I","3260B","8416","2422","2614","9434")
@@ -615,7 +614,8 @@ Estaciones <- c("9091O","8175","8019","6325O","1212E","2444","4452","B954","0200
 
 De esta manera se crearon los 52 dataframes empleando recursividad:
 
-``` {r eval=FALSE}
+
+```r
 for (i in 1:length(Provincias)){
   Nam <- paste(Provincias[i], "Meteo", sep="")
   Objeto <- aemet_monthly_period(station = Estaciones[i], start = 2010, end = 2019)
@@ -631,13 +631,15 @@ for (i in 1:length(Provincias)){
 Una vez creados estos dataframes, se tuvieron que realizar varias correcciones debido a que ciertas estaciones seleccionadas (la de Guadalajara, Málaga, Palencia, Soria y Valladolid) presentaban años incompletos o de los cuales directamente no existía información (obligándonos a seleccionar otra estación de la misma provincia e introducir la información restante de forma manual).
 Un ejemplo de cómo se introdujo esta información:
 
-``` {r eval=FALSE}
+
+```r
 MalagaMeteo <- bind_rows(MalagaMeteo, aemet_monthly_clim(station = "6084X", year = 2015)
 ```
 
 Por último, estos dataframes modificados por falta de datos debieron ser reordenados por fecha para facilitar su posterior trabajo. El problema es que el formato de fecha que presenta AEMET es 2010-1 por ejemplo, por lo que al ordenar por fecha colocaba antes el mes 2010-12 que 2010-2. Por ello se hizo necesario declarar una función que nos permitiera reordenar los dataframes:
 
-``` {r eval=FALSE}
+
+```r
 Reorder <- function(provincia){
   #recorre todos los elementos de la columna fecha de la provincia pasada como parámetro
   for (i in 1:length(provincia$fecha)){
@@ -650,7 +652,6 @@ Reorder <- function(provincia){
   #por último devuelve la provincia pasada, pero ahora ordenada por fecha (donde ya sí que se puede ordenar correctamente por fecha)
   return(arrange(provincia, fecha))
 }
-
 ```
 
 Posteriormente aplicaríamos esta función a las provincias modificadas (GuadalajaraMeteo, MalagaMeteo, SoriaMeteo, PalenciaMeteo, ValladolidMeteo).
@@ -664,7 +665,8 @@ Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encue
 
 Desde donde se descargaron los datos en formato .xlsx. Estos archivos de Excel se almacenaron en la carpeta INPUT, y se importaron al archivo .R empleando el siguiente código:
 
-```{r eval=FALSE}
+
+```r
 DFMorbilidad <- data.frame()
 for (i in dir_ls(path = "INPUT", regexp="morbilidad")){
   temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6, col_types = c("text",rep("numeric",64))) 
@@ -682,7 +684,8 @@ También se obtuvieron desde la base de datos del INE, en el apartado INEbase / 
      
 Desde aquí se descargaron los datos en formato .xlsx a la carpeta INPUT. La carga de datos al archivo .R se realizó empleando el siguiente fragmento de código:
 
-```{r eval=FALSE}
+
+```r
 DFMort_Mens <- data.frame()
 for (i in dir_ls(path = "INPUT", regexp="Mort_nacion")){
   temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
@@ -701,7 +704,8 @@ De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defuncio
      height="341">
      
 Donde se descargaron los archivos en formato .xlsx en la carpeta INPUT. Desde ahí se cargaron de nuevo al fichero. R mediante el siguiente código:
-``` {r eval=FALSE}
+
+```r
 DFMort_Prov <- data.frame()
 for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
   temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
@@ -720,7 +724,8 @@ El último tipo de datos, datos acerca de la población de cada provincia, se ob
      
 Que nuevamente fueron descargados en la carpeta INPUT en formato .xlsx. Para su importación en el .R se empleó el siguiente código:
 
-```{r eval=FALSE}
+
+```r
 DFPoblacion <- read_excel("C:/Users/samue/Documents/UBU/3er curso/FDB y Web Semántica/Cambio_climatico_y_ECV/INPUT/Poblacion_prov.xlsx", 
                           skip = 6)
 ```
@@ -738,7 +743,8 @@ Hasta el momento hemos logrado importar los datos en nuestro archivo de R, pero 
 De toda la información que contienen nuestros dataframes ProvinciaMeteo, solo nos interesan las filas que contienen información mensual, aquellas que contienen información anual nos sobran. De igual manera solo nos interesan las columnas que hacen referencia a las variables meteorológicas que vamos a estudiar: tm_max (temperatura media de las máximas), tm_min (temperatura media de las mínimas), q_max (presión media de las máximas), q_min (presión media de las mínimas), hr (humedad relativa) y p_sol (insolación real/insolación teórica en %). Además de estas tareas de eliminación, vamos a añadir 2 columnas nuevas a cada dataframe: una denominada Periodo con el año del dato y otra denominada Mes con el mes del dato, y posteriormente vamos a eliminar la columna `fecha` que viene por defecto en el dataframe. Por último vamos a convertir las columnas q_max y q_min a numérico (ya que por defecto vienen como carácter al incorporar en el valor del dato el día del mes en que se obtuvo ese valor).
 Como vamos a querer aplicar todas estas modificaciones a 52 dataframes vamos a crear una función para ello, facilitándonos el trabajo posterior. Esta función es la siguiente:
 
-``` {r eval=FALSE}
+
+```r
 Mod_meteo <- function(prov){
   # Como vamos a emplear la función sobre una lista de nombres (y no con los objetos directamente), debemos emplear la función 'get()' que nos permita obtener el objeto al que referencia ese nombre
   Objeto <- get(prov)
@@ -764,12 +770,12 @@ Mod_meteo <- function(prov){
   
   return(Objeto)
 }
-
 ```
 
 Una vez obtenida la función ya podemos aplicarla sobre cada dataframe de meteorología:
 
-``` {r eval=FALSE}
+
+```r
 for (i in 1:length(Provincias)){
   Nam <- paste(Provincias[i],"Meteo",sep = "")
   assign(Nam,Mod_meteo(Nam))
@@ -788,7 +794,8 @@ Las columnas Periodo y Mes son de tipo carácter y representan el año y mes al 
 
 En el refinamiento de estos datos se busca seleccionar las filas que contienen información únicamente sobre ECV (eliminando el resto de filas), eliminando también la columna CAUSA e introduciendo la columna Periodo que contiene los años de cada dato y la columna Sexo con el sexo de cada dato:
 
-``` {r eval=FALSE}
+
+```r
 DFMorbilidad <- filter(DFMorbilidad, CAUSA %in% c("390-459 VII ENFERMEDADES DEL SISTEMA CIRCULATORIO", "0900 ENFERMEDADES DEL APARATO CIRCULATORIO I00-I99")) %>% 
   bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3), Sexo = rep(c("Ambos sexos", "Hombres", "Mujeres"), 10)) %>% 
   subset(select = - CAUSA)
@@ -796,7 +803,8 @@ DFMorbilidad <- filter(DFMorbilidad, CAUSA %in% c("390-459 VII ENFERMEDADES DEL 
 
 Posteriormente eliminar las columnas que hacen referencia a comunidades autónomas (seleccionando solo las que contienen información de provincias):
 
-``` {r eval=FALSE}
+
+```r
 DFMorbilidad <- DFMorbilidad[ ,order(names(DFMorbilidad))] %>% 
   relocate(.,`Araba/Álava`, .before = `Albacete`) %>% 
   relocate(., `Gipuzkoa`, .after = `Guadalajara`)
@@ -812,7 +820,8 @@ for (i in 1:length(DFMorbilidad)){
 
 Por último vamos a recolocar las columnas periodo y sexo y a cambiar la tabla a formato 'longer' para que se adecúe más a nuestro tipo de datos de meteorología.
 
-```{r eval=FALSE}
+
+```r
 DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>% 
   pivot_longer(data = ., names_to = "Provincia", values_to = "Altas", cols= c(Alava:Zaragoza))
 ```
@@ -828,13 +837,15 @@ Este es el aspecto final del dataframe DFMorbilidad, donde la variable Periodo, 
 
 Lo primero que vamos a realizar es determinar en qué posiciones, en qué filas, hay información sobre ECV:
 
-``` {r eval=FALSE}
+
+```r
 posiciones <- which(DFMort_Mens$Causa %in% c("053-061 IX.Enfermedades del sistema circulatorio"))
 ```
 
 Una vez obtenidas estas posiciones, y empleando un dataframe auxiliar denominado temporal (que usaremos como pivote temporal) vamos a cargar las filas que contienen información sobre ECV en el dataframe temporal:
 
-``` {r eval=FALSE}
+
+```r
 for(i in posiciones){
   temporal <- bind_rows(temporal, DFMort_Mens[(i+1):(i+3), ])
 }
@@ -848,7 +859,8 @@ Ahora tenemos un dataframe temporal con el siguiente aspecto:
      
 Por lo que debemos modificarlo antes de almacenarlo en el ya definitivo DFMort_Mens. Las modificaciones necesarias son incorporar la columna Periodo que contiene el año del dato, recolocar esta columna y eliminamos la columna ‘Todos los meses’. Por último realizamos un pivot_longer() para dar el formato deseado a los datos y ponemos en mayúscula el nombre de los meses para facilitar futuros join:
 
-``` {r eval=FALSE}
+
+```r
 DFMort_Mens <- mutate(temporal, Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3)) %>% 
   mutate(Sexo = Causa) %>% 
   relocate(`Sexo`, .before = `Todos los meses`) %>% 
@@ -872,19 +884,22 @@ Que posee 3 variables de tipo carácter: Periodo, Mes y Sexo. Y también posee u
 
 El primer paso en el tratamiento de estos datos es nombrar la primera columna del dataframe como Causa para facilitar su posterior manejo:
 
-``` {r eval=FALSE}
+
+```r
 names(DFMort_Prov)[1] <-"Causa"
 ```
 
 Al igual que en el refinamiento de datos de mortalidad mensual, vamos a seleccionar las posiciones de las filas que contienen información referente a muertes por ECV y las almacenaremos en el vector posiciones:
 
-``` {r eval=FALSE}
+
+```r
 posiciones <- which(DFMort_Prov$Causa %in% c("053-061 IX.Enfermedades del sistema circulatorio"))
 ```
 
 De manera idéntica al punto 2.3 vamos a emplear un dataframe pivote denominado temporal. En él vamos a cargar estas filas que nos son de interés:
 
-``` {r eval=FALSE}
+
+```r
 for(i in posiciones){
   temporal <- bind_rows(temporal, DFMort_Prov[(i+1):(i+3), ])
 }
@@ -899,7 +914,8 @@ Posteriormente cargamos temporal en DFMort_Prov, quedándonos este dataframe con
 
 Hay que modificar por tanto este dataframe para lograr llegar a la forma final, la forma inteligible y más útil. Para ello vamos a eliminar las 3 últimas columnas (contienen datos de extranjeros e información que no nos es útil) para posteriormente introducir la columna Periodo, la columna Sexo, y posteriormente ordenar las columnas para que el orden coincida con el del vector estándar Provincias. Tras realizar pivot_longer(), introducimos una columna con los elementos del vector Provincias (logrando así estandarizar los nombres de las provincias de las filas). Y ya tendríamos el dataframe listo. El código es el siguiente:
 
-``` {r eval=FALSE}
+
+```r
 DFMort_Prov <- DFMort_Prov[ ,1:(length(DFMort_Prov)-3)] %>% 
   mutate(Sexo = Causa, Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3)) %>% 
   relocate(Periodo, .before = Causa) %>% 
@@ -928,7 +944,8 @@ Donde la columna Periodo, Sexo y Provincia son de tipo character y la columna Mo
 
 Lo primero que vamos a realizar es nombrar la primera columna como “Localidad” para facilitar su manejo. Posteriormente vamos a seleccionar las columnas que contienen información poblacional recogida el 1 de enero (hay también columnas del 1 de julio). Del dataframe restante vamos a escoger aquellas columnas que se corresponden con el periodo de tiempo que nos interesa (2010-2019) y eliminar las filas con datos nacionales (quedándonos exclusivamente con datos provinciales). Por último renombramos las columnas para posteriores join con otras tablas:
 
-``` {r eval=FALSE}
+
+```r
 names(DFPoblacion)[1] <- "Localidad"
 DFPoblacion <- select(DFPoblacion, starts_with(c("Localidad","1 de enero"))) %>% 
   select(. , ends_with(c("Localidad","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"))) %>%
@@ -944,7 +961,8 @@ De esta manera hemos conseguido un dataframe como el siguiente:
 
 Que aún dista de lo que deseamos. El primer paso es sustituir el valor ‘Ambos sexos’ por el de la provincia correspondiente, y después eliminar las filas de NA:
 
-```{r eval=FALSE}
+
+```r
 i <- 2
 while(i<length(DFPoblacion$Localidad)){
   nombre <- DFPoblacion$Localidad[i]
@@ -957,7 +975,8 @@ DFPoblacion <- drop_na(DFPoblacion)
 
 A continuación eliminamos el número previo presente en el valor de la columna Localidad y hacemos un par de cambios de nombre de provincia (para poder ordenarlos alfabéticamente).
 
-``` {r eval=FALSE}
+
+```r
 for (i in 1:length(DFPoblacion$Localidad)){
   DFPoblacion$Localidad[i] <- str_sub(DFPoblacion$Localidad[i], start = 4)
 }
