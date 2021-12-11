@@ -1803,9 +1803,10 @@ Y a mujeres:
 <img src="IMAGENES/4.1.2.jpg"
      width="1100"
      height="700" alt="an image">
-<figcaption>Gráfica teniendo en cuenta a Hombres</figcaption>
+<figcaption>Gráfica teniendo en cuenta a Mujeres</figcaption>
 </figure>
 
 <br>
       
 <div style="text-align: justify">
+Por lo que observamos en los resultados, no parece haber relación directa entre el número de fenómenos climatológicos adversos o extremos y la morbilidad hospitalaria por enfermedad cardiovascular. Sí que apreciamos que parece tener mayor relación en las mujeres que en los hombres, ya que hay mayor fluctuación en la última gráfica que en las anteriores. También se puede observar que la morbilidad en los hombres es más alta que en las mujeres (hay mayor número de altas por ECV de hombres que de mujeres).
