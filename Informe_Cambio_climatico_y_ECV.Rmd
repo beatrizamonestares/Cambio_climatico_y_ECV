@@ -1387,3 +1387,36 @@ Graf_filt_Meteo <- function(objeto){
   
 }
 ``` 
+
+###### _3.1.2 Filtro_Extremos(provincia, dataframe)_
+
+Al igual que en el desarrollo de la función anterior vamos a comenzar especificando los parámetros que recibe y el return() que devuelve. Esta función se emplea para seleccionar las filas del objeto provincia pasado como parámetro cuya anomalía cuadrada se salga del límite superior des intervalo de confianza del geom_smooth(), una vez seleccionadas esas filas las va a añadir al dataframe pasado como parámetro dataframe.
+Recibe 2 parámetros:
+
+•	_provincia_ que ha de ser un dataframe meteorológico de una determinada provincia (ya no el nombre, sino el objeto en sí)
+
+•	_dataframe_ un dataframe en el cual queramos que se añadan las filas que cumplan el siguiente requisito: su anomalía debe ser superior al intervalo de confianza.
+
+El return que devuelve es ese dataframe en el que hemos insertado las filas que cumplen el requisito. 
+
+Su funcionamiento es el siguiente. El primer paso que se lleva a cabo es obtener el nombre en formato carácter del objeto pasado como parámetro provincia, y obtener una lista con las gráficas de esa provincia (invocando para ello a la función _Graf_filt_Meteo())_.
+
+``` {r eval=FALSE}
+name <- str_sub(deparse(substitute(provincia)))
+  lista_graficas <- Graf_filt_Meteo(name)
+```
+
+A continuación vamos a emplear la información de esas gráficas. Los objetos tipo gráfica en R, además de aportar información visual, se puede acceder a la información numérica que el programa emplea para realizar los plots. La función que permite acceder a la información (en forma de tabla) de las gráficas es ggplot_build. En ella vamos a basarnos para poder acceder a los valores del límite superior del intervalo de confianza correspondiente a cada doblete ‘Periodo Mes’. 
+
+Vamos a crear un dataframe para albergar el valor de ese límite superior, y lo vamos a llamar IC_vble (e.g. IC_tmax, IC_tmin, IC_qmax…). Para su construcción accederemos mediante la función ggplot_build a la información de la capa gráfica geom_smooth() de cada una de las gráficas, ya que esta es la que contiene la información del intervalo de confianza. Para poder hacer más tarde un join entre este dataframe, que contiene el valor del límite superior del intervalo de confianza, y los dataframe de datos meteorológicos vamos a necesitar una columna afín a ambas tablas. Esta columna será la columna que contiene el valor de ‘x’ (la posición que ocupa en el eje ‘x’ cada doblete ‘Periodo Mes’), así que también seleccionaremos ese valor de x. La función ggplot_build recibe una gráfica como parámetro y devuelve una lista con la información de cada capa de la gráfica. Para acceder a ellas se puede acceder por indexación (si la capa geom_smooth() es la 3ª deberemos indexar con un [3]).
+
+Así pues obtenemos este dataframe que contiene 2 columnas: el límite superior del intervalo de confianza (columna high_IC_vble_meteo) y la posición del eje ‘x’ con que se corresponde ese límite (columna x). El código es el siguiente (se muestra el código correspondiente con la obtención del límite superior de la variable tm_max):
+
+``` {r eval= FALSE}
+  IC_tmax <- left_join(ggplot_build(lista_graficas[[1]])$data[[2]] %>% 
+                         select(. , c(x)),
+                       ggplot_build(lista_graficas[[1]])$data[[3]] %>% 
+                         select(. , c(x, ymax)) %>% 
+                         rename(high_IC_tmax = ymax), 
+                       by = "x")
+```
