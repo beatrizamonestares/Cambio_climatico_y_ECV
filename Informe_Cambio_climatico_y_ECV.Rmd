@@ -1765,6 +1765,7 @@ ggsave(
 
 En este apartado vamos a analizar las gráficas obtenidas en el apartado anterior y sacar conclusiones, generar nueva información.
 
+<div style="text-align: justify">
 #### _4.1 Relación meteorología-morbilidad_
 
 Comencemos con la relación entre los sucesos adversos meteorológicos y la morbilidad. La gráfica obtenida teniendo en cuenta ambos sexos es la siguiente (estas gráficas están en la carpeta de OUTPUT del repositorio):
@@ -1811,7 +1812,7 @@ Y a mujeres:
 <div style="text-align: justify">
 Por lo que observamos en los resultados, no parece haber relación directa entre el número de fenómenos climatológicos adversos o extremos y la morbilidad hospitalaria por enfermedad cardiovascular. Sí que apreciamos que parece tener mayor relación en las mujeres que en los hombres, ya que hay mayor fluctuación en la última gráfica que en las anteriores. También se puede observar que la morbilidad en los hombres es más alta que en las mujeres (hay mayor número de altas por ECV de hombres que de mujeres).
 
-
+<div style="text-align: justify">
 #### _4.2 Relación metereología-mortalidad provincial_
 
 Vamos a estudiar la posible relación entre el número de sucesos meteorológicos adversos y el número de muertes por ECV calculado provincial y anualmente.
@@ -1850,7 +1851,7 @@ Y la correspondiente a mujeres es la siguiente:
 <img src="IMAGENES/4.2.2.jpg"
      width="1100"
      height="700" alt="an image">
-<figcaption>Gráfica para Hombres</figcaption>
+<figcaption>Gráfica para Mujeres</figcaption>
 </figure>
 
 <br>
@@ -1859,3 +1860,50 @@ Y la correspondiente a mujeres es la siguiente:
 
 La mortalidad parece estar más relacionada con los fenómenos meteorológicos que la morbilidad, sin embargo tampoco parece haber una relación clara entre ambos fenómenos. Respecto a los datos obtenidos, en este caso podemos apreciar que la mortalidad es menor que la morbilidad por ECV y que en este caso, al contrario que ocurría en la morbilidad, hay mayor porcentaje de mujeres que de hombres que fallecen como consecuencia de ECV.
 
+<div style="text-align: justify">
+#### _4.3 Relación meteorología-mortalidad mensual_
+Por último vamos a evaluar los resultados obtenidos para la relación entre sucesos meteorológicos extremos y mortalidad calculada mensualmente de forma nacional. 
+
+La gráfica para ambos sexos es:
+
+<center>
+<figure>
+<img src="IMAGENES/4.3.jpg"
+     width="1100"
+     height="700" alt="an image">
+<figcaption>Gráfica para ambos sexos</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
+La de los hombres:
+
+
+<center>
+<figure>
+<img src="IMAGENES/4.3.1.jpg"
+     width="1100"
+     height="700" alt="an image">
+<figcaption>Gráfica para Hombres</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
+Y la de las mujeres:
+<center>
+<figure>
+<img src="IMAGENES/4.3.2.jpg"
+     width="1100"
+     height="700" alt="an image">
+<figcaption>Gráfica para Mujeres</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
+De nuevo parece que nos enfrentamos a la misma situación, existe una cierta relación, sobre todo en las mujeres, pero no lo suficientemente clara como para poder afirmar una causalidad. Otra información que podemos obtener de las gráficas es que tampoco hay un incremento del número de sucesos meteorológicos adversos con el paso del tiempo, si así fuera el color de las barras seguiría un gradiente oscuro aproximadamente, sin embargo vemos que los colores se distribuyen bastante uniformemente.
