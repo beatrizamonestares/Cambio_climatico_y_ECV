@@ -651,8 +651,8 @@ for (i in 1:length(Provincias)){
 <center>
 <figure>
 <img src="IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg"
-     width="1100"
-     height="600" alt="an image">
+     width="1800"
+     height="800" alt="an image">
 <figcaption>Aspecto del dataframe metereológico recién creado </figcaption>
 </figure>
 
@@ -688,6 +688,8 @@ Reorder <- function(provincia){
 
 Posteriormente aplicaríamos esta función a las provincias modificadas (GuadalajaraMeteo, MalagaMeteo, SoriaMeteo, PalenciaMeteo, ValladolidMeteo).
 
+<br>
+
 #### _1.2 Datos de Morbilidad_
 Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encuesta de morbilidad hospitalaria:
 
@@ -695,7 +697,7 @@ Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encue
 <center>
 <figure>
 <img src="IMAGENES/INE.jpg"
-     width="1100"
+     width="1300"
      height="600" alt="an image">
 <figcaption>Página del INE donde encontrar datos de morbilidad </figcaption>
 </figure>
@@ -798,6 +800,8 @@ DFPoblacion <- read_excel("C:/Users/samue/Documents/UBU/3er curso/FDB y Web Sem�
 Como podemos observar se almacenaron en un objeto denominado DFPoblacion.
 Una vez importados todos los datos, haciendo un repaso de los objetos hasta ahora obtenidos (y con los que vamos a trabajar de aquí en adelante) encontramos: los 52 dataframe ProvinciaMeteo con datos meteorológicos, DFMorbilidad con información de la morbilidad, DFMort_Mens con el número mensual de muertes a nivel nacional, DFMort_Prov con el número anual de muertes por provincia y DFPoblacion con el número de habitantes por provincia y año.
 
+<br>
+
 <div style="text-align: justify">
 #### **2. REFINAMIENTO DE LOS DATOS**
 
@@ -851,8 +855,8 @@ De esta manera hemos logrado modificar los datos de meteorología, dejándolos m
 <center>
 <figure>
 <img src="IMAGENES/Dataframe A Coruña.jpg"
-     width="1100"
-     height="600" alt="an image">
+     width="700"
+     height="700" alt="an image">
 <figcaption>Dataframe de los datos de A Coruña </figcaption>
 </figure>
 
@@ -900,8 +904,8 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
 <center>
 <figure>
 <img src="IMAGENES/2.2.jpg"
-     width="1100"
-     height="600" alt="an image">
+     width="500"
+     height="700" alt="an image">
 <figcaption>Página del INE donde encontrar datos de población </figcaption>
 </figure>
 
@@ -960,8 +964,8 @@ El resultado final es un dataframe DFMort_Mens como el siguiente:
 <center>
 <figure>
 <img src="IMAGENES/2.3.2.jpg"
-     width="1100"
-     height="600" alt="an image">
+     width="500"
+     height="700" alt="an image">
 <figcaption>Dataframe mortalidad mensual </figcaption>
 </figure>
 
@@ -1032,8 +1036,8 @@ Siendo el resultado final del dataframe DFMort_Prov:
 <center>
 <figure>
 <img src="IMAGENES/2.4.2.jpg"
-     width="1100"
-     height="600" alt="an image">
+     width="500"
+     height="700" alt="an image">
 <figcaption>Dataframe mortalidad provincial definitivo </figcaption>
 </figure>
 
@@ -1102,8 +1106,8 @@ Una vez ya ordenado alfabéticamente introducimos la nueva columna Provincia que
 <center>
 <figure>
 <img src="IMAGENES/2.5.2.jpg"
-     width="1100"
-     height="600" alt="an image">
+     width="500"
+     height="700" alt="an image">
 <figcaption>Dataframe de población final </figcaption>
 </figure>
 
