@@ -679,3 +679,15 @@ También se obtuvieron desde la base de datos del INE, en el apartado INEbase / 
 <img src="INEmort.jpg"
      width="400"
      height="341>
+     
+Desde aquí se descargaron los datos en formato .xlsx a la carpeta INPUT. La carga de datos al archivo .R se realizó empleando el siguiente fragmento de código:
+
+```{r eval=FALSE}
+DFMort_Mens <- data.frame()
+for (i in dir_ls(path = "INPUT", regexp="Mort_nacion")){
+  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
+  DFMort_Mens <- bind_rows(DFMort_Mens, temporal)
+}
+```
+
+Donde podemos comprobar que se almacenaron en un objeto denominado DFMort_Mens.
