@@ -1794,3 +1794,18 @@ La gráfica referente únicamente a Hombres:
 <br>
       
 <div style="text-align: justify">
+
+Y a mujeres:
+
+
+<center>
+<figure>
+<img src="IMAGENES/4.1.2.jpg"
+     width="1100"
+     height="700" alt="an image">
+<figcaption>Gráfica teniendo en cuenta a Hombres</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
