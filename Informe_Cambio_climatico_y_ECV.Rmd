@@ -596,7 +596,7 @@ Se va a explicar desde qué fuente y cómo se obtuvieron cada uno de ellos.
 
 En un principio se obtuvieron desde la plataforma de Open Data del AEMET, generando para ello un fichero .csv con todos los enlaces a cada conjunto de datos:
 
-<img src="Aspecto fichero.jpg"
+<img src="IMAGENES/Aspecto fichero.jpg"
      width="400"
      height="341>
       
@@ -623,7 +623,7 @@ for (i in 1:length(Provincias)){
 }
 ```
 
-<img src="/IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg"
+<img src="IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg"
      width="400"
      height="341">
      
@@ -658,7 +658,7 @@ Posteriormente aplicaríamos esta función a las provincias modificadas (Guadala
 #### _1.2 Datos de Morbilidad_
 Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encuesta de morbilidad hospitalaria:
 
-<img src="INE.jpg"
+<img src="IMAGENES/INE.jpg"
      width="400"
      height="341">
 
@@ -676,7 +676,7 @@ Como se puede comprobar se almacenaron en un objeto denominado DFMorbilidad
 #### _1.3 Datos de Mortalidad mensual_
 También se obtuvieron desde la base de datos del INE, en el apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados nacionales / Defunciones por causas (lista reducida), sexo y mes de fallecimiento. Un ejemplo de este acceso para el año 2010 es:
 
-<img src="INEmort.jpg"
+<img src="IMAGENES/INEmort.jpg"
      width="400"
      height="341">
      
@@ -696,7 +696,7 @@ Donde podemos comprobar que se almacenaron en un objeto denominado DFMort_Mens.
 
 De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados por provincia de residencia/ Defunciones por causas (lista reducida) por sexo. Ejemplo de ello:
 
-<img src="INEmortalidadprovincial.jpg"
+<img src="IMAGENES/INEmortalidadprovincial.jpg"
      width="400"
      height="341">
      
@@ -714,7 +714,7 @@ Observamos que se ha almacenado en un objeto denominado DFMort_Prov
 
 El último tipo de datos, datos acerca de la población de cada provincia, se obtuvieron de nuevo desde el INE, en el apartado INEbase / Demografía y población / Cifras de Población y Censos demográficos /Cifras de población, como se muestra a continuación:
 
-<img src="INEdatosdepoblacion.jpg"
+<img src="IMAGENES/INEdatosdepoblacion.jpg"
      width="400"
      height="341">
      
@@ -777,3 +777,4 @@ for (i in 1:length(Provincias)){
 ```
 
 De esta manera hemos logrado modificar los datos de meteorología, dejándolos más legibles y entendibles. 
+
