@@ -1843,4 +1843,19 @@ La gráfica para los hombres es la siguiente:
       
 <div style="text-align: justify">
 
+Y la correspondiente a mujeres es la siguiente:
+
+<center>
+<figure>
+<img src="IMAGENES/4.2.2.jpg"
+     width="1100"
+     height="700" alt="an image">
+<figcaption>Gráfica para Hombres</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
+La mortalidad parece estar más relacionada con los fenómenos meteorológicos que la morbilidad, sin embargo tampoco parece haber una relación clara entre ambos fenómenos. Respecto a los datos obtenidos, en este caso podemos apreciar que la mortalidad es menor que la morbilidad por ECV y que en este caso, al contrario que ocurría en la morbilidad, hay mayor porcentaje de mujeres que de hombres que fallecen como consecuencia de ECV.
 
