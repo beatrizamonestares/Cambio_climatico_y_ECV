@@ -312,7 +312,10 @@ _Otros estudios_
 
 **OBJETIVOS**
 
-![](https://www.google.com/url?sa=i&url=https%3A%2F%2Fcoworkingfy.com%2Fcomo-definir-objetivos-metodos%2F&psig=AOvVaw3QuTp5DQe0R0Sd6BkR0T0H&ust=1639334416362000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKC5reOy3PQCFQAAAAAdAAAAABAD){width=600px}
+
+<img src="IMAGENES/objetivos.jpg"
+     width="500"
+     height="341">
 </span>
 </font>
 </center>
@@ -396,7 +399,11 @@ Una vez conocidos qué meses y de qué año tuvieron una climatología más extr
 
 **METODOLOGÍAS**
 
-![](https://www.google.com/url?sa=i&url=https%3A%2F%2Fconceptodefinicion.de%2Fmetodologia%2F&psig=AOvVaw0N-y90BoVqMFhsZ0ZIYVU_&ust=1639334519373000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCPjh9ZKz3PQCFQAAAAAdAAAAABAD){width=600px}
+
+<img src="IMAGENES/metodologia.jpg"
+     width="500"
+     height="341">
+
 </span>
 </font>
 </center>
