@@ -968,4 +968,6 @@ DFPoblacion$Localidad[which(DFPoblacion$Localidad %in% c("Gipuzkoa"))] <- "Guipu
 DFPoblacion <- arrange(DFPoblacion, Localidad)
 ```
 
+Una vez ya ordenado alfabéticamente introducimos la nueva columna Provincia que contiene el nombre estandarizado de cada provincia empleando el vector inicial Provincias. Finalmente realizamos un pivot_longer() para que los datos puedan relacionarse mejor con otras tablas. El dataframe DFPoblacion obtenido es el siguiente:
+
 
