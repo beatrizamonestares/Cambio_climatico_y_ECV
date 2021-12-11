@@ -1420,3 +1420,152 @@ Así pues obtenemos este dataframe que contiene 2 columnas: el límite superior 
                          rename(high_IC_tmax = ymax), 
                        by = "x")
 ```
+
+La obtención de los demás limites superiores es idéntica, variando únicamente la indexación necesaria en lista_gráficas (1 para gráfica graf_temp, 2 para la gráfica graf_presion y 3 para la gráfica graf_sol_hr) y para data (1 para la gráfica geom_line(), 2 para la gráfica geom_point() y 3 para la gráfica geom_smooth() correspondientes a la primera variable meteorológica, 4 para geom_line(), 5 para geom_point() y 6 para geom_smooth() correspondientes con la segunda variable medida en la gráfica)
+
+El aspecto de una de estas tablas IC_vble es el siguiente:
+
+<center>
+<figure>
+<img src="IMAGENES/3.1.2.jpg"
+     width="500"
+     height="700" alt="an image">
+<figcaption>Aspecto de una tabla IC_vble</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
+Que posee las 2 columnas mencionadas y 120 filas (10 años * 12 meses). Al igual que este dataframe, correspondiente a IC_tmax, tenemos otros 5 correspondientes a las demás variables meteorológicas.
+
+Una vez tenemos esta información acerca de los límites superiores (que recordemos que vamos a utilizarlos como filtro para seleccionar las filas cuya anomalía supere estos límites), es el momento de juntarlos con el dataframe provincia pasado como parámetro y que se corresponde con el dataframe meteorológico de una determinada provincia (AlavaMeteo, MalagaMeteo, MadridMeteo…). Para ello primero unimos (sin hacer join) el dataframe IC_tmax y a partir de ahí ya podemos hacer join empleando la columna ‘x’. 
+
+Además vamos a eliminar posteriormente la columna ‘x’ (ya no nos va a ser de utilidad) y vamos a crear una columna nueva en nuestro dataframe combinación del ProvinciaMeteo e IC_vble, esta columna va a contener el nombre de la provincia con la que se corresponden los datos.El código es el siguiente:
+
+``` {r eval=FALSE}
+Interna <- bind_cols(provincia, IC_tmax) %>% 
+    left_join(.,IC_tmin, by = "x") %>% 
+    left_join(.,IC_qmax, by = "x") %>% 
+    left_join(.,IC_qmin, by = "x") %>% 
+    left_join(.,IC_psol, by = "x") %>% 
+    left_join(.,IC_hr, by = "x") %>% 
+    subset(select = -x) %>% 
+    mutate(Provincia = str_sub(name, start = 1L, end = -6L)) %>% 
+    relocate(., Provincia, .before = Periodo)
+```
+
+Ahora hemos obtenido un dataframe Interna que contiene todas las filas del dataframe meteorológico de la provincia, pero nos interesan solo aquellas que pasen el filtro (precisamente para eso hemos añadido las columnas high_IC_vble). Así que ahora debemos filtrar esas filas, y añadirlas al dataframe dataframe pasado como parámetro. Vamos a incluir todas las filas que cumplan el filtro variable por variable, es decir, primero añadiremos todas las que cumplan el filtro (que su anomalía sea mayor al valor de la columna high_IC_vble) para la variable tm_max, luego para tm_min, q_max… y así con todas. Obviamente vamos a obtener filas repetidas, pero esto es lo que deseamos para el siguiente paso. El código que lleva a cabo esto es el siguiente:
+
+``` {r eval=FALSE}
+  dataframe <- bind_rows(dataframe, filter(Interna,
+    Anom_tmax>high_IC_tmax
+  )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_tmin>high_IC_tmin
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_qmax>high_IC_qmax
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_qmin>high_IC_qmin
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_psol>high_IC_psol
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_hr>high_IC_hr
+    ))
+```
+
+Por último vamos a devolver ese dataframe que acabamos de crear.
+
+``` {r eval=FALSE}
+return(dataframe)
+```
+
+El aspecto total de la función _Filtro_Extremos(provincia, dataframe)_ es el siguiente:
+
+``` {r eval=FALSE}
+Filtro_Extremos <- function(provincia, dataframe){
+  
+  name <- str_sub(deparse(substitute(provincia)))
+  lista_graficas <- Graf_filt_Meteo(name)
+  
+  IC_tmax <- left_join(ggplot_build(lista_graficas[[1]])$data[[2]] %>% 
+                         select(. , c(x)),
+                       ggplot_build(lista_graficas[[1]])$data[[3]] %>% 
+                         select(. , c(x, ymax)) %>% 
+                         rename(high_IC_tmax = ymax), 
+                       by = "x")
+  
+  IC_tmin <- left_join(ggplot_build(lista_graficas[[1]])$data[[5]] %>% 
+                         select(. , c(x)),
+                       ggplot_build(lista_graficas[[1]])$data[[6]] %>% 
+                         select(. , c(x, ymax)) %>% 
+                         rename(high_IC_tmin = ymax), 
+                       by = "x")
+  
+  IC_qmax <- left_join(ggplot_build(lista_graficas[[2]])$data[[2]] %>% 
+                         select(. , c(x)),
+                       ggplot_build(lista_graficas[[2]])$data[[3]] %>% 
+                         select(. , c(x, ymax)) %>% 
+                         rename(high_IC_qmax = ymax), 
+                       by = "x")
+  
+  IC_qmin <- left_join(ggplot_build(lista_graficas[[2]])$data[[5]] %>% 
+                         select(. , c(x)),
+                       ggplot_build(lista_graficas[[2]])$data[[6]] %>% 
+                         select(. , c(x, ymax)) %>% 
+                         rename(high_IC_qmin = ymax), 
+                       by = "x")
+  
+  IC_psol <- left_join(ggplot_build(lista_graficas[[3]])$data[[2]] %>% 
+                         select(. , c(x)),
+                       ggplot_build(x[[3]])$data[[3]] %>% 
+                         select(. , c(x, ymax)) %>% 
+                         rename(high_IC_psol = ymax), 
+                       by = "x")
+  
+  IC_hr <- left_join(ggplot_build(lista_graficas[[3]])$data[[5]] %>% 
+                       select(. , c(x)),
+                     ggplot_build(lista_graficas[[3]])$data[[6]] %>% 
+                       select(. , c(x, ymax)) %>% 
+                       rename(high_IC_hr = ymax), 
+                     by = "x")
+  
+  
+  Interna <- bind_cols(provincia, IC_tmax) %>% 
+    left_join(.,IC_tmin, by = "x") %>% 
+    left_join(.,IC_qmax, by = "x") %>% 
+    left_join(.,IC_qmin, by = "x") %>% 
+    left_join(.,IC_psol, by = "x") %>% 
+    left_join(.,IC_hr, by = "x") %>% 
+    subset(select = -x) %>% 
+    mutate(Provincia = str_sub(name, start = 1L, end = -6L)) %>% 
+    relocate(., Provincia, .before = Periodo)
+  
+  dataframe <- bind_rows(dataframe, filter(Interna,
+    Anom_tmax>high_IC_tmax
+  )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_tmin>high_IC_tmin
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_qmax>high_IC_qmax
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_qmin>high_IC_qmin
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_psol>high_IC_psol
+    )) %>% 
+    bind_rows(. , filter(Interna,
+    Anom_hr>high_IC_hr
+    ))
+  
+  return(dataframe)
+  
+}
+```
+
