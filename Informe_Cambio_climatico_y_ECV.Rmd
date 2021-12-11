@@ -608,6 +608,7 @@ Se va a explicar desde qué fuente y cómo se obtuvieron cada uno de ellos.
 
 En un principio se obtuvieron desde la plataforma de Open Data del AEMET, generando para ello un fichero .csv con todos los enlaces a cada conjunto de datos:
 
+<<<<<<< HEAD
 </div>
 </span>
 
@@ -619,6 +620,11 @@ En un principio se obtuvieron desde la plataforma de Open Data del AEMET, genera
 </figure>
 
 <br>
+=======
+<img src="Aspecto fichero.jpg"
+     width="400"
+     height="341>
+>>>>>>> ded87c4daa2d79e6bba9ab208fb10a08ceb567c2
       
 <div style="text-align: justify">
 
@@ -644,6 +650,7 @@ for (i in 1:length(Provincias)){
 }
 ```
 
+<<<<<<< HEAD
 </div>
 </span>
 
@@ -659,6 +666,12 @@ for (i in 1:length(Provincias)){
       
 <div style="text-align: justify">
 
+=======
+<img src="/IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg"
+     width="400"
+     height="341">
+     
+>>>>>>> ded87c4daa2d79e6bba9ab208fb10a08ceb567c2
      
 Una vez creados estos dataframes, se tuvieron que realizar varias correcciones debido a que ciertas estaciones seleccionadas (la de Guadalajara, Málaga, Palencia, Soria y Valladolid) presentaban años incompletos o de los cuales directamente no existía información (obligándonos a seleccionar otra estación de la misma provincia e introducir la información restante de forma manual).
 Un ejemplo de cómo se introdujo esta información:
@@ -691,6 +704,7 @@ Posteriormente aplicaríamos esta función a las provincias modificadas (Guadala
 #### _1.2 Datos de Morbilidad_
 Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encuesta de morbilidad hospitalaria:
 
+<<<<<<< HEAD
 
 <center>
 <figure>
@@ -703,6 +717,11 @@ Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encue
 <br>
       
 <div style="text-align: justify">
+=======
+<img src="INE.jpg"
+     width="400"
+     height="341">
+>>>>>>> ded87c4daa2d79e6bba9ab208fb10a08ceb567c2
 
 Desde donde se descargaron los datos en formato .xlsx. Estos archivos de Excel se almacenaron en la carpeta INPUT, y se importaron al archivo .R empleando el siguiente código:
 
@@ -716,6 +735,7 @@ Como se puede comprobar se almacenaron en un objeto denominado DFMorbilidad
 <div style="text-align: justify">
 #### _1.3 Datos de Mortalidad mensual_
 También se obtuvieron desde la base de datos del INE, en el apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados nacionales / Defunciones por causas (lista reducida), sexo y mes de fallecimiento. Un ejemplo de este acceso para el año 2010 es:
+<<<<<<< HEAD
 <center>
 <figure>
 <img src="IMAGENES/INEmort.jpg"
@@ -726,6 +746,13 @@ También se obtuvieron desde la base de datos del INE, en el apartado INEbase / 
 <br>
       
 <div style="text-align: justify">
+=======
+
+<img src="INEmort.jpg"
+     width="400"
+     height="341">
+     
+>>>>>>> ded87c4daa2d79e6bba9ab208fb10a08ceb567c2
 Desde aquí se descargaron los datos en formato .xlsx a la carpeta INPUT. La carga de datos al archivo .R se realizó empleando el siguiente fragmento de código:
 ```{r eval=FALSE}
 DFMort_Mens <- data.frame()
@@ -738,6 +765,7 @@ Donde podemos comprobar que se almacenaron en un objeto denominado DFMort_Mens.
 <div style="text-align: justify">
 #### _1.4 Datos de mortalidad provincial_
 De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados por provincia de residencia/ Defunciones por causas (lista reducida) por sexo. Ejemplo de ello:
+<<<<<<< HEAD
 <center>
 <figure>
 <img src="IMAGENES/INEmortalidadprovincial.jpg"
@@ -748,6 +776,12 @@ De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defuncio
 <br>
       
 <div style="text-align: justify">
+=======
+
+<img src="INEmortalidadprovincial.jpg"
+     width="400"
+     height="341">
+>>>>>>> ded87c4daa2d79e6bba9ab208fb10a08ceb567c2
      
 Donde se descargaron los archivos en formato .xlsx en la carpeta INPUT. Desde ahí se cargaron de nuevo al fichero. R mediante el siguiente código:
 ``` {r eval=FALSE}
@@ -761,6 +795,7 @@ Observamos que se ha almacenado en un objeto denominado DFMort_Prov
 <div style="text-align: justify">
 #### _1.5 Datos de poblacion_
 El último tipo de datos, datos acerca de la población de cada provincia, se obtuvieron de nuevo desde el INE, en el apartado INEbase / Demografía y población / Cifras de Población y Censos demográficos /Cifras de población, como se muestra a continuación:
+<<<<<<< HEAD
 <center>
 <figure>
 <img src="IMAGENES/INEdatosdepoblacion.jpg"
@@ -771,6 +806,12 @@ El último tipo de datos, datos acerca de la población de cada provincia, se ob
 <br>
       
 <div style="text-align: justify">
+=======
+
+<img src="INEdatosdepoblacion.jpg"
+     width="400"
+     height="341">
+>>>>>>> ded87c4daa2d79e6bba9ab208fb10a08ceb567c2
      
 Que nuevamente fueron descargados en la carpeta INPUT en formato .xlsx. Para su importación en el .R se empleó el siguiente código:
 ```{r eval=FALSE}
@@ -779,6 +820,7 @@ DFPoblacion <- read_excel("C:/Users/samue/Documents/UBU/3er curso/FDB y Web Sem�
 ```
 Como podemos observar se almacenaron en un objeto denominado DFPoblacion.
 Una vez importados todos los datos, haciendo un repaso de los objetos hasta ahora obtenidos (y con los que vamos a trabajar de aquí en adelante) encontramos: los 52 dataframe ProvinciaMeteo con datos meteorológicos, DFMorbilidad con información de la morbilidad, DFMort_Mens con el número mensual de muertes a nivel nacional, DFMort_Prov con el número anual de muertes por provincia y DFPoblacion con el número de habitantes por provincia y año.
+<<<<<<< HEAD
 <br>
 <div style="text-align: justify">
 #### **2. REFINAMIENTO DE LOS DATOS**
@@ -1024,3 +1066,5 @@ Una vez ya ordenado alfabéticamente introducimos la nueva columna Provincia que
       
 <div style="text-align: justify">
 Que posee 520 filas (52 provincias * 10 años) y 3 columnas: 2 de ellas caracteres (Provincia y Periodo) y una de tipo numeric (Habitantes) que representa el número de habitantes en esa provincia ese año.
+=======
+>>>>>>> ded87c4daa2d79e6bba9ab208fb10a08ceb567c2
