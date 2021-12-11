@@ -309,3 +309,85 @@ _Otros estudios_
 <font size="30">
 <span style="color:black">
 
+**OBJETIVOS**
+
+![](https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg){width=600px}
+</span>
+</font>
+</center>
+
+## 
+<span style="color:black">
+<center>
+<font size="6">
+
+**OBJETIVO GENERAL**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+Tratar de encontrar correlación entre el cambio climático y una mayor incidencia y mortalidad de las enfermedades cardiovasculares en España en entre los años 2010 y 2019.
+
+</div>
+</span>
+
+
+## 
+<span style="color:black">
+<center>
+<font size="6">
+
+**OBJETIVO ESPECÍFICO 1**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+Estudiar las variables meteorológicas mensuales (temperatura, presión atmosférica e insolación diaria) de todas las provincias españolas desde 2010 hasta 2019, con el fin de determinar qué meses y provincias fueron los más adversos.
+
+</div>
+</span>
+
+
+## 
+<span style="color:black">
+<center>
+<font size="6">
+
+**OBJETIVO ESPECÍFICO 2**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+Una vez conocidas las provincias con climatología más adversa para cada año del periodo 2010-2019, comprobar si la morbilidad hospitalaria y la mortalidad por ECV fue significativamente mayor en dichas provincias con respecto a las climatológicamente normales.
+
+</div>
+</span>
+
+## 
+<span style="color:black">
+<center>
+<font size="6">
+
+**OBJETIVO ESPECÍFICO 3**
+
+</font>
+</center>
+
+<div style="text-align: justify"> 
+
+Una vez conocidos qué meses y de qué año tuvieron una climatología más extrema en todo el territorio nacional, comprobar si la mortalidad por ECV fue significaticamente mayor esos meses en comparación con los demás meses.
+
+</div>
+</span>
+
+## {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
+<center>
+<font size="30">
+<span style="color:black">
+
