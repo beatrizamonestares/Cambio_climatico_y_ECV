@@ -1769,5 +1769,17 @@ En este apartado vamos a analizar las gráficas obtenidas en el apartado anterio
 
 Comencemos con la relación entre los sucesos adversos meteorológicos y la morbilidad. La gráfica obtenida teniendo en cuenta ambos sexos es la siguiente (estas gráficas están en la carpeta de OUTPUT del repositorio):
 
+<center>
+<figure>
+<img src="IMAGENES/4.1.jpg"
+     width="1100"
+     height="700" alt="an image">
+<figcaption>Gráfica teniendo en cuenta ambos sexos</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
 
 
