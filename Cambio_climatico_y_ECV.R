@@ -317,7 +317,7 @@ DFMort_Prov <- DFMort_Prov[ ,1:(length(DFMort_Prov)-3)] %>%
 
 # * Datos meteorológicos --------------------------------------------------
 
-# Una vez ya tenemos modificados nuestro datos meteorológicos comenzamos a comprobar qué meses y en qué provincias fueron los más dispares climatológicamente hablando. Para ello vamos a seguir los siguientes pases:
+# Una vez ya tenemos modificados nuestro datos meteorológicos comenzamos a comprobar qué meses y en qué provincias fueron los más dispares climatológicamente hablando. Para ello vamos a seguir los siguientes pasos:
 #     - Para cada dataframe de meteorología de cada provincia, calcular la media de cada variable meteorológica entre el mismo mes de los diferentes años (obtendremos una media para todos los eneros, otra para todos los febreros, otra para marzos...).
 #     - Calcular la anomalía de cada valor meteorológico (calculado como la diferencia entre el valor y la media de dicho valor)
 #     - Obtener una gráfica para representar cada una de estas anomalías elevadas al cuadrado para cada provincia.
@@ -357,19 +357,17 @@ for (i in Provincias){
 Graf_filt_Meteo <- function(objeto){
   # Creamos la gráfica que representa las anomalías al cuadrado de tm_max y tm_min. Vamos a generarla por capas para poder juntar distintos estilos de representación.
   provincia <- get(objeto)
-  colors <- c("Anom_tmax" = "red", "Anom_tmin" = "blue", )
   
   graf_temp <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
-    geom_line(aes(y = Anom_tmax, group = 1), colour = "Anom_tmax") + 
+    geom_line(aes(y = Anom_tmax, group = 1), colour = "red") + 
     geom_point(size = 1.5, aes(y = Anom_tmax), colour = "red") + 
-    geom_smooth(aes( y = Anom_tmax, group = 1), fill = "Anom_tmax", alpha = 0.25, colour = "Anom_tmax", level = 0.995) +
-    geom_line(aes(y = Anom_tmin,  group = 1), colour = "Anom_tmin") + 
+    geom_smooth(aes( y = Anom_tmax, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
+    geom_line(aes(y = Anom_tmin,  group = 1), colour = "blue") + 
     geom_point(size = 1.5, aes(y = Anom_tmin), colour = "blue") + 
-    geom_smooth(aes(y = Anom_tmin, group = 1), fill = "Anom_tmin", alpha = 0.25, colour = "Anom_tmin", level = 0.995) +
+    geom_smooth(aes(y = Anom_tmin, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
-    labs(x = "Periodo Mes", y = expression("Anomalía"~^2), colour = "Serie") + 
-    scale_color_manual(values = colors) +
-    # A continuación se emplea la función 'deparse()' junto con 'substitute()' que nos permite obtener en forma de character el nombre del objeto pasado como parámetro.
+    labs(x = "Periodo Mes", 
+         y = expression("Anomalía"~^2))
     ggtitle(label = "Anomalía Temperatura", subtitle = str_sub(objeto, start = 1L, end = -6L))
 
   # Creamos la gráfica que representa las anomalías al cuadrado de q_max y q_min. Vamos a generarla por capas para poder juntar distintos estilos de representación.
