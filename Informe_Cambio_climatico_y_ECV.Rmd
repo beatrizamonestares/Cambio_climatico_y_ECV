@@ -916,3 +916,9 @@ DFMort_Prov <- DFMort_Prov[ ,1:(length(DFMort_Prov)-3)] %>%
 ```
 
 Siendo el resultado final del dataframe DFMort_Prov:
+
+<img src="IMAGENES/2.4.2.jpg"
+     width="400"
+     height="341">
+     
+Donde la columna Periodo, Sexo y Provincia son de tipo character y la columna Mortalidad es de tipo numeric y representa el número de muertes por provincia, sexo y periodo.
