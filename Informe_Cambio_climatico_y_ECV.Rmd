@@ -651,7 +651,7 @@ for (i in 1:length(Provincias)){
 <center>
 <figure>
 <img src="IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg"
-     width="900"
+     width="1100"
      height="600" alt="an image">
 <figcaption>Aspecto del dataframe metereológico recién creado </figcaption>
 </figure>
@@ -691,9 +691,18 @@ Posteriormente aplicaríamos esta función a las provincias modificadas (Guadala
 #### _1.2 Datos de Morbilidad_
 Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encuesta de morbilidad hospitalaria:
 
+
+<center>
+<figure>
 <img src="IMAGENES/INE.jpg"
-     width="400"
-     height="341">
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Página del INE donde encontrar datos de morbilidad </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
 
 Desde donde se descargaron los datos en formato .xlsx. Estos archivos de Excel se almacenaron en la carpeta INPUT, y se importaron al archivo .R empleando el siguiente código:
 
@@ -705,6 +714,8 @@ for (i in dir_ls(path = "INPUT", regexp="morbilidad")){
 ```
 
 Como se puede comprobar se almacenaron en un objeto denominado DFMorbilidad
+
+<div style="text-align: justify">
 
 #### _1.3 Datos de Mortalidad mensual_
 También se obtuvieron desde la base de datos del INE, en el apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados nacionales / Defunciones por causas (lista reducida), sexo y mes de fallecimiento. Un ejemplo de este acceso para el año 2010 es:
