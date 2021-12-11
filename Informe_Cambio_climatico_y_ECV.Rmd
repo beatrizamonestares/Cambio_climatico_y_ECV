@@ -692,7 +692,7 @@ for (i in dir_ls(path = "INPUT", regexp="Mort_nacion")){
 
 Donde podemos comprobar que se almacenaron en un objeto denominado DFMort_Mens.
 
-#### _Datos de mortalidad provincial_
+#### _1.4 Datos de mortalidad provincial_
 
 De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados por provincia de residencia/ Defunciones por causas (lista reducida) por sexo. Ejemplo de ello:
 
@@ -700,3 +700,12 @@ De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defuncio
      width="400"
      height="341>
      
+Donde se descargaron los archivos en formato .xlsx en la carpeta INPUT. Desde ahí se cargaron de nuevo al fichero. R mediante el siguiente código:
+``` {r eval=FALSE}
+DFMort_Prov <- data.frame()
+for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
+  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6) 
+  DFMort_Prov <- bind_rows(DFMort_Prov, temporal)
+}
+```
+Observamos que se ha almacenado en un objeto denominado DFMort_Prov
