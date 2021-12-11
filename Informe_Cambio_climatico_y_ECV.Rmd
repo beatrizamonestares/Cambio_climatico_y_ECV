@@ -720,10 +720,17 @@ Como se puede comprobar se almacenaron en un objeto denominado DFMorbilidad
 #### _1.3 Datos de Mortalidad mensual_
 También se obtuvieron desde la base de datos del INE, en el apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados nacionales / Defunciones por causas (lista reducida), sexo y mes de fallecimiento. Un ejemplo de este acceso para el año 2010 es:
 
+<center>
+<figure>
 <img src="IMAGENES/INEmort.jpg"
-     width="400"
-     height="341">
-     
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Página del INE donde encontrar datos de mortalidad mensual</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
 Desde aquí se descargaron los datos en formato .xlsx a la carpeta INPUT. La carga de datos al archivo .R se realizó empleando el siguiente fragmento de código:
 
 ```{r eval=FALSE}
@@ -736,13 +743,23 @@ for (i in dir_ls(path = "INPUT", regexp="Mort_nacion")){
 
 Donde podemos comprobar que se almacenaron en un objeto denominado DFMort_Mens.
 
+<div style="text-align: justify">
+
 #### _1.4 Datos de mortalidad provincial_
 
 De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados por provincia de residencia/ Defunciones por causas (lista reducida) por sexo. Ejemplo de ello:
 
+<center>
+<figure>
 <img src="IMAGENES/INEmortalidadprovincial.jpg"
-     width="400"
-     height="341">
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Página del INE donde encontrar datos de mortalidad provincial </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
      
 Donde se descargaron los archivos en formato .xlsx en la carpeta INPUT. Desde ahí se cargaron de nuevo al fichero. R mediante el siguiente código:
 ``` {r eval=FALSE}
@@ -754,13 +771,22 @@ for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
 ```
 Observamos que se ha almacenado en un objeto denominado DFMort_Prov
 
+<div style="text-align: justify">
 #### _1.5 Datos de poblacion_
 
 El último tipo de datos, datos acerca de la población de cada provincia, se obtuvieron de nuevo desde el INE, en el apartado INEbase / Demografía y población / Cifras de Población y Censos demográficos /Cifras de población, como se muestra a continuación:
 
+<center>
+<figure>
 <img src="IMAGENES/INEdatosdepoblacion.jpg"
-     width="400"
-     height="341">
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Página del INE donde encontrar datos de población </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
      
 Que nuevamente fueron descargados en la carpeta INPUT en formato .xlsx. Para su importación en el .R se empleó el siguiente código:
 
@@ -772,8 +798,8 @@ DFPoblacion <- read_excel("C:/Users/samue/Documents/UBU/3er curso/FDB y Web Sem�
 Como podemos observar se almacenaron en un objeto denominado DFPoblacion.
 Una vez importados todos los datos, haciendo un repaso de los objetos hasta ahora obtenidos (y con los que vamos a trabajar de aquí en adelante) encontramos: los 52 dataframe ProvinciaMeteo con datos meteorológicos, DFMorbilidad con información de la morbilidad, DFMort_Mens con el número mensual de muertes a nivel nacional, DFMort_Prov con el número anual de muertes por provincia y DFPoblacion con el número de habitantes por provincia y año.
 
-
-### **2. REFINAMIENTO DE LOS DATOS**
+<div style="text-align: justify">
+#### **2. REFINAMIENTO DE LOS DATOS**
 
 Hasta el momento hemos logrado importar los datos en nuestro archivo de R, pero son datos brutos, difíciles de manejar, poco inteligibles y con mucha información que nos sobra. A continuación vamos a explicar el proceso de refinamiento de dichos datos.
 
@@ -822,11 +848,21 @@ for (i in 1:length(Provincias)){
 
 De esta manera hemos logrado modificar los datos de meteorología, dejándolos más legibles y entendibles. 
 
+<center>
+<figure>
 <img src="IMAGENES/Dataframe A Coruña.jpg"
-     width="400"
-     height="341">
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Dataframe de los datos de A Coruña </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
 
 Las columnas Periodo y Mes son de tipo carácter y representan el año y mes al que corresponden los datos. Las columnas tm_max (temperatura media de las máximas), tm_min (temperatura media de las mínimas), q_max (presión media de las máximas), q_min (presión media de las mínimas), p_sol(porcentaje de insolación real frente a insolación teórica) y hr (humedad relativa) son de tipo numeric. Cada dataframe de meteorología posee 120 filas (12 meses*10 años) y 8 columnas.
+
+<div style="text-align: justify">
 
 #### _2.2 Datos de morbilidad_
 
@@ -861,13 +897,21 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
   pivot_longer(data = ., names_to = "Provincia", values_to = "Altas", cols= c(Alava:Zaragoza))
 ```
 
+<center>
+<figure>
 <img src="IMAGENES/2.2.jpg"
-     width="400"
-     height="341">
-     
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Página del INE donde encontrar datos de población </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
 Este es el aspecto final del dataframe DFMorbilidad, donde la variable Periodo, Sexo y Provincia son de tipo carácter, y la columna Altas (que representa el número de altas hospitalarias por ECV para ese triplete de Periodo, Sexo, Provincia) es de tipo _numeric_.
 
-
+<div style="text-align: justify">
 #### _2.3 Datos de mortalidad nacional menusal_
 
 Lo primero que vamos a realizar es determinar en qué posiciones, en qué filas, hay información sobre ECV:
@@ -886,10 +930,17 @@ for(i in posiciones){
 
 Ahora tenemos un dataframe temporal con el siguiente aspecto:
 
+<center>
+<figure>
 <img src="IMAGENES/2.3.jpg"
-     width="400"
-     height="341">
-     
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Dataframe temporal </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
 Por lo que debemos modificarlo antes de almacenarlo en el ya definitivo DFMort_Mens. Las modificaciones necesarias son incorporar la columna Periodo que contiene el año del dato, recolocar esta columna y eliminamos la columna ‘Todos los meses’. Por último realizamos un pivot_longer() para dar el formato deseado a los datos y ponemos en mayúscula el nombre de los meses para facilitar futuros join:
 
 ``` {r eval=FALSE}
@@ -906,12 +957,21 @@ DFMort_Mens <- mutate(temporal, Periodo = rep(c(2010,2011,2012,2013,2014,2015,20
 
 El resultado final es un dataframe DFMort_Mens como el siguiente:
 
+<center>
+<figure>
 <img src="IMAGENES/2.3.2.jpg"
-     width="400"
-     height="341">
-     
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Dataframe mortalidad mensual </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
 Que posee 3 variables de tipo carácter: Periodo, Mes y Sexo. Y también posee una cuarta columna ‘Muertes’ que representa el número mensual de muertes para esa combinación de Periodo, Mes y Sexo.
 
+      
+<div style="text-align: justify">
 #### _2.4 Datos de Mortalidad Provincial_
 
 El primer paso en el tratamiento de estos datos es nombrar la primera columna del dataframe como Causa para facilitar su posterior manejo:
@@ -937,9 +997,17 @@ for(i in posiciones){
 Posteriormente cargamos temporal en DFMort_Prov, quedándonos este dataframe con el siguiente aspecto:
 
 
+<<center>
+<figure>
 <img src="IMAGENES/2.4.jpg"
-     width="400"
-     height="341">
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Dataframe mortalidad provincial </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
 
 Hay que modificar por tanto este dataframe para lograr llegar a la forma final, la forma inteligible y más útil. Para ello vamos a eliminar las 3 últimas columnas (contienen datos de extranjeros e información que no nos es útil) para posteriormente introducir la columna Periodo, la columna Sexo, y posteriormente ordenar las columnas para que el orden coincida con el del vector estándar Provincias. Tras realizar pivot_longer(), introducimos una columna con los elementos del vector Provincias (logrando así estandarizar los nombres de las provincias de las filas). Y ya tendríamos el dataframe listo. El código es el siguiente:
 
@@ -961,12 +1029,22 @@ DFMort_Prov <- DFMort_Prov[ ,1:(length(DFMort_Prov)-3)] %>%
 
 Siendo el resultado final del dataframe DFMort_Prov:
 
+<center>
+<figure>
 <img src="IMAGENES/2.4.2.jpg"
-     width="400"
-     height="341">
-     
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Dataframe mortalidad provincial definitivo </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
 Donde la columna Periodo, Sexo y Provincia son de tipo character y la columna Mortalidad es de tipo numeric y representa el número de muertes por provincia, sexo y periodo.
 
+
+
+<div style="text-align: justify">
 
 #### _2.5 Datos de población_
 
@@ -981,10 +1059,17 @@ names(DFPoblacion) <- c("Localidad","2010","2011","2012","2013","2014","2015","2
 ```
 
 De esta manera hemos conseguido un dataframe como el siguiente:
-
+<center>
+<figure>
 <img src="IMAGENES/2.5.jpg"
-     width="400"
-     height="341">
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Dataframe de población inicial </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
 
 Que aún dista de lo que deseamos. El primer paso es sustituir el valor ‘Ambos sexos’ por el de la provincia correspondiente, y después eliminar las filas de NA:
 
@@ -1014,8 +1099,16 @@ DFPoblacion <- arrange(DFPoblacion, Localidad)
 
 Una vez ya ordenado alfabéticamente introducimos la nueva columna Provincia que contiene el nombre estandarizado de cada provincia empleando el vector inicial Provincias. Finalmente realizamos un pivot_longer() para que los datos puedan relacionarse mejor con otras tablas. El dataframe DFPoblacion obtenido es el siguiente:
 
+<center>
+<figure>
 <img src="IMAGENES/2.5.2.jpg"
-     width="400"
-     height="341">
+     width="1100"
+     height="600" alt="an image">
+<figcaption>Dataframe de población final </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
 
 Que posee 520 filas (52 provincias * 10 años) y 3 columnas: 2 de ellas caracteres (Provincia y Periodo) y una de tipo numeric (Habitantes) que representa el número de habitantes en esa provincia ese año.
