@@ -1781,5 +1781,16 @@ Comencemos con la relación entre los sucesos adversos meteorológicos y la morb
       
 <div style="text-align: justify">
 
+La gráfica referente únicamente a Hombres:
 
+<center>
+<figure>
+<img src="IMAGENES/4.1.1.jpg"
+     width="1100"
+     height="700" alt="an image">
+<figcaption>Gráfica teniendo en cuenta a Hombres</figcaption>
+</figure>
 
+<br>
+      
+<div style="text-align: justify">
