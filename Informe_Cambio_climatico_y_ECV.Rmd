@@ -1653,4 +1653,102 @@ Grafica_Meteo_Morbi_AS <- DFMeteo_Extrem %>%
   labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Morbilidad anual")
 ```
 
+Por último guardamos la gráfica recién creada:
+
+``` {r eval=FALSE}
+ggsave(
+  filename = "Morbilidad frente a sucesos extremos Ambos Sexos.png",
+  plot = Grafica_Meteo_Morbi_AS,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+```
+
+#### _3.3 Buscar la relación entre los meses más adversos y mortalidad por ECV_
+
+Debido a que en nuestro trabajo poseemos 2 dataframes con información referente a mortalidad (DFMort_Mens y DFMort_Prov), vamos a realizar el estudio de la relación entre meteorología y mortalidad desde 2 puntos de vista.
+
+Tomemos primero la relación estudiando la mortalidad desde el punto de vista provincial anual, es decir, tomando DFMort_Prov. El análisis es bastante similar al realizado en la morbilidad.
+
+Primero debemos unir DFMort_Prov y DFPoblación para más tarde poder calcular la mortalidad como % respecto al número de habitantes. 
+
+``` {r eval=FALSE}
+DFMort_Prov <- left_join(DFMort_Prov, DFPoblacion, by = c("Provincia", "Periodo"))
+```
+
+Y a continuación vamos a graficar esta relación. Al igual que con la morbilidad vamos a agrupar DFMeteo_Extrem por Provincia y Periodo, para posteriormente contar el número de sucesos que corresponde a cada grupo. Unimos mediante left_join la tabla obtenida y DFMort_Prov empleando como columnas pivote Periodo y Provincia. Hasta aquí es la parte común a las gráficas de mortalidad provincial frente a sucesos meteorológicos adversos. En este punto se realiza una división para analizar los datos según el sexo. De nuevo empleamos geom_boxplot() para representar la información.
+
+El código encargado de graficar esta relación es el siguiente (el ejemplo está dado para Ambos sexos, pero es muy similar a hombres y mujeres, cambiando únicamente el filter):
+
+``` {r eval=FALSE}
+Grafica_Meteo_MortPro_AS <- DFMeteo_Extrem %>% 
+  group_by(Provincia,Periodo) %>% 
+  summarise(Sucesos = length(Periodo)) %>% 
+  left_join(., DFMort_Prov, by = c("Provincia","Periodo")) %>% 
+  filter(., `Sexo` == "Ambos sexos")%>% 
+  ggplot(data = ., aes(x = factor(Sucesos), y = (Mortalidad/Habitantes)*100, fill = factor(Sucesos))) + 
+  geom_boxplot(outlier.color = "red", outlier.shape = 3) +
+  ggtitle(label = "Mortalidad Nacional por número de sucesos meteorológicos extremos - Ambos Sexos", subtitle = "Calculado anual y provincialmente") + 
+  labs(x = "Nº Sucesos meteorológicos adversos/año", y = "% de Mortalidad anual")
+```
+
+Y a continuación salvamos la gráfica recién creada:
+
+``` {r eval=FALSE}
+ggsave(
+  filename = "Mortalidad frente a sucesos extremos Ambos Sexos (Prov).png",
+  plot = Grafica_Meteo_MortPro_AS,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+```
+
+Por último vamos a estudiar la relación entre meteorología y mortalidad pero obteniendo los datos de mortalidad a nivel nacional y mensual (no provincial y anual como antaño. Para ello vamos a emplear el dataframe DFMort_Mens. En este caso no vamos a agregar la población, ya que para esta perspectiva no es relevante.
+
+El primer paso es agrupar el DFMeteo_Extrem por Periodo y Mes (ya no nos interesa por Provincia) y contar el número de sucesos meteorológicos extremos para cada una de estas agrupaciones. A continuación hacemos un _left_join_ con DFMort_Mens empleando las columnas Periodo y Mes y filtramos según el sexo. Por último graficamos.
+
+En este caso no vamos a emplear boxplot para representar la información, ya que ahora el número de sucesos no va a ocupar el eje x, sino que lo va a hacer el doblete Periodo Mes. La información referente a sucesos se representará en forma de gráfico de barras y el número de muertes en forma de gráfico de puntos (junto con la correspondiente media suavizada). El color de las barras indica el periodo al que pertenece, de forma que podemos también saber si existe una relación entre el periodo y el número de sucesos.
+
+El código para representar todo esto es el siguiente:
+
+``` {r eval=FALSE}
+Grafica_Meteo_MortNac_AS <- DFMeteo_Extrem %>% 
+  group_by(Periodo, Mes) %>% 
+  summarise(Sucesos = length(Mes)) %>% 
+  left_join(., DFMort_Mens, by = c("Periodo", "Mes")) %>% 
+  filter(., `Sexo` == "Ambos sexos") %>% 
+  ggplot(., aes(x = reorder(paste(Periodo, Mes, sep = " "), +Sucesos))) + 
+  geom_bar(stat = "identity", aes(y = Sucesos, fill = Periodo), color = "black") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  scale_fill_manual(values=c("grey99", "grey85", "grey75", "grey65","grey55", "grey45", "grey35","grey25","grey15","grey5")) + 
+  geom_point(aes(y = (Muertes/100)), color = "red", size = 1.5) + 
+  stat_smooth(aes(y = (Muertes/100), group = 1), color = "red") + 
+  ggtitle(label = "Mortalidad Nacional por mes y número de sucesos meteorológicos extremos - Ambos Sexos") + 
+  labs(x = "Mes y Año", y = "Cantidad de sucesos // Muertes nacionales/100")
+```
+
+A continuación guardamos la gráfica creada:
+
+``` {r eval=FALSE}
+ggsave(
+  filename = "Mortalidad por mes frente a sucesos meteorológicos extremos - Ambos Sexos.png",
+  plot = Grafica_Meteo_MortNac_AS,
+  path = paste(getwd(), "/OUTPUT", sep = ""),
+  scale = 1,
+  width = 40,
+  height = 20,
+  units = "cm",
+  dpi = 320
+)
+```
+
+
 
