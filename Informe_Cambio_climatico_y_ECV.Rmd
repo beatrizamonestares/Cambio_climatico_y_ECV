@@ -1281,3 +1281,109 @@ Y la gráfica graf_sol_hr obtenida tiene el siguiente aspecto:
 <br>
       
 <div style="text-align: justify">
+
+Una vez obtenidas las gráficas vamos a guardarlas dentro del equipo, en la carpeta OUTPUT del directorio. Emplearemos el código basado en la función ggsave() pasándole los parámetros específicos para cada gráfica. Como nombre del archivo vamos a usar el nombre de la provincia, que es el mismo que recibe la función como parámetro objeto, unido al tipo de variable de la cual se están registrando los datos. El código es el siguiente (usando como ejemplo el código empleado para guardar la gráfica de anomalías de temperatura _graf_temp_):
+
+``` {r eval=FALSE}
+  ggsave(
+    filename = paste(str_sub(objeto, start = 1L, end = -6L), "Temperatura.png", sep = "_"),
+    plot = graf_temp ,
+    path = paste(getwd(), "/OUTPUT", sep = ""),
+    scale = 1,
+    width = 40,
+    height = 20,
+    units = "cm",
+    dpi = 320
+  )
+```
+
+Al final deberemos devolver una lista que contenga estas 3 gráficas para su posterior uso:
+
+``` {r eval=FALSE}
+return(list(graf_temp,graf_presion,graf_sol_hr))
+```
+
+El aspecto completo de esta función es el siguiente:
+
+``` {r eval=FALSE}
+Graf_filt_Meteo <- function(objeto){
+  # Creamos la gráfica que representa las anomalías al cuadrado de tm_max y tm_min. Vamos a generarla por capas para poder juntar distintos estilos de representación.
+  provincia <- get(objeto)
+  
+  graf_temp <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
+    geom_line(aes(y = Anom_tmax, group = 1), colour = "red") + 
+    geom_point(size = 1.5, aes(y = Anom_tmax), colour = "red") + 
+    geom_smooth(aes( y = Anom_tmax, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
+    geom_line(aes(y = Anom_tmin,  group = 1), colour = "blue") + 
+    geom_point(size = 1.5, aes(y = Anom_tmin), colour = "blue") + 
+    geom_smooth(aes(y = Anom_tmin, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+    labs(x = "Periodo Mes", 
+         y = expression("Anomalía"~^2))
+    ggtitle(label = "Anomalía Temperatura", subtitle = str_sub(objeto, start = 1L, end = -6L))
+
+  # Creamos la gráfica que representa las anomalías al cuadrado de q_max y q_min. Vamos a generarla por capas para poder juntar distintos estilos de representación.
+  graf_presion <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
+    geom_line(aes(y = Anom_qmax, group = 1), colour = "red") + 
+    geom_point(size = 1.5, aes(y = Anom_qmax), colour = "red") + 
+    geom_smooth(aes( y = Anom_qmax, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
+    geom_line(aes(y = Anom_qmin,  group = 1), colour = "blue") + 
+    geom_point(size = 1.5, aes(y = Anom_qmin), colour = "blue") + 
+    geom_smooth(aes(y = Anom_qmin, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+    labs(x = "Periodo Mes",
+         y = "Anomalía^2") + 
+    ggtitle(label = "Anomalía Presión Atm", subtitle = str_sub(objeto, start = 1L, end = -6L))
+  
+  # Por último creamos la gráfica que representa las anomalías al cuadrado de p_sol y hr. Vamos a generarla por capas para poder juntar distintos estilos de representación.
+  graf_sol_hr <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
+    geom_line(aes(y = Anom_psol, group = 1), colour = "red") + 
+    geom_point(size = 1.5, aes(y = Anom_psol), colour = "red") + 
+    geom_smooth(aes( y = Anom_psol, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
+    geom_line(aes(y = Anom_hr,  group = 1), colour = "blue") + 
+    geom_point(size = 1.5, aes(y = Anom_hr), colour = "blue") + 
+    geom_smooth(aes(y = Anom_hr, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+ 
+    labs(x = "Periodo Mes",
+         y = "Anomalía^2") + 
+    ggtitle(label = "Anomalía Insolación y Humedad", subtitle = str_sub(objeto, start = 1L, end = -6L))
+  
+  # A cotinuación guardamos cada una de las gráficas generadas en la carpeta /OUTPUT bajo el nombre de la provincia seguido del nombre de la variable meteorológica de la cual se almacenan las anomalías.
+  
+  ggsave(
+    filename = paste(str_sub(objeto, start = 1L, end = -6L), "Temperatura.png", sep = "_"),
+    plot = graf_temp ,
+    path = paste(getwd(), "/OUTPUT", sep = ""),
+    scale = 1,
+    width = 40,
+    height = 20,
+    units = "cm",
+    dpi = 320
+  )
+  
+  ggsave(
+    filename = paste(str_sub(objeto, start = 1L, end = -6L), "Presion.png", sep = "_"),
+    plot = graf_presion ,
+    path = paste(getwd(), "/OUTPUT", sep = ""),
+    scale = 1,
+    width = 40,
+    height = 20,
+    units = "cm",
+    dpi = 320
+  )
+  
+  ggsave(
+    filename = paste(str_sub(objeto, start = 1L, end = -6L), "Sol_Humedad.png", sep = "_"),
+    plot = graf_sol_hr ,
+    path = paste(getwd(), "/OUTPUT", sep = ""),
+    scale = 1,
+    width = 40,
+    height = 20,
+    units = "cm",
+    dpi = 320
+  )
+  
+  return(list(graf_temp,graf_presion,graf_sol_hr))
+  
+}
+``` 
