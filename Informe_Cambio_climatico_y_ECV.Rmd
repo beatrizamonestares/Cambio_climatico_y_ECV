@@ -922,3 +922,50 @@ Siendo el resultado final del dataframe DFMort_Prov:
      height="341">
      
 Donde la columna Periodo, Sexo y Provincia son de tipo character y la columna Mortalidad es de tipo numeric y representa el número de muertes por provincia, sexo y periodo.
+
+
+#### _2.5 Datos de población_
+
+Lo primero que vamos a realizar es nombrar la primera columna como “Localidad” para facilitar su manejo. Posteriormente vamos a seleccionar las columnas que contienen información poblacional recogida el 1 de enero (hay también columnas del 1 de julio). Del dataframe restante vamos a escoger aquellas columnas que se corresponden con el periodo de tiempo que nos interesa (2010-2019) y eliminar las filas con datos nacionales (quedándonos exclusivamente con datos provinciales). Por último renombramos las columnas para posteriores join con otras tablas:
+
+``` {r eval=FALSE}
+names(DFPoblacion)[1] <- "Localidad"
+DFPoblacion <- select(DFPoblacion, starts_with(c("Localidad","1 de enero"))) %>% 
+  select(. , ends_with(c("Localidad","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"))) %>%
+  filter(!Localidad %in% c("Total","Total Nacional"))
+names(DFPoblacion) <- c("Localidad","2010","2011","2012","2013","2014","2015","2016","2017", "2018","2019")
+```
+
+De esta manera hemos conseguido un dataframe como el siguiente:
+
+<img src="IMAGENES/2.5.jpg"
+     width="400"
+     height="341">
+
+Que aún dista de lo que deseamos. El primer paso es sustituir el valor ‘Ambos sexos’ por el de la provincia correspondiente, y después eliminar las filas de NA:
+
+```{r eval=FALSE}
+i <- 2
+while(i<length(DFPoblacion$Localidad)){
+  nombre <- DFPoblacion$Localidad[i]
+  DFPoblacion$Localidad[i+1] <- nombre
+  i <- i+2
+}
+
+DFPoblacion <- drop_na(DFPoblacion)
+```
+
+A continuación eliminamos el número previo presente en el valor de la columna Localidad y hacemos un par de cambios de nombre de provincia (para poder ordenarlos alfabéticamente).
+
+``` {r eval=FALSE}
+for (i in 1:length(DFPoblacion$Localidad)){
+  DFPoblacion$Localidad[i] <- str_sub(DFPoblacion$Localidad[i], start = 4)
+}
+
+DFPoblacion$Localidad[which(DFPoblacion$Localidad %in% c("Araba/Álava"))] <- "Alava"
+DFPoblacion$Localidad[which(DFPoblacion$Localidad %in% c("Gipuzkoa"))] <- "Guipuzkoa"
+
+DFPoblacion <- arrange(DFPoblacion, Localidad)
+```
+
+
