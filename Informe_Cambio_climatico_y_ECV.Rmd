@@ -1066,5 +1066,3 @@ Una vez ya ordenado alfabéticamente introducimos la nueva columna Provincia que
       
 <div style="text-align: justify">
 Que posee 520 filas (52 provincias * 10 años) y 3 columnas: 2 de ellas caracteres (Provincia y Periodo) y una de tipo numeric (Habitantes) que representa el número de habitantes en esa provincia ese año.
-=======
->>>>>>> ded87c4daa2d79e6bba9ab208fb10a08ceb567c2
