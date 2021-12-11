@@ -1,7 +1,7 @@
 ---
 title: "Informe Cambio Climatico y ECV"
 author: "Samuel Lozano Juárez, Víctor Barcina Muñoz, Beatriz Amo Nestares"
-date: "11/12/2021"
+date: "13/12/2021"
 output: html_document
 ---
 
@@ -9,22 +9,34 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
+<center>
+<font size="30">
+<span style="color:black">
+**INTRODUCCIÓN**
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+![](https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg){width=600px}
+</span>
+</font>
+</center>
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## 
+<span style="color:black">
+<center>
+<font size="6">
 
-```{r cars}
-summary(cars)
-```
+**¿POR QUÉ ESTE TEMA?**
 
-## Including Plots
+</font>
+</center> 
 
-You can also embed plots, for example:
+<div style="text-align: justify"> 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+El proyecto realizado estudia la posible relación e influencia del cambio climático sobre la incidencia y mortalidad de enfermedades cardiovasculares.
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Se ha escogido este tema debido a que estamos ante los datos más extremos de concentraciones de gases de efecto invernadero de la historia, aumentando el calor terrestre, por lo que podría desencadenar el aumento de riesgo de muerte para aquellas personas que padecen enfermedades cardiovasculares.
+
+</div>
+</span>
+<center>
+![](https://ih1.redbubble.net/image.1167929045.9498/pp,840x830-pad,1000x1000,f8f8f8.jpg){width=200px}
