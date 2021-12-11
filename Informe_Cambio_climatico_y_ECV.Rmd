@@ -580,7 +580,7 @@ _Objetivo 3_
 </center> 
 
 <div style="text-align: justify"> 
-**1. Carga de los datos**
+### **1. Carga de los datos**
 
 En el proyecto desarrollado se va a tratar de vincular el cambio climático con las enfermedades cardiovasculares, para ello se emplean 5 fuentes de datos distintas:
 
@@ -613,4 +613,44 @@ Provincias <- c("Alava","Albacete","Alicante","Almeria","Asturias","Avila","Bada
 Estaciones <- c("9091O","8175","8019","6325O","1212E","2444","4452","B954","0200E","1082","2331","3469A","5960","1109","8500A","5000C","4121","5402","1387","8096","0367","5530E","3168D","1014A","4642E","9898","5270B","2661","9771C","1505","3129","6155A","6000A","7178I","9263D","1690A","2374X","C029O","1495","9170","2867","C447A","2465","5783","2030","9981A","9381I","3260B","8416","2422","2614","9434")
 ```
 
+De esta manera se crearon los 52 dataframes empleando recursividad:
 
+``` {r eval=FALSE}
+for (i in 1:length(Provincias)){
+  Nam <- paste(Provincias[i], "Meteo", sep="")
+  Objeto <- aemet_monthly_period(station = Estaciones[i], start = 2010, end = 2019)
+  assign(Nam, Objeto)
+}
+```
+
+<img src="Aspecto de un dataframe metereologico recien creado"
+     width="400"
+     height="341>
+     
+     
+Una vez creados estos dataframes, se tuvieron que realizar varias correcciones debido a que ciertas estaciones seleccionadas (la de Guadalajara, Málaga, Palencia, Soria y Valladolid) presentaban años incompletos o de los cuales directamente no existía información (obligándonos a seleccionar otra estación de la misma provincia e introducir la información restante de forma manual).
+Un ejemplo de cómo se introdujo esta información:
+
+``` {r eval=FALSE}
+MalagaMeteo <- bind_rows(MalagaMeteo, aemet_monthly_clim(station = "6084X", year = 2015)
+```
+
+Por último, estos dataframes modificados por falta de datos debieron ser reordenados por fecha para facilitar su posterior trabajo. El problema es que el formato de fecha que presenta AEMET es 2010-1 por ejemplo, por lo que al ordenar por fecha colocaba antes el mes 2010-12 que 2010-2. Por ello se hizo necesario declarar una función que nos permitiera reordenar los dataframes:
+
+``` {r eval=FALSE}
+Reorder <- function(provincia){
+  #recorre todos los elementos de la columna fecha de la provincia pasada como parámetro
+  for (i in 1:length(provincia$fecha)){
+    #comprueba si el tamaño del elemento actual de la columna fecha tiene menos de 7 caracteres
+    if(nchar(provincia$fecha[i])<7){
+      #en caso de que así sea, corta la cadena donde debiera ir el 0, lo introduce y pega la parte de después del 0
+      provincia$fecha[i] <- paste(str_sub(provincia$fecha[i], start = 1L, end = 5L), "0", str_sub(provincia$fecha[i], start = -1L, end=-1L), sep = "")
+    }
+  }
+  #por último devuelve la provincia pasada, pero ahora ordenada por fecha (donde ya sí que se puede ordenar correctamente por fecha)
+  return(arrange(provincia, fecha))
+}
+
+```
+
+Posteriormente aplicaríamos esta función a las provincias modificadas (GuadalajaraMeteo, MalagaMeteo, SoriaMeteo, PalenciaMeteo, ValladolidMeteo).
