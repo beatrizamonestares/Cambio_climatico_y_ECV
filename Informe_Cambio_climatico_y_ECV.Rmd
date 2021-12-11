@@ -573,3 +573,44 @@ _Objetivo 3_
 <center>
 <font size="30">
 <span style="color:black">
+
+**DESARROLLO DEL PROYECTO**
+
+</font>
+</center> 
+
+<div style="text-align: justify"> 
+**1. Carga de los datos**
+
+En el proyecto desarrollado se va a tratar de vincular el cambio climático con las enfermedades cardiovasculares, para ello se emplean 5 fuentes de datos distintas:
+
+-	Datos meteorológicos mensuales a nivel provincial
+-	Datos anuales de morbilidad a nivel provincial 
+-	Datos anuales de mortalidad a nivel provincial
+-	Datos mensuales de mortalidad a nivel nacional
+-	Datos anuales de número de población a nivel provincial
+
+Se va a explicar desde qué fuente y cómo se obtuvieron cada uno de ellos.
+
+#### _1.1. Datos metereológicos_
+
+En un principio se obtuvieron desde la plataforma de Open Data del AEMET, generando para ello un fichero .csv con todos los enlaces a cada conjunto de datos:
+
+<img src="Aspecto fichero.jpg"
+     width="400"
+     height="341>
+      
+
+Sin embargo surgió uno de los primeros problemas: los enlaces empleados tenían una cierta caducidad y no eran válidos trascurridos 5 días. Por ello nos vimos obligados a cambiar la forma de acceder a dichos datos. Se descubrió un paquete de R denominado climaemet que incorpora varias funciones, permitiendo acceder de forma directa a los datos meteorológicos desde R.
+
+Para ello se empleó la función climaemet::aemet_monthly_period(station, start, end) que permite acceder a los datos mensuales de cada provincia, pasando como parámetro station el nombre de la estación climatológica de interés y como parámetros start y end los años de inicio y fin de la búsqueda.
+
+El objetivo era crear 52 dataframes, uno para cada provincia. El nombre de estos dataframes esta compuesto por el nombre de la provincia + la palabra ‘Meteo’. Para emplear un formato estándar de nombres de provincias se declararon 2 vectores:
+
+```{r eval=FALSE}
+Provincias <- c("Alava","Albacete","Alicante","Almeria","Asturias","Avila","Badajoz","Islas_Baleares","Barcelona","Bizkaia","Burgos","Caceres","Cadiz","Cantabria","Castellon","Ceuta","Ciudad_Real","Cordoba","A_Coruna","Cuenca","Girona","Granada","Guadalajara","Guipuzkoa","Huelva","Huesca","Jaen","Leon","Lleida","Lugo","Madrid","Malaga","Melilla","Murcia","Navarra","Ourense","Palencia","Las_Palmas","Pontevedra","La_Rioja","Salamanca","Tenerife","Segovia","Sevilla","Soria","Tarragona","Teruel","Toledo","Valencia","Valladolid","Zamora","Zaragoza")
+
+Estaciones <- c("9091O","8175","8019","6325O","1212E","2444","4452","B954","0200E","1082","2331","3469A","5960","1109","8500A","5000C","4121","5402","1387","8096","0367","5530E","3168D","1014A","4642E","9898","5270B","2661","9771C","1505","3129","6155A","6000A","7178I","9263D","1690A","2374X","C029O","1495","9170","2867","C447A","2465","5783","2030","9981A","9381I","3260B","8416","2422","2614","9434")
+```
+
+
