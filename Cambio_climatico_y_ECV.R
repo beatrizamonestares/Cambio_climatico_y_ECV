@@ -782,7 +782,6 @@ ggsave(
 )
 
 
-
 # ANÁLISIS EXTRA DE LOS DATOS ---------------------------------------------
 
 # Hemos realizado este estudio basándonos en la hipótesis de que los valores meteorológicos extremos (aquellos que se salían de lo normal)
