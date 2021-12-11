@@ -1760,4 +1760,8 @@ ggsave(
 ```
 
 
+<div style="text-align: justify">
+#### **4. CONCLUSIONES**
+
+En este apartado vamos a analizar las gráficas obtenidas en el apartado anterior y sacar conclusiones, generar nueva información.
 
