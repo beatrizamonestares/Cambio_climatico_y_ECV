@@ -1829,3 +1829,18 @@ La gráfica para ambos sexos es la siguiente:
 <br>
       
 <div style="text-align: justify">
+
+La gráfica para los hombres es la siguiente:
+<center>
+<figure>
+<img src="IMAGENES/4.2.1.jpg"
+     width="1100"
+     height="700" alt="an image">
+<figcaption>Gráfica para Hombres</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
+
