@@ -867,3 +867,111 @@ El resultado final es un dataframe DFMort_Mens como el siguiente:
      height="341">
      
 Que posee 3 variables de tipo carácter: Periodo, Mes y Sexo. Y también posee una cuarta columna ‘Muertes’ que representa el número mensual de muertes para esa combinación de Periodo, Mes y Sexo.
+
+#### _2.4 Datos de Mortalidad Provincial_
+
+El primer paso en el tratamiento de estos datos es nombrar la primera columna del dataframe como Causa para facilitar su posterior manejo:
+
+``` {r eval=FALSE}
+names(DFMort_Prov)[1] <-"Causa"
+```
+
+Al igual que en el refinamiento de datos de mortalidad mensual, vamos a seleccionar las posiciones de las filas que contienen información referente a muertes por ECV y las almacenaremos en el vector posiciones:
+
+``` {r eval=FALSE}
+posiciones <- which(DFMort_Prov$Causa %in% c("053-061 IX.Enfermedades del sistema circulatorio"))
+```
+
+De manera idéntica al punto 2.3 vamos a emplear un dataframe pivote denominado temporal. En él vamos a cargar estas filas que nos son de interés:
+
+``` {r eval=FALSE}
+for(i in posiciones){
+  temporal <- bind_rows(temporal, DFMort_Prov[(i+1):(i+3), ])
+}
+```
+
+Posteriormente cargamos temporal en DFMort_Prov, quedándonos este dataframe con el siguiente aspecto:
+
+
+<img src="IMAGENES/2.4.jpg"
+     width="400"
+     height="341">
+
+Hay que modificar por tanto este dataframe para lograr llegar a la forma final, la forma inteligible y más útil. Para ello vamos a eliminar las 3 últimas columnas (contienen datos de extranjeros e información que no nos es útil) para posteriormente introducir la columna Periodo, la columna Sexo, y posteriormente ordenar las columnas para que el orden coincida con el del vector estándar Provincias. Tras realizar pivot_longer(), introducimos una columna con los elementos del vector Provincias (logrando así estandarizar los nombres de las provincias de las filas). Y ya tendríamos el dataframe listo. El código es el siguiente:
+
+``` {r eval=FALSE}
+DFMort_Prov <- DFMort_Prov[ ,1:(length(DFMort_Prov)-3)] %>% 
+  mutate(Sexo = Causa, Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3)) %>% 
+  relocate(Periodo, .before = Causa) %>% 
+  relocate(Sexo, .before = Causa) %>% 
+  subset(select = -c(Causa, Total)) %>% 
+  relocate(.,`Araba/Álava`, .before = `Albacete`) %>% 
+  relocate(., `Gipuzkoa`, .after = `Guadalajara`) %>%
+  relocate(., `Ceuta`, .before = `Ciudad Real`) %>% 
+  relocate(., Melilla, .before = `Murcia`) %>% 
+  pivot_longer(names_to = "temporal", values_to = "Mortalidad", cols = c(`Araba/Álava`:`Zaragoza`)) %>% 
+  mutate(., `Provincia` = rep(Provincias, 30)) %>% 
+  relocate(Provincia, .before = temporal) %>% 
+  subset(select = -temporal)
+```
+
+Siendo el resultado final del dataframe DFMort_Prov:
+
+<img src="IMAGENES/2.4.2.jpg"
+     width="400"
+     height="341">
+     
+Donde la columna Periodo, Sexo y Provincia son de tipo character y la columna Mortalidad es de tipo numeric y representa el número de muertes por provincia, sexo y periodo.
+
+
+#### _2.5 Datos de población_
+
+Lo primero que vamos a realizar es nombrar la primera columna como “Localidad” para facilitar su manejo. Posteriormente vamos a seleccionar las columnas que contienen información poblacional recogida el 1 de enero (hay también columnas del 1 de julio). Del dataframe restante vamos a escoger aquellas columnas que se corresponden con el periodo de tiempo que nos interesa (2010-2019) y eliminar las filas con datos nacionales (quedándonos exclusivamente con datos provinciales). Por último renombramos las columnas para posteriores join con otras tablas:
+
+``` {r eval=FALSE}
+names(DFPoblacion)[1] <- "Localidad"
+DFPoblacion <- select(DFPoblacion, starts_with(c("Localidad","1 de enero"))) %>% 
+  select(. , ends_with(c("Localidad","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"))) %>%
+  filter(!Localidad %in% c("Total","Total Nacional"))
+names(DFPoblacion) <- c("Localidad","2010","2011","2012","2013","2014","2015","2016","2017", "2018","2019")
+```
+
+De esta manera hemos conseguido un dataframe como el siguiente:
+
+<img src="IMAGENES/2.5.jpg"
+     width="400"
+     height="341">
+
+Que aún dista de lo que deseamos. El primer paso es sustituir el valor ‘Ambos sexos’ por el de la provincia correspondiente, y después eliminar las filas de NA:
+
+```{r eval=FALSE}
+i <- 2
+while(i<length(DFPoblacion$Localidad)){
+  nombre <- DFPoblacion$Localidad[i]
+  DFPoblacion$Localidad[i+1] <- nombre
+  i <- i+2
+}
+
+DFPoblacion <- drop_na(DFPoblacion)
+```
+
+A continuación eliminamos el número previo presente en el valor de la columna Localidad y hacemos un par de cambios de nombre de provincia (para poder ordenarlos alfabéticamente).
+
+``` {r eval=FALSE}
+for (i in 1:length(DFPoblacion$Localidad)){
+  DFPoblacion$Localidad[i] <- str_sub(DFPoblacion$Localidad[i], start = 4)
+}
+
+DFPoblacion$Localidad[which(DFPoblacion$Localidad %in% c("Araba/Álava"))] <- "Alava"
+DFPoblacion$Localidad[which(DFPoblacion$Localidad %in% c("Gipuzkoa"))] <- "Guipuzkoa"
+
+DFPoblacion <- arrange(DFPoblacion, Localidad)
+```
+
+Una vez ya ordenado alfabéticamente introducimos la nueva columna Provincia que contiene el nombre estandarizado de cada provincia empleando el vector inicial Provincias. Finalmente realizamos un pivot_longer() para que los datos puedan relacionarse mejor con otras tablas. El dataframe DFPoblacion obtenido es el siguiente:
+
+<img src="IMAGENES/2.5.2.jpg"
+     width="400"
+     height="341">
+
+Que posee 520 filas (52 provincias * 10 años) y 3 columnas: 2 de ellas caracteres (Provincia y Periodo) y una de tipo numeric (Habitantes) que representa el número de habitantes en esa provincia ese año.
