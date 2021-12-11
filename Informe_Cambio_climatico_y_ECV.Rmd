@@ -778,3 +778,8 @@ for (i in 1:length(Provincias)){
 
 De esta manera hemos logrado modificar los datos de meteorología, dejándolos más legibles y entendibles. 
 
+<img src="Dataframe A Coruña.jpg"
+     width="400"
+     height="341">
+
+Las columnas Periodo y Mes son de tipo carácter y representan el año y mes al que corresponden los datos. Las columnas tm_max (temperatura media de las máximas), tm_min (temperatura media de las mínimas), q_max (presión media de las máximas), q_min (presión media de las mínimas), p_sol(porcentaje de insolación real frente a insolación teórica) y hr (humedad relativa) son de tipo numeric. Cada dataframe de meteorología posee 120 filas (12 meses*10 años) y 8 columnas.
