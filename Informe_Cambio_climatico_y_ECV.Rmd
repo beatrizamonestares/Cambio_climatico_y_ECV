@@ -1117,9 +1117,11 @@ Una vez ya ordenado alfabéticamente introducimos la nueva columna Provincia que
 
 Que posee 520 filas (52 provincias * 10 años) y 3 columnas: 2 de ellas caracteres (Provincia y Periodo) y una de tipo numeric (Habitantes) que representa el número de habitantes en esa provincia ese año.
 
+<div style="text-align: justify">
 #### **3. ANALISIS DE LOS DATOS.**
 Llegados a este punto ya hemos logrado obtener los datos refinados de manera que se pueda comenzar a trabajar con  ellos para obtener nueva información. Debemos recordar cuál es el objetivo del proyecto: buscar una posible correlación entre el cambio climático y las enfermedades cardiovasculares.
 
+<div style="text-align: justify">
 #### _3.1 Obtener los meses y provincias mas adversos_
 
 En primer lugar vamos a tomar el objetivo específico 1: estudiar las variables meteorológicas mensuales de cada provincia, para determinar qué meses de qué provincias tuvieron algún valor adverso (climatológicamente hablando). 
@@ -1190,7 +1192,7 @@ Una vez realizado todo este proceso, ya tenemos nuestros dataframes meteorológi
 <center>
 <figure>
 <img src="IMAGENES/3.jpg"
-     width="500"
+     width="1100"
      height="700" alt="an image">
 <figcaption>Dataframe A CoruñaMeteo</figcaption>
 </figure>
@@ -1206,8 +1208,9 @@ _•	Graf_filt_Meteo(objeto)_, que va a generar las gráficas representanMdo la 
 _•	Filtro_Extremos(provinvia, dataframe)_ que recibirá un dataframe meteorológico de una determinada provincia, calculará sus gráficas empleando la función mencionada anteriormente Graf_filt_Meteo(objeto) y empleando los datos que se obtengan de la gráfica determinará qué dobletes ‘Periodo Mes’ de la provincia pasada como parámetro poseen una anomalía al cuadrado extrema. Para determinar qué es extremo y qué no va comprobar si el valor de anomalía cuadrada para ese periodo y ese mes es superior al límite superior del intervalo de confianza dado por la gráfica _geom_smooth()_.
 A continuación vamos a desgranar un poco el funcionamiento interno de cada una de estas funciones. 
 
+<br>
 
-###### _3.1.1 Graf_filt_Meteo(objeto)_
+##### _3.1.1 Graf_filt_Meteo(objeto)_
 
 Primero especifiquemos el parámetro que recibe y el return() que entrega. Recibe un parámetro objeto, que ha de ser de tipo carácter y debe de corresponderse con el nombre de un dataframe meteorológico de una provincia (A_CorunaMeteo, AlavaMeteo, AlbaceteMeteo…). A partir de ese nombre va a generar 3 gráficas: 
 
@@ -1244,7 +1247,7 @@ La gráfica obtenida tiene un aspecto como la siguiente (el ejemplo dado se corr
 <center>
 <figure>
 <img src="IMAGENES/grafpresion.jpg"
-     width="500"
+     width="1500"
      height="700" alt="an image">
 <figcaption>Grafica anomalías presión de A coruña</figcaption>
 </figure>
@@ -1273,7 +1276,7 @@ Y la gráfica graf_sol_hr obtenida tiene el siguiente aspecto:
 <center>
 <figure>
 <img src="IMAGENES/grafsol.jpg"
-     width="500"
+     width="1500"
      height="700" alt="an image">
 <figcaption>graf_sol_hr</figcaption>
 </figure>
@@ -1389,6 +1392,8 @@ Graf_filt_Meteo <- function(objeto){
 ``` 
 
 <div style="text-align: justify">
+
+<br>
 
 ###### _3.1.2 Filtro_Extremos(provincia, dataframe)_
 
