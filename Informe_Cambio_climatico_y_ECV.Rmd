@@ -608,11 +608,21 @@ Se va a explicar desde qué fuente y cómo se obtuvieron cada uno de ellos.
 
 En un principio se obtuvieron desde la plataforma de Open Data del AEMET, generando para ello un fichero .csv con todos los enlaces a cada conjunto de datos:
 
-<img src="IMAGENES/Aspecto fichero csv.jpg"
-     width="400"
-     height="341">
-      
+</div>
+</span>
 
+<center>
+<figure>
+<img src="IMAGENES/Aspecto fichero csv.jpg" alt="an image" width="400"
+         height="341">
+<figcaption>Aspecto del archivo csv </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
+  
 Sin embargo surgió uno de los primeros problemas: los enlaces empleados tenían una cierta caducidad y no eran válidos trascurridos 5 días. Por ello nos vimos obligados a cambiar la forma de acceder a dichos datos. Se descubrió un paquete de R denominado _climaemet_ que incorpora varias funciones, permitiendo acceder de forma directa a los datos meteorológicos desde R.
 
 Para ello se empleó la función _climaemet::aemet_monthly_period(station, start, end)_ que permite acceder a los datos mensuales de cada provincia, pasando como parámetro station el nombre de la estación climatológica de interés y como parámetros start y end los años de inicio y fin de la búsqueda.
@@ -635,10 +645,21 @@ for (i in 1:length(Provincias)){
 }
 ```
 
+</div>
+</span>
+
+<center>
+<figure>
 <img src="IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg"
-     width="400"
-     height="341">
-     
+     width="900"
+     height="600" alt="an image">
+<figcaption>Aspecto del dataframe metereológico recién creado </figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
+
      
 Una vez creados estos dataframes, se tuvieron que realizar varias correcciones debido a que ciertas estaciones seleccionadas (la de Guadalajara, Málaga, Palencia, Soria y Valladolid) presentaban años incompletos o de los cuales directamente no existía información (obligándonos a seleccionar otra estación de la misma provincia e introducir la información restante de forma manual).
 Un ejemplo de cómo se introdujo esta información:
