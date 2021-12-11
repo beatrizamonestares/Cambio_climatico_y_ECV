@@ -672,3 +672,10 @@ for (i in dir_ls(path = "INPUT", regexp="morbilidad")){
 ```
 
 Como se puede comprobar se almacenaron en un objeto denominado DFMorbilidad
+
+#### _1.3 Datos de Mortalidad mensual_
+También se obtuvieron desde la base de datos del INE, en el apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados nacionales / Defunciones por causas (lista reducida), sexo y mes de fallecimiento. Un ejemplo de este acceso para el año 2010 es:
+
+<img src="INEmort.jpg"
+     width="400"
+     height="341>
