@@ -8,3 +8,41 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+## {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
+<center>
+<font size="30">
+<span style="color:black">
+**INTRODUCCIÓN**
+
+![](https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg){width=600px}
+</span>
+</font>
+</center>
+
+## 
+<span style="color:black">
+<center>
+<font size="6">
+
+**¿POR QUÉ ESTE TEMA?**
+
+</font>
+</center> 
+
+<div style="text-align: justify"> 
+
+El proyecto realizado estudia la posible relación e influencia del cambio climático sobre la incidencia y mortalidad de enfermedades cardiovasculares.
+
+Se ha escogido este tema debido a que estamos ante los datos más extremos de concentraciones de gases de efecto invernadero de la historia, aumentando el calor terrestre, por lo que podría desencadenar el aumento de riesgo de muerte para aquellas personas que padecen enfermedades cardiovasculares.
+
+</div>
+</span>
+<center>
+![](https://ih1.redbubble.net/image.1167929045.9498/pp,840x830-pad,1000x1000,f8f8f8.jpg){width=200px}
+</center>
+
+## 
+<span style="color:black">
+<center>
+<font size="6">
