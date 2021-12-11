@@ -1818,3 +1818,14 @@ Vamos a estudiar la posible relación entre el número de sucesos meteorológico
 
 La gráfica para ambos sexos es la siguiente:
 
+<center>
+<figure>
+<img src="IMAGENES/4.2.jpg"
+     width="1100"
+     height="700" alt="an image">
+<figcaption>Gráfica para ambos sexos</figcaption>
+</figure>
+
+<br>
+      
+<div style="text-align: justify">
