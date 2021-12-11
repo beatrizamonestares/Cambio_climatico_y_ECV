@@ -821,4 +821,49 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
      width="400"
      height="341">
      
-Este es el aspecto final del dataframe DFMorbilidad, donde la variable Periodo, Sexo y Provincia son de tipo carácter, y la columna Altas (que representa el número de altas hospitalarias por ECV para ese triplete de Periodo, Sexo, Provincia) es de tipo numeric.
+Este es el aspecto final del dataframe DFMorbilidad, donde la variable Periodo, Sexo y Provincia son de tipo carácter, y la columna Altas (que representa el número de altas hospitalarias por ECV para ese triplete de Periodo, Sexo, Provincia) es de tipo _numeric_.
+
+
+#### _2.3 Datos de mortalidad nacional menusal_
+
+Lo primero que vamos a realizar es determinar en qué posiciones, en qué filas, hay información sobre ECV:
+
+``` {r eval=FALSE}
+posiciones <- which(DFMort_Mens$Causa %in% c("053-061 IX.Enfermedades del sistema circulatorio"))
+```
+
+Una vez obtenidas estas posiciones, y empleando un dataframe auxiliar denominado temporal (que usaremos como pivote temporal) vamos a cargar las filas que contienen información sobre ECV en el dataframe temporal:
+
+``` {r eval=FALSE}
+for(i in posiciones){
+  temporal <- bind_rows(temporal, DFMort_Mens[(i+1):(i+3), ])
+}
+```
+
+Ahora tenemos un dataframe temporal con el siguiente aspecto:
+
+<img src="IMAGENES/2.3.jpg"
+     width="400"
+     height="341">
+     
+Por lo que debemos modificarlo antes de almacenarlo en el ya definitivo DFMort_Mens. Las modificaciones necesarias son incorporar la columna Periodo que contiene el año del dato, recolocar esta columna y eliminamos la columna ‘Todos los meses’. Por último realizamos un pivot_longer() para dar el formato deseado a los datos y ponemos en mayúscula el nombre de los meses para facilitar futuros join:
+
+``` {r eval=FALSE}
+DFMort_Mens <- mutate(temporal, Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3)) %>% 
+  mutate(Sexo = Causa) %>% 
+  relocate(`Sexo`, .before = `Todos los meses`) %>% 
+  relocate(`Periodo`, .before = `Sexo`) %>% 
+  subset(select = -c(`Todos los meses`,`Causa`)) %>% 
+  # Realizamos también un pivot_longer() para almacenar los datos en formato longer y ponemos en mayúsculas el nombre de los meses para facilitar posteriores join con otras tablas
+  pivot_longer(names_to = "Mes", values_to = "Muertes", cols = c(enero:diciembre)) %>% 
+  relocate(Mes, .before = `Sexo`) %>% 
+  mutate(Mes = capitalize(Mes))
+```
+
+El resultado final es un dataframe DFMort_Mens como el siguiente:
+
+<img src="IMAGENES/2.3.2.jpg"
+     width="400"
+     height="341">
+     
+Que posee 3 variables de tipo carácter: Periodo, Mes y Sexo. Y también posee una cuarta columna ‘Muertes’ que representa el número mensual de muertes para esa combinación de Periodo, Mes y Sexo.
