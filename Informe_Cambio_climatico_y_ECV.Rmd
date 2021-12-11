@@ -1765,3 +1765,9 @@ ggsave(
 
 En este apartado vamos a analizar las gráficas obtenidas en el apartado anterior y sacar conclusiones, generar nueva información.
 
+#### _4.1 Relación meteorología-morbilidad_
+
+Comencemos con la relación entre los sucesos adversos meteorológicos y la morbilidad. La gráfica obtenida teniendo en cuenta ambos sexos es la siguiente (estas gráficas están en la carpeta de OUTPUT del repositorio):
+
+
+
