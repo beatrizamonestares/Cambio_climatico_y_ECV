@@ -654,3 +654,21 @@ Reorder <- function(provincia){
 ```
 
 Posteriormente aplicaríamos esta función a las provincias modificadas (GuadalajaraMeteo, MalagaMeteo, SoriaMeteo, PalenciaMeteo, ValladolidMeteo).
+
+#### _1.2 Datos de Morbilidad_
+Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encuesta de morbilidad hospitalaria:
+
+<img src="INE.jpg"
+     width="400"
+     height="341>
+
+Desde donde se descargaron los datos en formato .xlsx. Estos archivos de Excel se almacenaron en la carpeta INPUT, y se importaron al archivo .R empleando el siguiente código:
+
+```{r eval=FALSE}
+DFMorbilidad <- data.frame()
+for (i in dir_ls(path = "INPUT", regexp="morbilidad")){
+  temporal <- read_excel(path = i, sheet = "tabla-0", skip = 6, col_types = c("text",rep("numeric",64))) 
+  DFMorbilidad <- bind_rows(DFMorbilidad, temporal)
+```
+
+Como se puede comprobar se almacenaron en un objeto denominado DFMorbilidad
