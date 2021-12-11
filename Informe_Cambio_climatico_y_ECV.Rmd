@@ -156,7 +156,7 @@ _Consecuencias_
 </span>
 
 <center>
-![](https://geoinnova.org/wp-content/uploads/2021/08/deshielo-artico.jpg){width=250px}
+![](https://geoinnova.org/wp-content/uploads/2021/08/deshielo-artico.jpg){width=350px}
 </center>
 
 
@@ -248,7 +248,7 @@ _Causas_
 </span>
 
 <center>
-![](https://thumbs.dreamstime.com/b/gente-con-malos-h%C3%A1bitos-adicci%C3%B3n-las-drogas-y-los-juegos-drogadicci%C3%B3n-al-juego-comiendo-comida-chatarra-apostando-estilos-de-199569418.jpg){width=250}
+![](https://thumbs.dreamstime.com/b/gente-con-malos-h%C3%A1bitos-adicci%C3%B3n-las-drogas-y-los-juegos-drogadicci%C3%B3n-al-juego-comiendo-comida-chatarra-apostando-estilos-de-199569418.jpg){width=350}
 </center>
 
 ###
@@ -579,6 +579,8 @@ _Objetivo 3_
 </center>
 
 
+
+
 ### {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
 <center>
 <font size="30">
@@ -606,14 +608,14 @@ Se va a explicar desde qué fuente y cómo se obtuvieron cada uno de ellos.
 
 En un principio se obtuvieron desde la plataforma de Open Data del AEMET, generando para ello un fichero .csv con todos los enlaces a cada conjunto de datos:
 
-<img src="IMAGENES/Aspecto fichero.jpg"
+<img src="IMAGENES/Aspecto fichero csv.jpg"
      width="400"
-     height="341>
+     height="341">
       
 
-Sin embargo surgió uno de los primeros problemas: los enlaces empleados tenían una cierta caducidad y no eran válidos trascurridos 5 días. Por ello nos vimos obligados a cambiar la forma de acceder a dichos datos. Se descubrió un paquete de R denominado climaemet que incorpora varias funciones, permitiendo acceder de forma directa a los datos meteorológicos desde R.
+Sin embargo surgió uno de los primeros problemas: los enlaces empleados tenían una cierta caducidad y no eran válidos trascurridos 5 días. Por ello nos vimos obligados a cambiar la forma de acceder a dichos datos. Se descubrió un paquete de R denominado _climaemet_ que incorpora varias funciones, permitiendo acceder de forma directa a los datos meteorológicos desde R.
 
-Para ello se empleó la función climaemet::aemet_monthly_period(station, start, end) que permite acceder a los datos mensuales de cada provincia, pasando como parámetro station el nombre de la estación climatológica de interés y como parámetros start y end los años de inicio y fin de la búsqueda.
+Para ello se empleó la función _climaemet::aemet_monthly_period(station, start, end)_ que permite acceder a los datos mensuales de cada provincia, pasando como parámetro station el nombre de la estación climatológica de interés y como parámetros start y end los años de inicio y fin de la búsqueda.
 
 El objetivo era crear 52 dataframes, uno para cada provincia. El nombre de estos dataframes esta compuesto por el nombre de la provincia + la palabra ‘Meteo’. Para emplear un formato estándar de nombres de provincias se declararon 2 vectores:
 
