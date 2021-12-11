@@ -1388,6 +1388,8 @@ Graf_filt_Meteo <- function(objeto){
 }
 ``` 
 
+<div style="text-align: justify">
+
 ###### _3.1.2 Filtro_Extremos(provincia, dataframe)_
 
 Al igual que en el desarrollo de la función anterior vamos a comenzar especificando los parámetros que recibe y el return() que devuelve. Esta función se emplea para seleccionar las filas del objeto provincia pasado como parámetro cuya anomalía cuadrada se salga del límite superior des intervalo de confianza del geom_smooth(), una vez seleccionadas esas filas las va a añadir al dataframe pasado como parámetro dataframe.
