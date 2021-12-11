@@ -691,3 +691,12 @@ for (i in dir_ls(path = "INPUT", regexp="Mort_nacion")){
 ```
 
 Donde podemos comprobar que se almacenaron en un objeto denominado DFMort_Mens.
+
+#### _Datos de mortalidad provincial_
+
+De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados por provincia de residencia/ Defunciones por causas (lista reducida) por sexo. Ejemplo de ello:
+
+<img src="INEmortalidadprovincial.jpg"
+     width="400"
+     height="341>
+     
