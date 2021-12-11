@@ -623,9 +623,9 @@ for (i in 1:length(Provincias)){
 }
 ```
 
-<img src="Aspecto de un dataframe metereologico recien creado"
+<img src="/IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg"
      width="400"
-     height="341>
+     height="341">
      
      
 Una vez creados estos dataframes, se tuvieron que realizar varias correcciones debido a que ciertas estaciones seleccionadas (la de Guadalajara, Málaga, Palencia, Soria y Valladolid) presentaban años incompletos o de los cuales directamente no existía información (obligándonos a seleccionar otra estación de la misma provincia e introducir la información restante de forma manual).
@@ -660,7 +660,7 @@ Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encue
 
 <img src="INE.jpg"
      width="400"
-     height="341>
+     height="341">
 
 Desde donde se descargaron los datos en formato .xlsx. Estos archivos de Excel se almacenaron en la carpeta INPUT, y se importaron al archivo .R empleando el siguiente código:
 
@@ -678,7 +678,7 @@ También se obtuvieron desde la base de datos del INE, en el apartado INEbase / 
 
 <img src="INEmort.jpg"
      width="400"
-     height="341>
+     height="341">
      
 Desde aquí se descargaron los datos en formato .xlsx a la carpeta INPUT. La carga de datos al archivo .R se realizó empleando el siguiente fragmento de código:
 
@@ -698,7 +698,7 @@ De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defuncio
 
 <img src="INEmortalidadprovincial.jpg"
      width="400"
-     height="341>
+     height="341">
      
 Donde se descargaron los archivos en formato .xlsx en la carpeta INPUT. Desde ahí se cargaron de nuevo al fichero. R mediante el siguiente código:
 ``` {r eval=FALSE}
@@ -709,3 +709,21 @@ for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
 }
 ```
 Observamos que se ha almacenado en un objeto denominado DFMort_Prov
+
+#### _1.5 Datos de poblacion_
+
+El último tipo de datos, datos acerca de la población de cada provincia, se obtuvieron de nuevo desde el INE, en el apartado INEbase / Demografía y población / Cifras de Población y Censos demográficos /Cifras de población, como se muestra a continuación:
+
+<img src="INEdatosdepoblacion.jpg"
+     width="400"
+     height="341">
+     
+Que nuevamente fueron descargados en la carpeta INPUT en formato .xlsx. Para su importación en el .R se empleó el siguiente código:
+
+```{r eval=FALSE}
+DFPoblacion <- read_excel("C:/Users/samue/Documents/UBU/3er curso/FDB y Web Semántica/Cambio_climatico_y_ECV/INPUT/Poblacion_prov.xlsx", 
+                          skip = 6)
+```
+
+Como podemos observar se almacenaron en un objeto denominado DFPoblacion.
+Una vez importados todos los datos, haciendo un repaso de los objetos hasta ahora obtenidos (y con los que vamos a trabajar de aquí en adelante) encontramos: los 52 dataframe ProvinciaMeteo con datos meteorológicos, DFMorbilidad con información de la morbilidad, DFMort_Mens con el número mensual de muertes a nivel nacional, DFMort_Prov con el número anual de muertes por provincia y DFPoblacion con el número de habitantes por provincia y año.
