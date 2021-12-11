@@ -1810,3 +1810,11 @@ Y a mujeres:
       
 <div style="text-align: justify">
 Por lo que observamos en los resultados, no parece haber relación directa entre el número de fenómenos climatológicos adversos o extremos y la morbilidad hospitalaria por enfermedad cardiovascular. Sí que apreciamos que parece tener mayor relación en las mujeres que en los hombres, ya que hay mayor fluctuación en la última gráfica que en las anteriores. También se puede observar que la morbilidad en los hombres es más alta que en las mujeres (hay mayor número de altas por ECV de hombres que de mujeres).
+
+
+#### _4.2 Relación metereología-mortalidad provincial_
+
+Vamos a estudiar la posible relación entre el número de sucesos meteorológicos adversos y el número de muertes por ECV calculado provincial y anualmente.
+
+La gráfica para ambos sexos es la siguiente:
+
