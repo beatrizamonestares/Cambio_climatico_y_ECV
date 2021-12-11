@@ -596,7 +596,7 @@ Se va a explicar desde qué fuente y cómo se obtuvieron cada uno de ellos.
 
 En un principio se obtuvieron desde la plataforma de Open Data del AEMET, generando para ello un fichero .csv con todos los enlaces a cada conjunto de datos:
 
-<img src="Aspecto fichero.jpg"
+<img src="IMAGENES/Aspecto fichero.jpg"
      width="400"
      height="341>
       
@@ -623,7 +623,7 @@ for (i in 1:length(Provincias)){
 }
 ```
 
-<img src="/IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg"
+<img src="IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg"
      width="400"
      height="341">
      
@@ -658,7 +658,7 @@ Posteriormente aplicaríamos esta función a las provincias modificadas (Guadala
 #### _1.2 Datos de Morbilidad_
 Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encuesta de morbilidad hospitalaria:
 
-<img src="INE.jpg"
+<img src="IMAGENES/INE.jpg"
      width="400"
      height="341">
 
@@ -676,7 +676,7 @@ Como se puede comprobar se almacenaron en un objeto denominado DFMorbilidad
 #### _1.3 Datos de Mortalidad mensual_
 También se obtuvieron desde la base de datos del INE, en el apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados nacionales / Defunciones por causas (lista reducida), sexo y mes de fallecimiento. Un ejemplo de este acceso para el año 2010 es:
 
-<img src="INEmort.jpg"
+<img src="IMAGENES/INEmort.jpg"
      width="400"
      height="341">
      
@@ -696,7 +696,7 @@ Donde podemos comprobar que se almacenaron en un objeto denominado DFMort_Mens.
 
 De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados por provincia de residencia/ Defunciones por causas (lista reducida) por sexo. Ejemplo de ello:
 
-<img src="INEmortalidadprovincial.jpg"
+<img src="IMAGENES/INEmortalidadprovincial.jpg"
      width="400"
      height="341">
      
@@ -714,7 +714,7 @@ Observamos que se ha almacenado en un objeto denominado DFMort_Prov
 
 El último tipo de datos, datos acerca de la población de cada provincia, se obtuvieron de nuevo desde el INE, en el apartado INEbase / Demografía y población / Cifras de Población y Censos demográficos /Cifras de población, como se muestra a continuación:
 
-<img src="INEdatosdepoblacion.jpg"
+<img src="IMAGENES/INEdatosdepoblacion.jpg"
      width="400"
      height="341">
      
@@ -727,3 +727,143 @@ DFPoblacion <- read_excel("C:/Users/samue/Documents/UBU/3er curso/FDB y Web Sem�
 
 Como podemos observar se almacenaron en un objeto denominado DFPoblacion.
 Una vez importados todos los datos, haciendo un repaso de los objetos hasta ahora obtenidos (y con los que vamos a trabajar de aquí en adelante) encontramos: los 52 dataframe ProvinciaMeteo con datos meteorológicos, DFMorbilidad con información de la morbilidad, DFMort_Mens con el número mensual de muertes a nivel nacional, DFMort_Prov con el número anual de muertes por provincia y DFPoblacion con el número de habitantes por provincia y año.
+
+
+### **2. REFINAMIENTO DE LOS DATOS**
+
+Hasta el momento hemos logrado importar los datos en nuestro archivo de R, pero son datos brutos, difíciles de manejar, poco inteligibles y con mucha información que nos sobra. A continuación vamos a explicar el proceso de refinamiento de dichos datos.
+
+#### _2.1 Datos metereológicos_
+
+De toda la información que contienen nuestros dataframes ProvinciaMeteo, solo nos interesan las filas que contienen información mensual, aquellas que contienen información anual nos sobran. De igual manera solo nos interesan las columnas que hacen referencia a las variables meteorológicas que vamos a estudiar: tm_max (temperatura media de las máximas), tm_min (temperatura media de las mínimas), q_max (presión media de las máximas), q_min (presión media de las mínimas), hr (humedad relativa) y p_sol (insolación real/insolación teórica en %). Además de estas tareas de eliminación, vamos a añadir 2 columnas nuevas a cada dataframe: una denominada Periodo con el año del dato y otra denominada Mes con el mes del dato, y posteriormente vamos a eliminar la columna `fecha` que viene por defecto en el dataframe. Por último vamos a convertir las columnas q_max y q_min a numérico (ya que por defecto vienen como carácter al incorporar en el valor del dato el día del mes en que se obtuvo ese valor).
+Como vamos a querer aplicar todas estas modificaciones a 52 dataframes vamos a crear una función para ello, facilitándonos el trabajo posterior. Esta función es la siguiente:
+
+``` {r eval=FALSE}
+Mod_meteo <- function(prov){
+  # Como vamos a emplear la función sobre una lista de nombres (y no con los objetos directamente), debemos emplear la función 'get()' que nos permita obtener el objeto al que referencia ese nombre
+  Objeto <- get(prov)
+  # Nos quedamos solo con las columnas de interés
+  Objeto <- select(Objeto, c(`fecha`,`tm_max`,`tm_min`,`q_max`,`q_min`,`p_sol`,`hr`)) %>% 
+    # Eliminamos las filas referentes a valores de medias anuales
+    filter(.data = . , !`fecha` %in% c("2010-13","2011-13","2012-13","2013-13","2014-13","2015-13","2016-13","2017-13","2018-13","2019-13")) %>% 
+    # Introducimos las columnas de Periodo y de Mes
+    bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=12), Mes = rep(c("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"), 10)) %>% 
+    # Colocamos estas columnas recién creadas como las 2 primeras y eliminamos la columna de fecha empleando el subset y el complementario de fecha (indicado como - `fecha`) 
+    relocate(.,c(`Periodo`,`Mes`),.before = `fecha`) %>% 
+    subset(select = -`fecha`)
+  
+  # Recorremos cada elemento de la columna q_max del dataframe respectivo y eliminamos las posiciones que contienen caracteres no numéricos.
+  for (i in 1:length(Objeto$q_max)){
+    Objeto$q_max[i] <- str_sub(string = Objeto$q_max[i], start = 1L, end = -5L)
+    Objeto$q_min[i] <- str_sub(string = Objeto$q_min[i], start = 1L, end = -5L)
+  }
+  
+  # Forzamos la conversión a numeric una vez eliminados los elementos del tipo character
+  Objeto$q_max <- as.numeric(Objeto$q_max)
+  Objeto$q_min <- as.numeric(Objeto$q_min)
+  
+  return(Objeto)
+}
+
+```
+
+Una vez obtenida la función ya podemos aplicarla sobre cada dataframe de meteorología:
+
+``` {r eval=FALSE}
+for (i in 1:length(Provincias)){
+  Nam <- paste(Provincias[i],"Meteo",sep = "")
+  assign(Nam,Mod_meteo(Nam))
+}
+```
+
+De esta manera hemos logrado modificar los datos de meteorología, dejándolos más legibles y entendibles. 
+
+<img src="IMAGENES/Dataframe A Coruña.jpg"
+     width="400"
+     height="341">
+
+Las columnas Periodo y Mes son de tipo carácter y representan el año y mes al que corresponden los datos. Las columnas tm_max (temperatura media de las máximas), tm_min (temperatura media de las mínimas), q_max (presión media de las máximas), q_min (presión media de las mínimas), p_sol(porcentaje de insolación real frente a insolación teórica) y hr (humedad relativa) son de tipo numeric. Cada dataframe de meteorología posee 120 filas (12 meses*10 años) y 8 columnas.
+
+#### _2.2 Datos de morbilidad_
+
+En el refinamiento de estos datos se busca seleccionar las filas que contienen información únicamente sobre ECV (eliminando el resto de filas), eliminando también la columna CAUSA e introduciendo la columna Periodo que contiene los años de cada dato y la columna Sexo con el sexo de cada dato:
+
+``` {r eval=FALSE}
+DFMorbilidad <- filter(DFMorbilidad, CAUSA %in% c("390-459 VII ENFERMEDADES DEL SISTEMA CIRCULATORIO", "0900 ENFERMEDADES DEL APARATO CIRCULATORIO I00-I99")) %>% 
+  bind_cols(Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3), Sexo = rep(c("Ambos sexos", "Hombres", "Mujeres"), 10)) %>% 
+  subset(select = - CAUSA)
+```
+
+Posteriormente eliminar las columnas que hacen referencia a comunidades autónomas (seleccionando solo las que contienen información de provincias):
+
+``` {r eval=FALSE}
+DFMorbilidad <- DFMorbilidad[ ,order(names(DFMorbilidad))] %>% 
+  relocate(.,`Araba/Álava`, .before = `Albacete`) %>% 
+  relocate(., `Gipuzkoa`, .after = `Guadalajara`)
+
+j <- 1
+for (i in 1:length(DFMorbilidad)){
+  if (!colnames(DFMorbilidad)[i] %in% c("Sexo","Periodo")){
+    colnames(DFMorbilidad)[i] = Provincias[j]
+    j <- j+1
+  }
+}
+```
+
+Por último vamos a recolocar las columnas periodo y sexo y a cambiar la tabla a formato 'longer' para que se adecúe más a nuestro tipo de datos de meteorología.
+
+```{r eval=FALSE}
+DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>% 
+  pivot_longer(data = ., names_to = "Provincia", values_to = "Altas", cols= c(Alava:Zaragoza))
+```
+
+<img src="IMAGENES/2.2.jpg"
+     width="400"
+     height="341">
+     
+Este es el aspecto final del dataframe DFMorbilidad, donde la variable Periodo, Sexo y Provincia son de tipo carácter, y la columna Altas (que representa el número de altas hospitalarias por ECV para ese triplete de Periodo, Sexo, Provincia) es de tipo _numeric_.
+
+
+#### _2.3 Datos de mortalidad nacional menusal_
+
+Lo primero que vamos a realizar es determinar en qué posiciones, en qué filas, hay información sobre ECV:
+
+``` {r eval=FALSE}
+posiciones <- which(DFMort_Mens$Causa %in% c("053-061 IX.Enfermedades del sistema circulatorio"))
+```
+
+Una vez obtenidas estas posiciones, y empleando un dataframe auxiliar denominado temporal (que usaremos como pivote temporal) vamos a cargar las filas que contienen información sobre ECV en el dataframe temporal:
+
+``` {r eval=FALSE}
+for(i in posiciones){
+  temporal <- bind_rows(temporal, DFMort_Mens[(i+1):(i+3), ])
+}
+```
+
+Ahora tenemos un dataframe temporal con el siguiente aspecto:
+
+<img src="IMAGENES/2.3.jpg"
+     width="400"
+     height="341">
+     
+Por lo que debemos modificarlo antes de almacenarlo en el ya definitivo DFMort_Mens. Las modificaciones necesarias son incorporar la columna Periodo que contiene el año del dato, recolocar esta columna y eliminamos la columna ‘Todos los meses’. Por último realizamos un pivot_longer() para dar el formato deseado a los datos y ponemos en mayúscula el nombre de los meses para facilitar futuros join:
+
+``` {r eval=FALSE}
+DFMort_Mens <- mutate(temporal, Periodo = rep(c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019), each=3)) %>% 
+  mutate(Sexo = Causa) %>% 
+  relocate(`Sexo`, .before = `Todos los meses`) %>% 
+  relocate(`Periodo`, .before = `Sexo`) %>% 
+  subset(select = -c(`Todos los meses`,`Causa`)) %>% 
+  # Realizamos también un pivot_longer() para almacenar los datos en formato longer y ponemos en mayúsculas el nombre de los meses para facilitar posteriores join con otras tablas
+  pivot_longer(names_to = "Mes", values_to = "Muertes", cols = c(enero:diciembre)) %>% 
+  relocate(Mes, .before = `Sexo`) %>% 
+  mutate(Mes = capitalize(Mes))
+```
+
+El resultado final es un dataframe DFMort_Mens como el siguiente:
+
+<img src="IMAGENES/2.3.2.jpg"
+     width="400"
+     height="341">
+     
+Que posee 3 variables de tipo carácter: Periodo, Mes y Sexo. Y también posee una cuarta columna ‘Muertes’ que representa el número mensual de muertes para esa combinación de Periodo, Mes y Sexo.
