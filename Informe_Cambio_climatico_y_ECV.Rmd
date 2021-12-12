@@ -1,34 +1,36 @@
 ---
-title: "Informe Cambio Climatico y ECV"
-author: "Samuel Lozano Juárez, Víctor Barcina Muñoz, Beatriz Amo Nestares"
-date: "13/12/2021"
-output: html_document
+title: "<font size = 8>__Informe Cambio Climatico y ECV__</font>"
+subtitle: "<font size = 3> Repositorio: [GitHub](https://github.com/SamuelLozanoJuarez/Cambio_climatico_y_ECV) </font>"
+author:
+- name: "Samuel Lozano Juárez"
+- name: "Víctor Barcina Muñoz"
+- name: "Beatriz Amo Nestares"
+date: "Fecha: 13/12/2021"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 6
+    css: doc.css
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
-<center>
-<font size="30">
-<span style="color:black">
-**INTRODUCCIÓN**
+# __1. Introducción__
 
 ![](https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg){width=600px}
-</span>
-</font>
-</center>
+</left>
 
-###
 <span style="color:black">
-<center>
+<left>
 <font size="6">
 
-**¿POR QUÉ ESTE TEMA?**
+### **1.1 ¿Por qué este tema?**
 
 </font>
-</center> 
+</left> 
 
 <div style="text-align: justify"> 
 
@@ -42,15 +44,14 @@ Se ha escogido este tema debido a que estamos ante los datos más extremos de co
 ![](https://ih1.redbubble.net/image.1167929045.9498/pp,840x830-pad,1000x1000,f8f8f8.jpg){width=200px}
 </center>
 
-###
 <span style="color:black">
-<center>
+<left>
 <font size="6">
 
-**CAMBIO CLIMÁTICO**
+### **1.2 Cambio climático**
 
 </font>
-</center>
+</left>
 
 <div style="text-align: justify"> 
 
@@ -68,7 +69,6 @@ Esta quema de combustibles genera la emisión de gases de efecto invernadero que
 <center>
 
 ![](https://www.socialistasvascos.com/imagenes/noticias/CAMBIO-CLIMATICO-et.jpg){width=300px}
-## 
 <span style="color:black">
 <center>
 <font size="6">
@@ -99,7 +99,6 @@ _Causas_
 ![](https://laverdadnoticias.com/__export/1621690617219/sites/laverdad/img/2021/05/22/cambio_climxtico_natural.jpg_911187431.jpg){width=370px}
 </center>
 
-## 
 <span style="color:black">
 <center>
 <font size="6">
@@ -110,10 +109,6 @@ _Causas_
 </center>
 
 <div style="text-align: justify"> 
-
-<span style="color:gray">
-
-</span>
 
 - Humanas
   - Quema de combustibles fósiles
@@ -130,7 +125,6 @@ _Causas_
 </center> 
 
 
-##
 <span style="color:black">
 <center>
 <font size="6">
@@ -159,17 +153,14 @@ _Consecuencias_
 ![](https://geoinnova.org/wp-content/uploads/2021/08/deshielo-artico.jpg){width=350px}
 </center>
 
-
-
-###
 <span style="color:black">
-<center>
+<left>
 <font size="6">
 
-**ENFERMEDADES CARDIOVASCULARES**
+### **1.3 Enfermedades cardiovasculares**
 
 </font>
-</center>
+</left>
 
 <div style="text-align: justify"> 
 
@@ -188,16 +179,7 @@ Este tipo de transtornos **causan el mayor número de muertes** en el mundo (seg
 ![](https://plustatic.com/292/conversions/enfermedades-cardiovasculares-large.jpg){width=350px}
 </center>
 
-
-##
 <span style="color:black">
-<center>
-<font size="6">
-
-
-
-</font>
-</center>
 
 <div style="text-align: justify"> 
 
@@ -219,16 +201,7 @@ _Síntomas_
 ![](http://hsbnoticias.com/sites/default/files/2021-10/enfermedades_cardiovasculares.jpg){width=300px}
 </center>
 
-
-##
 <span style="color:black">
-<center>
-<font size="6">
-
-
-
-</font>
-</center>
 
 <div style="text-align: justify"> 
 
@@ -251,17 +224,14 @@ _Causas_
 ![](https://thumbs.dreamstime.com/b/gente-con-malos-h%C3%A1bitos-adicci%C3%B3n-las-drogas-y-los-juegos-drogadicci%C3%B3n-al-juego-comiendo-comida-chatarra-apostando-estilos-de-199569418.jpg){width=350}
 </center>
 
-###
 <span style="color:black">
-<center>
+<left>
 <font size="6">
 
-
-
-**RELACIÓN ENTRE AMBOS CONCEPTOS**
+### **1.4 Relación entre ambos conceptos**
 
 </font>
-</center>
+</left>
 
 <div style="text-align: justify"> 
 
@@ -278,16 +248,7 @@ Por ello, cambios extremos e inusuales en los factores ambientales pudieran esta
 </div>
 </span>
 
-##
 <span style="color:black">
-<center>
-<font size="6">
-
-
-
-</font>
-</center>
-
 <span style="color:gray">
 _Otros estudios_
 </span>
@@ -304,31 +265,23 @@ _Otros estudios_
 
 </div>
 </span>
+<left>
 
-### {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
+# **2. Objetivos**
+</left>
+
 <center>
-<font size="30">
-<span style="color:black">
-
-**OBJETIVOS**
-
-
 <img src="IMAGENES/objetivos.jpg"
      width="500"
      height="341">
-</span>
-</font>
 </center>
 
-####
 <span style="color:black">
-<center>
-<font size="6">
+<left>
 
-**OBJETIVO GENERAL**
+#### **2.1 Objetivo general**
 
-</font>
-</center>
+</left>
 
 <div style="text-align: justify"> 
 
@@ -337,16 +290,14 @@ Tratar de encontrar correlación entre el cambio climático y una mayor incidenc
 </div>
 </span>
 
-
-####
 <span style="color:black">
-<center>
+<left>
 <font size="6">
 
-**OBJETIVO ESPECÍFICO 1**
+#### **2.2 Objetivo específico 1**
 
 </font>
-</center>
+</left>
 
 <div style="text-align: justify"> 
 
@@ -355,16 +306,14 @@ Estudiar las variables meteorológicas mensuales (temperatura, presión atmosfé
 </div>
 </span>
 
-
-####
 <span style="color:black">
-<center>
+<left>
 <font size="6">
 
-**OBJETIVO ESPECÍFICO 2**
+#### **2.3 Objetivo específico 2**
 
 </font>
-</center>
+</left>
 
 <div style="text-align: justify"> 
 
@@ -373,15 +322,14 @@ Una vez conocidas las provincias con climatología más adversa para cada año d
 </div>
 </span>
 
-####
 <span style="color:black">
-<center>
+<left>
 <font size="6">
 
-**OBJETIVO ESPECÍFICO 3**
+#### **2.4 Objetivo específico 3**
 
 </font>
-</center>
+</left>
 
 <div style="text-align: justify"> 
 
@@ -390,14 +338,11 @@ Una vez conocidos qué meses y de qué año tuvieron una climatología más extr
 </div>
 </span>
 
-
-
-### {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
-<center>
+<left>
 <font size="30">
 <span style="color:black">
 
-**METODOLOGÍAS**
+# **3. Metodologías**
 
 
 <img src="IMAGENES/metodologia.jpg"
@@ -406,20 +351,14 @@ Una vez conocidos qué meses y de qué año tuvieron una climatología más extr
 
 </span>
 </font>
-</center>
+</left>
 
-## 
+<left>
 <span style="color:black">
-<center>
-<font size="6">
 
-</font>
-</center>
+#### **3.1 Metodologías del Objetivo 1**
 
-<span style="color:gray">
-_Objetivo 1_
 </span>
-
 <div style="text-align: justify"> 
 
 - Crear un archivo .csv que contenga las URL a los archivos con la información meterológica mensual por provincias desde 2010 hasta 2019.
@@ -432,63 +371,19 @@ _Objetivo 1_
 ![](http://www.aemet.es/imagenes_gcd/subhomes/conocenos/quienes_somos/quienes_somos.gif)
 </center>
 
-## 
-<span style="color:black">
-<center>
-<font size="6">
-
-
-
-</font>
-</center>
-
-<span style="color:gray">
-
-</span>
-
 <div style="text-align: justify"> 
 
 - Filtrar cada dataframe para que únicamente contenga la información de cada año y mes referente a: temperatura media, temperatura media de las máximas, temperatura media de las mínimas, presión media, presión máxima absoluta, presión mínima absoluta, media de insolación y porcentaje medio mensual de la insolación diaria frente a la insolación teórica.
 
-</div>
-</span>
-
-## 
-<span style="color:black">
-<center>
-<font size="6">
-
-
-
-</font>
-</center>
-
-<span style="color:gray">
-
-</span>
-
-<div style="text-align: justify"> 
-
 - Comparar las variables meteorológicas de una misma provincia entre los diferentes meses y años y seleccionar los valores más extremos para cada variable meteorológica, almacenando en un vector aquellos meses y años con más de 2 factores extremos. Repetir dicho proceso con todas las provincias, de manera que se obtengan 52 vectores (como máximo) que contengan los meses más adversos correspondientes a cada provincia.
 
 </div>
-</span>
 
 <center>
 ![](https://www.ecoticias.com/userfiles/extra/GRGY_150.jpg){width=300px}
 </center>
 
-## 
-<span style="color:black">
-<center>
-<font size="6">
-
-</font>
-</center>
-
-<span style="color:gray">
-_Objetivo 2_
-</span>
+#### **3.2 Metodologías del Objetivo 2**
 
 <div style="text-align: justify"> 
 
@@ -497,26 +392,10 @@ _Objetivo 2_
 - Combinar dichos archivos mediante R para obtener 52 dataframes (uno por provincia) que contenga toda la información referente a la morbilidad hospitalaria y causas de defunción anual desde 2010 a 2019.
 
 </div>
-</span>
 
 <center>
 ![](https://www.ine.es/infografias/calidadvida/img/logoinecaja.jpg){width=300px}
 </center>
-
-
-## 
-<span style="color:black">
-<center>
-<font size="6">
-
-
-
-</font>
-</center>
-
-<span style="color:gray">
-
-</span>
 
 <div style="text-align: justify"> 
 
@@ -525,20 +404,8 @@ _Objetivo 2_
 - Comprobar si hay alguna provincia que posea 3 meses en un mismo año con meteorología adversa, y contrastar la mortalidad y morbilidad hospitalaria para ECV en esa provincia y ese año con los datos normales.
 
 </div>
-</span>
 
-## 
-<span style="color:black">
-<center>
-<font size="6">
-
-
-</font>
-</center>
-
-<span style="color:gray">
-_Objetivo 3_
-</span>
+#### **3.3 Metodologías del Objetivo 3**
 
 <div style="text-align: justify"> 
 
@@ -552,18 +419,6 @@ _Objetivo 3_
 <center>
 ![](http://coremain.com/images/casos_exito/Sigha.jpg){width=300px}
 </center>
-## 
-<span style="color:black">
-<center>
-<font size="6">
-
-
-</font>
-</center>
-
-<span style="color:gray">
-
-</span>
 
 <div style="text-align: justify"> 
 
@@ -578,21 +433,23 @@ _Objetivo 3_
 ![](https://www.questionpro.com/blog/wp-content/uploads/2021/03/Portada-tipos-de-graficas-para-encuestas-768x512.jpg){width=400px}
 </center>
 
-
-
-
-### {data-background=https://vinilosametros.com/wp-content/uploads/2018/04/color-azul-claro-2-510x509.jpg data-background-size=cover}
-<center>
+<left>
 <font size="30">
 <span style="color:black">
 
-**DESARROLLO DEL PROYECTO**
+# **4. Desarrollo del proyecto**
 
 </font>
-</center> 
+</left> 
 
-<div style="text-align: justify"> 
-#### **1. Carga de los datos**
+<left>
+<font size="30">
+<span style="color:black">
+
+### **4.1. Carga de los datos**
+
+</font>
+</left> 
 
 En el proyecto desarrollado se va a tratar de vincular el cambio climático con las enfermedades cardiovasculares, para ello se emplean 5 fuentes de datos distintas:
 
@@ -604,7 +461,7 @@ En el proyecto desarrollado se va a tratar de vincular el cambio climático con 
 
 Se va a explicar desde qué fuente y cómo se obtuvieron cada uno de ellos.
 
-#### _1.1. Datos metereológicos_
+#### _4.1.1. Datos metereológicos_
 
 En un principio se obtuvieron desde la plataforma de Open Data del AEMET, generando para ello un fichero .csv con todos los enlaces a cada conjunto de datos:
 
@@ -652,7 +509,7 @@ for (i in 1:length(Provincias)){
 <figure>
 <img src="IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg"
      width="1800"
-     height="800" alt="an image">
+     height="750" alt="an image">
 <figcaption>Aspecto del dataframe metereológico recién creado </figcaption>
 </figure>
 
@@ -690,7 +547,7 @@ Posteriormente aplicaríamos esta función a las provincias modificadas (Guadala
 
 <br>
 
-#### _1.2 Datos de Morbilidad_
+#### _4.1.2 Datos de Morbilidad_
 Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encuesta de morbilidad hospitalaria:
 
 
@@ -719,7 +576,7 @@ Como se puede comprobar se almacenaron en un objeto denominado DFMorbilidad
 
 <div style="text-align: justify">
 
-#### _1.3 Datos de Mortalidad mensual_
+#### _4.1.3 Datos de Mortalidad mensual_
 También se obtuvieron desde la base de datos del INE, en el apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados nacionales / Defunciones por causas (lista reducida), sexo y mes de fallecimiento. Un ejemplo de este acceso para el año 2010 es:
 
 <center>
@@ -747,7 +604,7 @@ Donde podemos comprobar que se almacenaron en un objeto denominado DFMort_Mens.
 
 <div style="text-align: justify">
 
-#### _1.4 Datos de mortalidad provincial_
+#### _4.1.4 Datos de mortalidad provincial_
 
 De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defunciones según la causa de muerte / Resultados por provincia de residencia/ Defunciones por causas (lista reducida) por sexo. Ejemplo de ello:
 
@@ -774,7 +631,7 @@ for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
 Observamos que se ha almacenado en un objeto denominado DFMort_Prov
 
 <div style="text-align: justify">
-#### _1.5 Datos de poblacion_
+#### _4.1.5 Datos de poblacion_
 
 El último tipo de datos, datos acerca de la población de cada provincia, se obtuvieron de nuevo desde el INE, en el apartado INEbase / Demografía y población / Cifras de Población y Censos demográficos /Cifras de población, como se muestra a continuación:
 
@@ -802,12 +659,17 @@ Una vez importados todos los datos, haciendo un repaso de los objetos hasta ahor
 
 <br>
 
+<left>
+
+### **4.2. Refinamiento de los datos**
+
+</left>
+
 <div style="text-align: justify">
-#### **2. REFINAMIENTO DE LOS DATOS**
 
 Hasta el momento hemos logrado importar los datos en nuestro archivo de R, pero son datos brutos, difíciles de manejar, poco inteligibles y con mucha información que nos sobra. A continuación vamos a explicar el proceso de refinamiento de dichos datos.
 
-#### _2.1 Datos metereológicos_
+#### _4.2.1 Datos metereológicos_
 
 De toda la información que contienen nuestros dataframes ProvinciaMeteo, solo nos interesan las filas que contienen información mensual, aquellas que contienen información anual nos sobran. De igual manera solo nos interesan las columnas que hacen referencia a las variables meteorológicas que vamos a estudiar: tm_max (temperatura media de las máximas), tm_min (temperatura media de las mínimas), q_max (presión media de las máximas), q_min (presión media de las mínimas), hr (humedad relativa) y p_sol (insolación real/insolación teórica en %). Además de estas tareas de eliminación, vamos a añadir 2 columnas nuevas a cada dataframe: una denominada Periodo con el año del dato y otra denominada Mes con el mes del dato, y posteriormente vamos a eliminar la columna `fecha` que viene por defecto en el dataframe. Por último vamos a convertir las columnas q_max y q_min a numérico (ya que por defecto vienen como carácter al incorporar en el valor del dato el día del mes en que se obtuvo ese valor).
 Como vamos a querer aplicar todas estas modificaciones a 52 dataframes vamos a crear una función para ello, facilitándonos el trabajo posterior. Esta función es la siguiente:
@@ -868,7 +730,7 @@ Las columnas Periodo y Mes son de tipo carácter y representan el año y mes al 
 
 <div style="text-align: justify">
 
-#### _2.2 Datos de morbilidad_
+#### _4.2.2 Datos de morbilidad_
 
 En el refinamiento de estos datos se busca seleccionar las filas que contienen información únicamente sobre ECV (eliminando el resto de filas), eliminando también la columna CAUSA e introduciendo la columna Periodo que contiene los años de cada dato y la columna Sexo con el sexo de cada dato:
 
@@ -916,7 +778,7 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
 Este es el aspecto final del dataframe DFMorbilidad, donde la variable Periodo, Sexo y Provincia son de tipo carácter, y la columna Altas (que representa el número de altas hospitalarias por ECV para ese triplete de Periodo, Sexo, Provincia) es de tipo _numeric_.
 
 <div style="text-align: justify">
-#### _2.3 Datos de mortalidad nacional menusal_
+#### _4.2.3 Datos de mortalidad nacional menusal_
 
 Lo primero que vamos a realizar es determinar en qué posiciones, en qué filas, hay información sobre ECV:
 
@@ -976,7 +838,7 @@ Que posee 3 variables de tipo carácter: Periodo, Mes y Sexo. Y también posee u
 
       
 <div style="text-align: justify">
-#### _2.4 Datos de Mortalidad Provincial_
+#### _4.2.4 Datos de Mortalidad Provincial_
 
 El primer paso en el tratamiento de estos datos es nombrar la primera columna del dataframe como Causa para facilitar su posterior manejo:
 
@@ -1050,7 +912,7 @@ Donde la columna Periodo, Sexo y Provincia son de tipo character y la columna Mo
 
 <div style="text-align: justify">
 
-#### _2.5 Datos de población_
+#### _4.2.5 Datos de población_
 
 Lo primero que vamos a realizar es nombrar la primera columna como “Localidad” para facilitar su manejo. Posteriormente vamos a seleccionar las columnas que contienen información poblacional recogida el 1 de enero (hay también columnas del 1 de julio). Del dataframe restante vamos a escoger aquellas columnas que se corresponden con el periodo de tiempo que nos interesa (2010-2019) y eliminar las filas con datos nacionales (quedándonos exclusivamente con datos provinciales). Por último renombramos las columnas para posteriores join con otras tablas:
 
@@ -1117,12 +979,17 @@ Una vez ya ordenado alfabéticamente introducimos la nueva columna Provincia que
 
 Que posee 520 filas (52 provincias * 10 años) y 3 columnas: 2 de ellas caracteres (Provincia y Periodo) y una de tipo numeric (Habitantes) que representa el número de habitantes en esa provincia ese año.
 
+<left>
+
+### **4.3. Análisis de los datos**
+
+</left>
+
 <div style="text-align: justify">
-#### **3. ANALISIS DE LOS DATOS.**
 Llegados a este punto ya hemos logrado obtener los datos refinados de manera que se pueda comenzar a trabajar con  ellos para obtener nueva información. Debemos recordar cuál es el objetivo del proyecto: buscar una posible correlación entre el cambio climático y las enfermedades cardiovasculares.
 
 <div style="text-align: justify">
-#### _3.1 Obtener los meses y provincias mas adversos_
+#### _4.3.1 Obtener los meses y provincias mas adversos_
 
 En primer lugar vamos a tomar el objetivo específico 1: estudiar las variables meteorológicas mensuales de cada provincia, para determinar qué meses de qué provincias tuvieron algún valor adverso (climatológicamente hablando). 
 Para saber qué entendemos por valor climatológico adverso vamos a basarnos en la anomalía (diferencia entre el valor de un dato y la media para ese tipo de dato). Para ello el primer paso es calcular la media de cada variable meteorológica estudiada (tm_max, tm_min, q_max, q_min, hr y p_sol) para cada mes, es decir, obtener una media de las tm_max de todos los eneros, febreros, marzos… y así con tm_min, q_max, q_min, hr y p_sol. Una vez obtenida esta media, se almacenará en cada dataframe meteorológico (recordemos que tenemos 52 dataframes meteorológicos llamados ProvinciaMeteo) dentro de una columna con el nombre Av_variable_meteorológica (e.g. Av_tmax, Av_tmin, Av_qmax…). En el fragmento de código que aparece a continuación no se emplea directamente el dataframe de la provincia, ya que el código pertenece a una función en la que empleamos un objeto pivote denominado _Interna_ para poder solventar un problema con los datos NA que se explica en el paso siguiente.
@@ -1210,12 +1077,14 @@ A continuación vamos a desgranar un poco el funcionamiento interno de cada una 
 
 <br>
 
-##### _3.1.1 Graf_filt_Meteo(objeto)_
+##### _4.3.1.1 Graf_filt_Meteo(objeto)_
 
 Primero especifiquemos el parámetro que recibe y el return() que entrega. Recibe un parámetro objeto, que ha de ser de tipo carácter y debe de corresponderse con el nombre de un dataframe meteorológico de una provincia (A_CorunaMeteo, AlavaMeteo, AlbaceteMeteo…). A partir de ese nombre va a generar 3 gráficas: 
 
 •	_graf_temp_ (que representa Anom_tmax y Anom_tmin de cada periodo y cada mes)
+
 •	_graf_presion_ (que representa Anom_qmax y Anom_qmin de cada periodo y cada mes)
+
 •	_graf_sol_hr_ (que representa Anom_psol y Anom_hr de cada periodo y cada mes)
 
 El _return_ va a consistir en una lista que contiene estas 3 gráficas.
@@ -1395,7 +1264,7 @@ Graf_filt_Meteo <- function(objeto){
 
 <br>
 
-###### _3.1.2 Filtro_Extremos(provincia, dataframe)_
+###### _4.3.1.2 Filtro_Extremos(provincia, dataframe)_
 
 Al igual que en el desarrollo de la función anterior vamos a comenzar especificando los parámetros que recibe y el return() que devuelve. Esta función se emplea para seleccionar las filas del objeto provincia pasado como parámetro cuya anomalía cuadrada se salga del límite superior des intervalo de confianza del geom_smooth(), una vez seleccionadas esas filas las va a añadir al dataframe pasado como parámetro dataframe.
 Recibe 2 parámetros:
@@ -1579,7 +1448,7 @@ Filtro_Extremos <- function(provincia, dataframe){
 <br>
 <div style="text-align: justify">
 
-###### _3.1.3 Uso de Filtro_Extremos para crear DFMeteo_Extrem_
+###### _4.3.1.3 Uso de Filtro_Extremos para crear DFMeteo_Extrem_
 
 El último paso en la selección de meses y provincias es crear un dataframe que contenga a todas estas filas ‘extremas’. Para ello vamos a aplicar la función Filtro_Extremos pasando como parámetros cada uno de los dataframes meteorológicos de las provincias (A_CorunaMeteo, AlavaMeteo, AlbaceteMeteo…) y el dataframe DFMeteo_Extrem para que las filas que pasen el filtro las almacene todas juntas en este único dataframe. Para ello primero vamos a crear el dataframe DFMeteo_Extrem y posteriormente invocar la función Filtro_Extremos pasando como parámetros cada vez una provincia distinta. El código es (ejemplificado con A_CorunaMeteo):
 
@@ -1605,7 +1474,7 @@ Así obtenemos un dataframe DFMeteo_Extrem que contiene 6174 filas, correspondie
 
 <div style="text-align: justify">
 
-#### _3.2 Buscar relación entre los meses más adversos y el índice de morbilidad hospitalaria por ECV_
+#### _4.3.2 Buscar relación entre los meses más adversos y el índice de morbilidad hospitalaria por ECV_
 
 Finalmente, tras todo el tratamiento previo y el manejo de los datos, llegamos a la última etapa: establecer relación entre los datos meteorológicos y la salud humana.
 
@@ -1677,7 +1546,7 @@ ggsave(
 
 <div style="text-align: justify">
 
-#### _3.3 Buscar la relación entre los meses más adversos y mortalidad por ECV_
+#### _4.3.3 Buscar la relación entre los meses más adversos y mortalidad por ECV_
 
 Debido a que en nuestro trabajo poseemos 2 dataframes con información referente a mortalidad (DFMort_Mens y DFMort_Prov), vamos a realizar el estudio de la relación entre meteorología y mortalidad desde 2 puntos de vista.
 
@@ -1759,14 +1628,19 @@ ggsave(
 )
 ```
 
+<div style="text-align: justify">
+
+# **5. Conclusiones**
+
+</div>
+
 
 <div style="text-align: justify">
-#### **4. CONCLUSIONES**
 
 En este apartado vamos a analizar las gráficas obtenidas en el apartado anterior y sacar conclusiones, generar nueva información.
 
 <div style="text-align: justify">
-#### _4.1 Relación meteorología-morbilidad_
+#### _5.1 Relación meteorología-morbilidad_
 
 Comencemos con la relación entre los sucesos adversos meteorológicos y la morbilidad. La gráfica obtenida teniendo en cuenta ambos sexos es la siguiente (estas gráficas están en la carpeta de OUTPUT del repositorio):
 
@@ -1813,7 +1687,7 @@ Y a mujeres:
 Por lo que observamos en los resultados, no parece haber relación directa entre el número de fenómenos climatológicos adversos o extremos y la morbilidad hospitalaria por enfermedad cardiovascular. Sí que apreciamos que parece tener mayor relación en las mujeres que en los hombres, ya que hay mayor fluctuación en la última gráfica que en las anteriores. También se puede observar que la morbilidad en los hombres es más alta que en las mujeres (hay mayor número de altas por ECV de hombres que de mujeres).
 
 <div style="text-align: justify">
-#### _4.2 Relación metereología-mortalidad provincial_
+#### _5.2 Relación metereología-mortalidad provincial_
 
 Vamos a estudiar la posible relación entre el número de sucesos meteorológicos adversos y el número de muertes por ECV calculado provincial y anualmente.
 
@@ -1861,7 +1735,7 @@ Y la correspondiente a mujeres es la siguiente:
 La mortalidad parece estar más relacionada con los fenómenos meteorológicos que la morbilidad, sin embargo tampoco parece haber una relación clara entre ambos fenómenos. Respecto a los datos obtenidos, en este caso podemos apreciar que la mortalidad es menor que la morbilidad por ECV y que en este caso, al contrario que ocurría en la morbilidad, hay mayor porcentaje de mujeres que de hombres que fallecen como consecuencia de ECV.
 
 <div style="text-align: justify">
-#### _4.3 Relación meteorología-mortalidad mensual_
+#### _5.3 Relación meteorología-mortalidad mensual_
 Por último vamos a evaluar los resultados obtenidos para la relación entre sucesos meteorológicos extremos y mortalidad calculada mensualmente de forma nacional. 
 
 La gráfica para ambos sexos es:
