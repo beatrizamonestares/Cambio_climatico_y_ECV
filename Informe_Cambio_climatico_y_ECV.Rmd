@@ -20,7 +20,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # __1. Introducción__
 
+<center>
 ![](https://user-images.githubusercontent.com/80346399/135160096-b203c9df-312d-4719-a699-5f31a1f278bb.jpg){width=600px}
+</center>
 </left>
 
 <span style="color:black">
@@ -317,7 +319,7 @@ Estudiar las variables meteorológicas mensuales (temperatura, presión atmosfé
 
 <div style="text-align: justify"> 
 
-Una vez conocidas las provincias con climatología más adversa para cada año del periodo 2010-2019, comprobar si la morbilidad hospitalaria y la mortalidad por ECV fue significativamente mayor en dichas provincias con respecto a las climatológicamente normales.
+Una vez conocidas las provincias con climatología más adversa para cada año del periodo 2010-2019, comprobar si la morbilidad hospitalaria y la mortalidad por ECV fue significativamente mayor en las provincias con una mayor climatología adversa.
 
 </div>
 </span>
@@ -344,10 +346,11 @@ Una vez conocidos qué meses y de qué año tuvieron una climatología más extr
 
 # **3. Metodologías**
 
-
+<center>
 <img src="IMAGENES/metodologia.jpg"
      width="500"
      height="341">
+</center>
 
 </span>
 </font>
@@ -361,7 +364,7 @@ Una vez conocidos qué meses y de qué año tuvieron una climatología más extr
 </span>
 <div style="text-align: justify"> 
 
-- Crear un archivo .csv que contenga las URL a los archivos con la información meterológica mensual por provincias desde 2010 hasta 2019.
+- Cargar las tablas de información meteorológica mensual para cada provincia empleando el paquete climaemet.
 
 - Crear los archivos correspondientes a cada provincia empleando R, obteniendo 52 dataframes (uno por provincia) que contengan toda la información meteorológica desde 2010 a 2019.
 </div>
@@ -373,9 +376,11 @@ Una vez conocidos qué meses y de qué año tuvieron una climatología más extr
 
 <div style="text-align: justify"> 
 
-- Filtrar cada dataframe para que únicamente contenga la información de cada año y mes referente a: temperatura media, temperatura media de las máximas, temperatura media de las mínimas, presión media, presión máxima absoluta, presión mínima absoluta, media de insolación y porcentaje medio mensual de la insolación diaria frente a la insolación teórica.
+- Filtrar cada dataframe para que únicamente contenga la información de cada año y mes referente a: temperatura media de las máximas, temperatura media de las mínimas, presión máxima absoluta, presión mínima absoluta, humedad relativa y porcentaje medio mensual de la insolación diaria frente a la insolación teórica.
 
-- Comparar las variables meteorológicas de una misma provincia entre los diferentes meses y años y seleccionar los valores más extremos para cada variable meteorológica, almacenando en un vector aquellos meses y años con más de 2 factores extremos. Repetir dicho proceso con todas las provincias, de manera que se obtengan 52 vectores (como máximo) que contengan los meses más adversos correspondientes a cada provincia.
+- Comparar las variables meteorológicas de una misma provincia entre los diferentes meses y años y seleccionar los meses de cada provincia que fueran meteorológicamente adversos, empleando para ello la anomalía de cada variable meteorológica.
+
+- Aquellos meses de cada provincia que sean más adversos, almacenarlos en un dataframe todos juntos.
 
 </div>
 
@@ -387,9 +392,9 @@ Una vez conocidos qué meses y de qué año tuvieron una climatología más extr
 
 <div style="text-align: justify"> 
 
-- Descargar todos los archivos en formato .json que contienen la información relativa a morbilidad hospitalaria y causas de defunción desde 2010 a 2019 a través de la página INEBase.
+- Descargar todos los archivos en formato .xlsx que contienen la información relativa a morbilidad hospitalaria y causas de defunción desde 2010 a 2019 a través de la página INEBase.
 
-- Combinar dichos archivos mediante R para obtener 52 dataframes (uno por provincia) que contenga toda la información referente a la morbilidad hospitalaria y causas de defunción anual desde 2010 a 2019.
+- Combinar dichos archivos mediante R para obtener 2 dataframes (uno de morbilidad y uno de mortalidad).
 
 </div>
 
@@ -401,7 +406,7 @@ Una vez conocidos qué meses y de qué año tuvieron una climatología más extr
 
 - Filtrar los dataframes para que únicamente contengan la información referente a morbilidad hospitalaria por Enfermedades del aparato circulatorio (I00-I99) y causas de defunción debido a Enfermedades del sistema circulatorio (053-061) clasificado por provincias y año.
 
-- Comprobar si hay alguna provincia que posea 3 meses en un mismo año con meteorología adversa, y contrastar la mortalidad y morbilidad hospitalaria para ECV en esa provincia y ese año con los datos normales.
+- Combinar los dataframes de morbilidad y mortalidad con el dataframe de meteorología adversa, y representar en una gráfica la climatología frente a la morbilidad y en otra gráfica la climatología frente a la mortalidad.
 
 </div>
 
@@ -409,9 +414,9 @@ Una vez conocidos qué meses y de qué año tuvieron una climatología más extr
 
 <div style="text-align: justify"> 
 
-- Combinar los archivos de causas de defunción mensual a nivel nacional obteniendo 10 dataframes (uno por año desde 2010 a 2019).
+- Obtener un dataframe que contenga los datos de mortalidad a nivel anual clasificada por meses y año. 
 
-- Filtrar dichos dataframes para que únicamente contengan la información referente al número de muertes por Enfermedades del sistema circulatorio (053-061) en cada mes de dicho año.
+- Filtrar dicho dataframe para que únicamente contenga la información referente al número de muertes por Enfermedades del sistema circulatorio (053-061) en cada mes de dicho año.
 
 </div>
 </span>
@@ -422,9 +427,7 @@ Una vez conocidos qué meses y de qué año tuvieron una climatología más extr
 
 <div style="text-align: justify"> 
 
-- Comprobar si hay algún mes de algún año que aparezca como adverso en más de 20 provincias, y contrastar la mortalidad por Enfermedades del sistema circulatorio en ese mes con el resto de datos normales.
-
-- Graficar los resultados obtenidos en todos los análisis.
+- Combinar este dataframe con el dataframe de meteorología y graficar la relación.
 
 </div>
 </span>
@@ -470,8 +473,7 @@ En un principio se obtuvieron desde la plataforma de Open Data del AEMET, genera
 
 <center>
 <figure>
-<img src="IMAGENES/Aspecto fichero csv.jpg" alt="an image" width="400"
-         height="341">
+<img src="IMAGENES/Aspecto fichero csv.jpg" alt="an image">
 <figcaption>Aspecto del archivo csv </figcaption>
 </figure>
 
@@ -507,9 +509,7 @@ for (i in 1:length(Provincias)){
 
 <center>
 <figure>
-<img src="IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg"
-     width="1800"
-     height="750" alt="an image">
+<img src="IMAGENES/Aspecto de un dataframe metereologico recien creado.jpg">
 <figcaption>Aspecto del dataframe metereológico recién creado </figcaption>
 </figure>
 
@@ -553,9 +553,7 @@ Estos datos se obtuvieron desde la página del INE, en el apartado Salud / Encue
 
 <center>
 <figure>
-<img src="IMAGENES/INE.jpg"
-     width="1300"
-     height="600" alt="an image">
+<img src="IMAGENES/INE.jpg">
 <figcaption>Página del INE donde encontrar datos de morbilidad </figcaption>
 </figure>
 
@@ -581,9 +579,7 @@ También se obtuvieron desde la base de datos del INE, en el apartado INEbase / 
 
 <center>
 <figure>
-<img src="IMAGENES/INEmort.jpg"
-     width="1100"
-     height="600" alt="an image">
+<img src="IMAGENES/INEmort.jpg">
 <figcaption>Página del INE donde encontrar datos de mortalidad mensual</figcaption>
 </figure>
 
@@ -610,9 +606,7 @@ De nuevo acudimos al INE, al apartado INEbase / Salud / Estadística de defuncio
 
 <center>
 <figure>
-<img src="IMAGENES/INEmortalidadprovincial.jpg"
-     width="1100"
-     height="600" alt="an image">
+<img src="IMAGENES/INEmortalidadprovincial.jpg"">
 <figcaption>Página del INE donde encontrar datos de mortalidad provincial </figcaption>
 </figure>
 
@@ -765,10 +759,8 @@ DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>%
 
 <center>
 <figure>
-<img src="IMAGENES/2.2.jpg"
-     width="500"
-     height="700" alt="an image">
-<figcaption>Página del INE donde encontrar datos de población </figcaption>
+<img src="IMAGENES/2.2.jpg">
+<figcaption>Dataframe de morbilidad </figcaption>
 </figure>
 
 <br>
@@ -798,9 +790,7 @@ Ahora tenemos un dataframe temporal con el siguiente aspecto:
 
 <center>
 <figure>
-<img src="IMAGENES/2.3.jpg"
-     width="1100"
-     height="600" alt="an image">
+<img src="IMAGENES/2.3.jpg">
 <figcaption>Dataframe temporal </figcaption>
 </figure>
 
@@ -825,9 +815,7 @@ El resultado final es un dataframe DFMort_Mens como el siguiente:
 
 <center>
 <figure>
-<img src="IMAGENES/2.3.2.jpg"
-     width="500"
-     height="700" alt="an image">
+<img src="IMAGENES/2.3.2.jpg">
 <figcaption>Dataframe mortalidad mensual </figcaption>
 </figure>
 
@@ -865,9 +853,7 @@ Posteriormente cargamos temporal en DFMort_Prov, quedándonos este dataframe con
 
 <<center>
 <figure>
-<img src="IMAGENES/2.4.jpg"
-     width="1100"
-     height="600" alt="an image">
+<img src="IMAGENES/2.4.jpg">
 <figcaption>Dataframe mortalidad provincial </figcaption>
 </figure>
 
@@ -897,9 +883,7 @@ Siendo el resultado final del dataframe DFMort_Prov:
 
 <center>
 <figure>
-<img src="IMAGENES/2.4.2.jpg"
-     width="500"
-     height="700" alt="an image">
+<img src="IMAGENES/2.4.2.jpg">
 <figcaption>Dataframe mortalidad provincial definitivo </figcaption>
 </figure>
 
@@ -927,9 +911,7 @@ names(DFPoblacion) <- c("Localidad","2010","2011","2012","2013","2014","2015","2
 De esta manera hemos conseguido un dataframe como el siguiente:
 <center>
 <figure>
-<img src="IMAGENES/2.5.jpg"
-     width="1100"
-     height="600" alt="an image">
+<img src="IMAGENES/2.5.jpg">
 <figcaption>Dataframe de población inicial </figcaption>
 </figure>
 
@@ -967,9 +949,7 @@ Una vez ya ordenado alfabéticamente introducimos la nueva columna Provincia que
 
 <center>
 <figure>
-<img src="IMAGENES/2.5.2.jpg"
-     width="500"
-     height="700" alt="an image">
+<img src="IMAGENES/2.5.2.jpg">
 <figcaption>Dataframe de población final </figcaption>
 </figure>
 
@@ -979,11 +959,11 @@ Una vez ya ordenado alfabéticamente introducimos la nueva columna Provincia que
 
 Que posee 520 filas (52 provincias * 10 años) y 3 columnas: 2 de ellas caracteres (Provincia y Periodo) y una de tipo numeric (Habitantes) que representa el número de habitantes en esa provincia ese año.
 
-<left>
+<div style="text-align: justify">
 
 ### **4.3. Análisis de los datos**
 
-</left>
+</div>
 
 <div style="text-align: justify">
 Llegados a este punto ya hemos logrado obtener los datos refinados de manera que se pueda comenzar a trabajar con  ellos para obtener nueva información. Debemos recordar cuál es el objetivo del proyecto: buscar una posible correlación entre el cambio climático y las enfermedades cardiovasculares.
@@ -1058,9 +1038,7 @@ Una vez realizado todo este proceso, ya tenemos nuestros dataframes meteorológi
 
 <center>
 <figure>
-<img src="IMAGENES/3.jpg"
-     width="1100"
-     height="700" alt="an image">
+<img src="IMAGENES/3.jpg">
 <figcaption>Dataframe A CoruñaMeteo</figcaption>
 </figure>
 
@@ -1072,7 +1050,7 @@ Una vez tenemos nuestros dataframes ya con este aspecto, vamos a filtrar y selec
 
 _•	Graf_filt_Meteo(objeto)_, que va a generar las gráficas representanMdo la anomalía al cuadrado en el eje y frente al doblete ‘Periodo Mes’ de cada provincia pasada como objeto en el eje x. Este parámetro objeto no es el dataframe de la provincia, sino que ha de ser el nombre del dataframe (deberemos pasarlo como carácter). Va a generar 3 gráficas para la provincia dada: una que representa la anomalía de tm_max y tm_min, otra de q_max y q_min y una tercera que representa la anomalía de hr y p_sol.
 
-_•	Filtro_Extremos(provinvia, dataframe)_ que recibirá un dataframe meteorológico de una determinada provincia, calculará sus gráficas empleando la función mencionada anteriormente Graf_filt_Meteo(objeto) y empleando los datos que se obtengan de la gráfica determinará qué dobletes ‘Periodo Mes’ de la provincia pasada como parámetro poseen una anomalía al cuadrado extrema. Para determinar qué es extremo y qué no va comprobar si el valor de anomalía cuadrada para ese periodo y ese mes es superior al límite superior del intervalo de confianza dado por la gráfica _geom_smooth()_.
+_•	Filtro_Extremos(provincia, dataframe)_ que recibirá un dataframe meteorológico de una determinada provincia, calculará sus gráficas empleando la función mencionada anteriormente Graf_filt_Meteo(objeto) y empleando los datos que se obtengan de la gráfica determinará qué dobletes ‘Periodo Mes’ de la provincia pasada como parámetro poseen una anomalía al cuadrado extrema. Para determinar qué es extremo y qué no va comprobar si el valor de anomalía cuadrada para ese periodo y ese mes es superior al límite superior del intervalo de confianza dado por la gráfica _geom_smooth()_.
 A continuación vamos a desgranar un poco el funcionamiento interno de cada una de estas funciones. 
 
 <br>
@@ -1115,9 +1093,7 @@ La gráfica obtenida tiene un aspecto como la siguiente (el ejemplo dado se corr
 
 <center>
 <figure>
-<img src="IMAGENES/grafpresion.jpg"
-     width="1500"
-     height="700" alt="an image">
+<img src="IMAGENES/grafpresion.jpg">
 <figcaption>Grafica anomalías presión de A coruña</figcaption>
 </figure>
 
@@ -1144,9 +1120,7 @@ Y la gráfica graf_sol_hr obtenida tiene el siguiente aspecto:
 
 <center>
 <figure>
-<img src="IMAGENES/grafsol.jpg"
-     width="1500"
-     height="700" alt="an image">
+<img src="IMAGENES/grafsol.jpg">
 <figcaption>graf_sol_hr</figcaption>
 </figure>
 
@@ -1264,7 +1238,7 @@ Graf_filt_Meteo <- function(objeto){
 
 <br>
 
-###### _4.3.1.2 Filtro_Extremos(provincia, dataframe)_
+##### _4.3.1.2 Filtro_Extremos(provincia, dataframe)_
 
 Al igual que en el desarrollo de la función anterior vamos a comenzar especificando los parámetros que recibe y el return() que devuelve. Esta función se emplea para seleccionar las filas del objeto provincia pasado como parámetro cuya anomalía cuadrada se salga del límite superior des intervalo de confianza del geom_smooth(), una vez seleccionadas esas filas las va a añadir al dataframe pasado como parámetro dataframe.
 Recibe 2 parámetros:
@@ -1303,9 +1277,7 @@ El aspecto de una de estas tablas IC_vble es el siguiente:
 
 <center>
 <figure>
-<img src="IMAGENES/3.1.2.jpg"
-     width="250"
-     height="550" alt="an image">
+<img src="IMAGENES/3.1.2.jpg">
 <figcaption>Aspecto de una tabla IC_vble</figcaption>
 </figure>
 
@@ -1448,7 +1420,7 @@ Filtro_Extremos <- function(provincia, dataframe){
 <br>
 <div style="text-align: justify">
 
-###### _4.3.1.3 Uso de Filtro_Extremos para crear DFMeteo_Extrem_
+##### _4.3.1.3 Uso de Filtro_Extremos para crear DFMeteo_Extrem_
 
 El último paso en la selección de meses y provincias es crear un dataframe que contenga a todas estas filas ‘extremas’. Para ello vamos a aplicar la función Filtro_Extremos pasando como parámetros cada uno de los dataframes meteorológicos de las provincias (A_CorunaMeteo, AlavaMeteo, AlbaceteMeteo…) y el dataframe DFMeteo_Extrem para que las filas que pasen el filtro las almacene todas juntas en este único dataframe. Para ello primero vamos a crear el dataframe DFMeteo_Extrem y posteriormente invocar la función Filtro_Extremos pasando como parámetros cada vez una provincia distinta. El código es (ejemplificado con A_CorunaMeteo):
 
@@ -1461,9 +1433,7 @@ Así obtenemos un dataframe DFMeteo_Extrem que contiene 6174 filas, correspondie
 
 <center>
 <figure>
-<img src="IMAGENES/3.1.3.jpg"
-     width="1800"
-     height="900" alt="an image">
+<img src="IMAGENES/3.1.3.jpg">
 <figcaption>Aspecto de DFMeteo_Extrem</figcaption>
 </figure>
 
@@ -1488,9 +1458,7 @@ Una vez realizado este paso ya podemos comenzar a graficar. Se va a representar 
 
 <center>
 <figure>
-<img src="IMAGENES/3.2.jpg"
-     width="500"
-     height="700" alt="an image">
+<img src="IMAGENES/3.2.jpg">
 <figcaption>Dataframe de sucesos metereológicos adversos en A Coruña</figcaption>
 </figure>
 
@@ -1502,9 +1470,7 @@ De esta manera tenemos una correspondencia entre el periodo, la provincia y el n
 
 <center>
 <figure>
-<img src="IMAGENES/3.2.2.jpg"
-     width="500"
-     height="700" alt="an image">
+<img src="IMAGENES/3.2.2.jpg">
 <figcaption>Dataframe común con todos los datos.</figcaption>
 </figure>
 
@@ -1646,9 +1612,7 @@ Comencemos con la relación entre los sucesos adversos meteorológicos y la morb
 
 <center>
 <figure>
-<img src="IMAGENES/4.1.jpg"
-     width="1100"
-     height="700" alt="an image">
+<img src="IMAGENES/4.1.jpg">
 <figcaption>Gráfica teniendo en cuenta ambos sexos</figcaption>
 </figure>
 
@@ -1660,9 +1624,7 @@ La gráfica referente únicamente a Hombres:
 
 <center>
 <figure>
-<img src="IMAGENES/4.1.1.jpg"
-     width="1100"
-     height="700" alt="an image">
+<img src="IMAGENES/4.1.1.jpg">
 <figcaption>Gráfica teniendo en cuenta a Hombres</figcaption>
 </figure>
 
@@ -1675,9 +1637,7 @@ Y a mujeres:
 
 <center>
 <figure>
-<img src="IMAGENES/4.1.2.jpg"
-     width="1100"
-     height="700" alt="an image">
+<img src="IMAGENES/4.1.2.jpg">
 <figcaption>Gráfica teniendo en cuenta a Mujeres</figcaption>
 </figure>
 
@@ -1695,9 +1655,7 @@ La gráfica para ambos sexos es la siguiente:
 
 <center>
 <figure>
-<img src="IMAGENES/4.2.jpg"
-     width="1100"
-     height="700" alt="an image">
+<img src="IMAGENES/4.2.jpg">
 <figcaption>Gráfica para ambos sexos</figcaption>
 </figure>
 
@@ -1708,9 +1666,7 @@ La gráfica para ambos sexos es la siguiente:
 La gráfica para los hombres es la siguiente:
 <center>
 <figure>
-<img src="IMAGENES/4.2.1.jpg"
-     width="1100"
-     height="700" alt="an image">
+<img src="IMAGENES/4.2.1.jpg">
 <figcaption>Gráfica para Hombres</figcaption>
 </figure>
 
@@ -1722,9 +1678,7 @@ Y la correspondiente a mujeres es la siguiente:
 
 <center>
 <figure>
-<img src="IMAGENES/4.2.2.jpg"
-     width="1100"
-     height="700" alt="an image">
+<img src="IMAGENES/4.2.2.jpg">
 <figcaption>Gráfica para Mujeres</figcaption>
 </figure>
 
@@ -1742,9 +1696,7 @@ La gráfica para ambos sexos es:
 
 <center>
 <figure>
-<img src="IMAGENES/4.3.jpg"
-     width="1100"
-     height="700" alt="an image">
+<img src="IMAGENES/4.3.jpg">
 <figcaption>Gráfica para ambos sexos</figcaption>
 </figure>
 
@@ -1757,9 +1709,7 @@ La de los hombres:
 
 <center>
 <figure>
-<img src="IMAGENES/4.3.1.jpg"
-     width="1100"
-     height="700" alt="an image">
+<img src="IMAGENES/4.3.1.jpg">
 <figcaption>Gráfica para Hombres</figcaption>
 </figure>
 
@@ -1770,9 +1720,7 @@ La de los hombres:
 Y la de las mujeres:
 <center>
 <figure>
-<img src="IMAGENES/4.3.2.jpg"
-     width="1100"
-     height="700" alt="an image">
+<img src="IMAGENES/4.3.2.jpg">
 <figcaption>Gráfica para Mujeres</figcaption>
 </figure>
 
