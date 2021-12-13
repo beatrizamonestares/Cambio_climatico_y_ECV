@@ -1100,6 +1100,35 @@ La gráfica obtenida tiene un aspecto como la siguiente (el ejemplo dado se corr
 <br>
       
 <div style="text-align: justify">
+La realización de la gráfica correspondiente a graf_presion es muy similar a graf_temp, modificando únicamente el parámetro pasado en cada uno de los geom. El código empleado para ello es el siguiente:
+
+``` {r eval=FALSE}
+  graf_presion <- ggplot(provincia , aes(x = paste(Periodo, Mes, sep = " "))) + 
+    geom_line(aes(y = Anom_qmax, group = 1), colour = "red") + 
+    geom_point(size = 1.5, aes(y = Anom_qmax), colour = "red") + 
+    geom_smooth(aes( y = Anom_qmax, group = 1), fill = "red", alpha = 0.25, colour = "red", level = 0.995) +
+    geom_line(aes(y = Anom_qmin,  group = 1), colour = "blue") + 
+    geom_point(size = 1.5, aes(y = Anom_qmin), colour = "blue") + 
+    geom_smooth(aes(y = Anom_qmin, group = 1), fill = "blue", alpha = 0.25, colour = "blue", level = 0.995) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+    labs(x = "Periodo Mes",
+         y = "Anomalía^2") + 
+    ggtitle(label = "Anomalía Presión Atm", subtitle = str_sub(objeto, start = 1L, end = -6L))
+
+```
+
+Siendo el resultado obtenido la siguente gráfica:
+
+<center>
+<figure>
+<img src="OUTPUT/A_Coruna_Presion.png">
+<figcaption>graf_sol_hr</figcaption>
+</figure>
+
+<br>
+
+<div style="text-align: justify">
+
 Por último vamos a generar la tercera gráfica: graf_sol_hr. De nuevo el proceso es el mismo a los anteriores, modificando las anomalías estudiadas y el nombre del gráfico. El código empleado para ello es el siguiente:
 
 ``` {r eval=FALSE}
