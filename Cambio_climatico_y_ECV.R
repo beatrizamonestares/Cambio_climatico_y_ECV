@@ -17,8 +17,10 @@ library(dplyr)
 library(tidyverse)
 library(fs)
 library(readxl)
+main
 library(ggplot2)
 library(Hmisc)
+main
 
 # API KEY AEMET -----------------------------------------------------------
 # Si no se detecta la presencia de una API KEY de AEMET, se abrirá la página oportuna para su obtención
@@ -29,6 +31,7 @@ if(aemet_detect_api_key() == FALSE){
 # Instalación de la API KEY de AEMET en el equipo para poder acceder a los datos de climatología
 aemet_api_key("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW11ZWxsb3phbm9qdWFyZXpAZ21haWwuY29tIiwianRpIjoiZjEzZWM0NDktOTc1Ny00MGNjLTg5MDktZmFhOTZjZmFkMTcxIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE2MzYzNzMwMDAsInVzZXJJZCI6ImYxM2VjNDQ5LTk3NTctNDBjYy04OTA5LWZhYTk2Y2ZhZDE3MSIsInJvbGUiOiIifQ.HSs6bokk9cYquyGSRBOSC6_fxQoK8ZSlRQR64qMtBns", overwrite = TRUE, install = TRUE)
 
+
 # DECLARACIÓN VARIABLES GLOBALES --------------------------------------------
 
 # * Vector de provincias --------------------------------------------------
@@ -37,12 +40,14 @@ Provincias <- c("Alava","Albacete","Alicante","Almeria","Asturias","Avila","Bada
 
 # * Vector de estaciones --------------------------------------------------
 # Vector que contiene el identificador de cada estación provincial de AEMET. Ocupan la misma posición en este vector que su provincia correspondiente en el vector Provincias, así el identificador 9091O se corresponde con Álava, el 8175 con Albacete ... y el 9434 con Zaragoza.
-Estaciones <- c("9091O","8175","8019","6325O","1212E","2444","4452","B954","0200E","1082","2331","3469A","5960","1109","8500A","5000C","4121","5402","1387","8096","0367","5530E","3168D","1014A","4642E","9898","5270B","2661","9771C","1505","3129","6155A","6000A","7178I","9263D","1690A","2374X","C029O","1495","9170","2867","C447A","2465","5783","2030","9981A","9381I","3260B","8416","2422","2614","9434")
+Estaciones <- c("9091O","8175","8019","6325O","1212E","2444","4452","B954","0201D","1082","2331","3469A","5960","1109","8500A","5000C","4121","5402","1387E","8096","0367","5530E","3168D","1014A","4642E","9898","5270B","2661","9771C","1505","3129","6155A","6000A","7178I","9263D","1690A","2374X","C029O","1495","9170","2867","C447A","2465","5783","2030","9981A","9381I","3260B","8416","2422","2614","9434")
+
+
 
 # CARGA DE DATOS ----------------------------------------------------------
 
 # * Datos meteorológicos --------------------------------------------------
-# A continuación empleando un bucle for y la función aemet_monthly_period() del paquete climaemet vamos a importar los datos meteorológicos de cada provincia en el periodo temporal de 2010 a 2019, creando un Data Frame para cada provincia.
+# A continuación empleando un bucle for y la función aemet_monthly_period() del paquete climaemet vamos a importar los datos meteorológicos de cada provincia en el periodo temportal de 2010 a 2019, creando un Data Frame para cada provincia.
 for (i in 1:length(Provincias)){
   Nam <- paste(Provincias[i], "Meteo", sep="")
   Objeto <- aemet_monthly_period(station = Estaciones[i], start = 2010, end = 2019)
@@ -51,8 +56,10 @@ for (i in 1:length(Provincias)){
 
 # Debido a que las estaciones seleccionadas de Guadalajara, Málaga, Palencia, Soria y Valladolid carecen de la información de determinados años, vamos a incorporar la información ausente de forma manual empleando la información para esos años de otras estaciones de esas mismas provincias.
 # Además en Guadalajara vamos a sustituir la información del año 2011 de la estación 3168D por la de 3168C.
-GuadalajaraMeteo <- GuadalajaraMeteo[14:nrow(GuadalajaraMeteo), ] # de esta manera logramos eliminar las filas referentes al año 2011
+GuadalajaraMeteo <- GuadalajaraMeteo[14:nrow(GuadalajaraMeteo), ]
 GuadalajaraMeteo <- bind_rows(GuadalajaraMeteo, aemet_monthly_clim(station = "3168C", year = 2010), aemet_monthly_clim(station = "3168C", year = 2011))
+
+HEAD
 
 # Vamos a reordenar las filas por fecha, para ello primero debemos añadir un "0" en los meses del 1 al 9, para que no tome como mayor el mes 2 que el 12 (vamos a realizarlo mediante programación funcional para reciclar código y no copiar y pegar).
 # Declaramos la función Reorder para poder emplearla con el resto de provincias
@@ -74,16 +81,12 @@ GuadalajaraMeteo <- Reorder(GuadalajaraMeteo)
 
 
 # A continuación añadimos de forma manual los años que faltan en las estaciones mencionadas (y reordenamos cada una de ellas por fecha)
+8ac24cb9616e9fce4d467f5e623335ef2c14f51e
 MalagaMeteo <- bind_rows(MalagaMeteo, aemet_monthly_clim(station = "6084X", year = 2015))
-MalagaMeteo <- Reorder(MalagaMeteo)
-
 PalenciaMeteo <- bind_rows(PalenciaMeteo, aemet_monthly_clim(station = "2374X", year = 2016))
-PalenciaMeteo <- Reorder(PalenciaMeteo)
-
 SoriaMeteo <- bind_rows(SoriaMeteo, aemet_monthly_clim(station = "2030", year = 2011))
-SoriaMeteo <- Reorder(SoriaMeteo)
-
 ValladolidMeteo <- bind_rows(ValladolidMeteo, aemet_monthly_clim(station = "2422", year = 2012))
+main
 ValladolidMeteo <- Reorder(ValladolidMeteo)
 
 
@@ -93,6 +96,7 @@ ValladolidMeteo <- Reorder(ValladolidMeteo)
 
 DFPoblacion <- read_excel("C:/Users/samue/Documents/UBU/3er curso/FDB y Web Semántica/Cambio_climatico_y_ECV/INPUT/Poblacion_prov.xlsx", 
                           skip = 6)
+main
 
 # * Datos de morbilidad ---------------------------------------------------
 
@@ -143,6 +147,8 @@ for (i in dir_ls(path = "INPUT", regexp="mort_prov")){
 
 # * Datos meteorológicos --------------------------------------------------
 
+HEAD
+
 # Para el refinamiento de datos meterológicos vamos a:
 #     - Eliminar las filas referentes a las medias anuales (seleccionar solo la información de los meses)
 #     - Eliminar las columnas referentes a variables no deseadaes (solo vamos a registrar tm_max, tm_min, q_max, q_min, hr y p_sol)
@@ -184,6 +190,7 @@ for (i in 1:length(Provincias)){
 }
 
 
+main
 #  * Datos de población ---------------------------------------------------
 
 names(DFPoblacion)[1] <- "Localidad"
@@ -219,6 +226,9 @@ DFPoblacion <- mutate(DFPoblacion, "Provincia" = Provincias) %>%
 
 DFPoblacion <- pivot_longer(DFPoblacion, names_to = "Periodo", values_to = "Habitantes", cols = c(`2010`:`2019`))
 
+
+8ac24cb9616e9fce4d467f5e623335ef2c14f51e
+main
 # * Datos de morbilidad --------------------------------------------------
 
 # Para el refinamiento de datos de morbilidad vamos a:
@@ -249,9 +259,17 @@ for (i in 1:length(DFMorbilidad)){
   }
 }
 
+HEAD
+DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`)
+
 #Por último vamos a recolocar las columnas periodo y sexo y a cambiar la tabla a formato 'longer' para que se adecúe más a nuestro tipo de datos de meteorología
 DFMorbilidad <- relocate(DFMorbilidad,c(`Periodo`,`Sexo`),.before = `Alava`) %>% 
+main
   pivot_longer(data = ., names_to = "Provincia", values_to = "Altas", cols= c(Alava:Zaragoza))
+
+  pivot_longer(data = ., names_to = "Provincias", values_to = "Altas", cols= c(Alava:Zaragoza))
+8ac24cb9616e9fce4d467f5e623335ef2c14f51e
+main
 
 # * Datos de mortalidad nacional mensual -------------------------------------------
 
@@ -280,13 +298,14 @@ DFMort_Mens <- mutate(temporal, Periodo = rep(c(2010,2011,2012,2013,2014,2015,20
   mutate(Mes = capitalize(Mes))
 
 
-# * Datos de mortalidad provincial ----------------------------------------
+# ME TOCA A MI, HACER EL CODIGO Y SUBIRLO A GITHUB
 
 # Primero vamos a nombrar la primera columna como CAUSA para poder manejarla de forma más cómoda
 names(DFMort_Prov)[1] <-"Causa"
 # Al igual que en el refinamiento anterior, vamos a localizar aquellas filas que contienen la información referente a los datos que nos interesan (muertes por ECV)
 posiciones <- which(DFMort_Prov$Causa %in% c("053-061 IX.Enfermedades del sistema circulatorio"))
 
+main
 # E igual que antes almacenamos los datos en un dataframe temporal que usaremos como pivote
 
 temporal <- data.frame()
@@ -295,6 +314,16 @@ temporal <- data.frame()
 for(i in posiciones){
   temporal <- bind_rows(temporal, DFMort_Prov[(i+1):(i+3), ])
 }
+
+DFMort_Prov <- filter(DFMort_Prov, causa %in% c("053-061 IX.enfermedades del sitema circulatorio", "061 Otras enfermedades de los vasos sanguíneos", 
+                                                  "084 Malformaciones congénitas del sistema circulatorio")) %>% 
+  bind_cols(Sexo = rep(c("Ambos sexos", "Hombres", "Mujeres"))) %>% 
+  bind_cols(Periodo = rep(c('enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'), each=3), 
+            Sexo = rep(c("Ambos sexos", "Hombres", "Mujeres"), 10)) %>% 
+  subset(select = - causa)
+
+ 
+main
 
 DFMort_Prov <- temporal
 
@@ -315,9 +344,16 @@ DFMort_Prov <- DFMort_Prov[ ,1:(length(DFMort_Prov)-3)] %>%
 
 # ANÁLISIS DE LOS DATOS ---------------------------------------------------
 
-# * Datos meteorológicos --------------------------------------------------
+HEAD
 
+# * Datos de mortalidad provincial ----------------------------------------
+
+main
 # Una vez ya tenemos modificados nuestro datos meteorológicos comenzamos a comprobar qué meses y en qué provincias fueron los más dispares climatológicamente hablando. Para ello vamos a seguir los siguientes pasos:
+
+
+# Una vez ya tenemos modificados nuestro datos meteorológicos comenzamos a comprobar qué meses y en qué provincias fueron los más dispares climatológicamente hablando. Para ello vamos a seguir los siguientes pases:
+main
 #     - Para cada dataframe de meteorología de cada provincia, calcular la media de cada variable meteorológica entre el mismo mes de los diferentes años (obtendremos una media para todos los eneros, otra para todos los febreros, otra para marzos...).
 #     - Calcular la anomalía de cada valor meteorológico (calculado como la diferencia entre el valor y la media de dicho valor)
 #     - Obtener una gráfica para representar cada una de estas anomalías elevadas al cuadrado para cada provincia.
@@ -1400,6 +1436,7 @@ ggsave(
   dpi = 320
 )
 
+main
 ggsave(
   filename = "Mortalidad nacional frente a insolación diaria (mensual).png",
   plot = Grafica_psol_MortalidadMes,
@@ -1410,3 +1447,7 @@ ggsave(
   units = "cm",
   dpi = 320
 )
+
+DFPrueba1 <- Filtro_Extremos(AlavaMeteo, DFPrueba1)
+8ac24cb9616e9fce4d467f5e623335ef2c14f51e
+main
