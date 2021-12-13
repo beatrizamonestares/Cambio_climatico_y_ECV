@@ -1475,6 +1475,8 @@ Así obtenemos un dataframe DFMeteo_Extrem que contiene 6174 filas, correspondie
 
 #### _4.3.2 Buscar relación entre los meses más adversos y el índice de morbilidad hospitalaria por ECV_
 
+</div>
+
 Finalmente, tras todo el tratamiento previo y el manejo de los datos, llegamos a la última etapa: establecer relación entre los datos meteorológicos y la salud humana.
 
 Las conclusiones que vamos a obtener van a ser basadas en gráficas, donde relacionaremos los datos meteorológicos con la morbilidad en este caso. Un factor a tener en cuenta es que la morbilidad no se puede computar en bruto, sino que hay que calcularla como morbilidad/población de la provincia estudiada. Para ello el primer paso es unir el dataframe DFPoblación obtenido anteriormente y el dataframe DFMorbilidad.
