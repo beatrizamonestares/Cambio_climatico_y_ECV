@@ -1545,6 +1545,8 @@ ggsave(
 
 #### _4.3.3 Buscar la relación entre los meses más adversos y mortalidad por ECV_
 
+</div>
+
 Debido a que en nuestro trabajo poseemos 2 dataframes con información referente a mortalidad (DFMort_Mens y DFMort_Prov), vamos a realizar el estudio de la relación entre meteorología y mortalidad desde 2 puntos de vista.
 
 Tomemos primero la relación estudiando la mortalidad desde el punto de vista provincial anual, es decir, tomando DFMort_Prov. El análisis es bastante similar al realizado en la morbilidad.
